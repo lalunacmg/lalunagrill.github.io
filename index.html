@@ -1,0 +1,507 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --G:#2A7A2A;--G2:#1E5E1E;--O:#E85D00;--O2:#FF7A1A;
+  --cream:#FFFBF5;--white:#FFFFFF;--dark:#1A1A1A;
+  --gray:#F4F1EC;--muted:#888;--border:#E2DDD6;
+  --radius:12px;--font:'Nunito',sans-serif;
+}
+body{font-family:var(--font);background:var(--cream);color:var(--dark)}
+#app{max-width:480px;margin:0 auto;background:var(--cream);min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--G);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200}
+.tl{display:flex;align-items:baseline;gap:3px}
+.tla{font-family:'Fredoka One',cursive;font-size:22px;color:#fff;letter-spacing:-0.5px}
+.tlb{font-family:'Fredoka One',cursive;font-size:22px;color:#FFD166;letter-spacing:-0.5px}
+.tsub{font-size:9px;letter-spacing:2.5px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-left:2px;align-self:center}
+.cart-icon-btn{background:var(--O);border:none;border-radius:10px;padding:7px 12px;display:flex;align-items:center;gap:6px;cursor:pointer;color:#fff;font-family:var(--font);font-size:13px;font-weight:700}
+.ci-badge{background:#fff;color:var(--O);border-radius:50%;width:18px;height:18px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+/* ── NAV ── */
+.nav{background:#fff;display:flex;border-bottom:1px solid var(--border)}
+.nt{flex:1;padding:11px 4px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);border-bottom:2.5px solid transparent;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font-family:var(--font);transition:.15s}
+.nt.on{color:var(--O);border-bottom-color:var(--O)}
+
+/* ── HERO ── */
+.hero{background:var(--G2);padding:22px 16px 20px;color:#fff;position:relative;overflow:hidden}
+.hero-arc{position:absolute;bottom:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,0.04);border-radius:50%}
+.hero-arc2{position:absolute;top:-30px;left:-30px;width:120px;height:120px;background:rgba(255,209,102,0.06);border-radius:50%}
+.h-tag{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFD166;margin-bottom:5px}
+.h-title{font-family:'Fredoka One',cursive;font-size:28px;line-height:1.15;margin-bottom:6px}
+.h-title em{color:#FFD166;font-style:normal}
+.h-sub{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.6}
+.h-btns{display:flex;gap:10px;margin-top:14px}
+.h-btn{padding:9px 18px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:var(--font)}
+.h-btn.primary{background:var(--O);color:#fff}
+.h-btn.outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.4)}
+
+/* ── CAT STRIP ── */
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:#fff;transition:.15s;font-family:var(--font)}
+.chip.on{background:var(--G);color:#fff;border-color:var(--G)}
+
+/* ── MENU SECTION ── */
+.sec-hdr{display:flex;align-items:center;gap:10px;padding:14px 16px 6px}
+.sec-hdr-line{flex:1;height:1px;background:var(--border)}
+.sec-hdr-lbl{font-family:'Fredoka One',cursive;font-size:17px;color:var(--G);white-space:nowrap}
+.sec-hdr-ico{font-size:18px}
+
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 12px}
+.mcard{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:.15s;position:relative}
+.mcard:active{transform:scale(0.98)}
+.mcard-img{background:var(--gray);height:110px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative}
+.mcard-body{padding:10px}
+.mcard-name{font-size:13px;font-weight:700;color:var(--dark);line-height:1.3;margin-bottom:2px}
+.mcard-note{font-size:10px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.mcard-foot{display:flex;align-items:center;justify-content:space-between}
+.mcard-price{font-size:14px;font-weight:800;color:var(--O)}
+.mcard-add{width:28px;height:28px;border-radius:50%;background:var(--G);color:#fff;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;font-weight:300;line-height:1;transition:.15s}
+.mcard-add.on{background:var(--O);font-size:12px;font-weight:800}
+.mcard-badge{position:absolute;top:8px;left:8px;background:var(--O);color:#fff;font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px;letter-spacing:.5px}
+
+/* ── VIEWS ── */
+.view{display:none}.view.on{display:block}
+
+/* ── STICKY ORDER BAR ── */
+.order-bar{background:var(--O);padding:13px 16px;display:none;align-items:center;justify-content:space-between;cursor:pointer;position:sticky;bottom:0;z-index:150}
+.ob-left{display:flex;align-items:center;gap:10px}
+.ob-badge{background:#fff;color:var(--O);border-radius:50%;width:26px;height:26px;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ob-lbl{font-size:13px;font-weight:700;color:#fff}
+.ob-total{font-size:15px;font-weight:800;color:#fff}
+
+/* ── CART PAGE ── */
+.cart-wrap{padding:16px}
+.pg-title{font-family:'Fredoka One',cursive;font-size:22px;color:var(--G);margin-bottom:14px}
+.cart-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+.ci-ico{font-size:28px;width:44px;text-align:center;flex-shrink:0}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:700;color:var(--dark)}
+.ci-unit{font-size:11px;color:var(--muted)}
+.ci-ctrls{display:flex;align-items:center;gap:6px;margin-top:5px}
+.ci-btn{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:#fff;color:var(--dark);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;line-height:1;font-family:var(--font)}
+.ci-qty{font-size:13px;font-weight:700;min-width:20px;text-align:center}
+.ci-price{font-size:14px;font-weight:800;color:var(--O);flex-shrink:0}
+.totals{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin:12px 0}
+.tr{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:3px 0}
+.tr.grand{font-size:16px;font-weight:800;color:var(--dark);padding-top:10px;margin-top:6px;border-top:1px solid var(--border)}
+.empty-cart{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty-ico{font-size:54px;margin-bottom:12px}
+
+/* ── CUSTOMER FORM ── */
+.form-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.form-title{font-family:'Fredoka One',cursive;font-size:16px;color:var(--G);margin-bottom:12px}
+.form-row{margin-bottom:10px}
+.form-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.form-inp{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:var(--font);color:var(--dark);background:#fff;outline:none}
+.form-inp:focus{border-color:var(--G)}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.radio-row{display:flex;gap:10px;margin-top:4px}
+.radio-opt{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:9px 10px;display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
+.radio-opt.on{border-color:var(--G);background:#EAF4EA;color:var(--G2)}
+.radio-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:.15s}
+.radio-opt.on .radio-dot{border-color:var(--G);background:var(--G)}
+
+/* ── MESSENGER BTN ── */
+.msg-btn{width:100%;padding:15px;background:#1877F2;color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:800;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:10px;margin-top:4px;transition:.15s}
+.msg-btn:active{opacity:.9}
+.msg-btn svg{width:22px;height:22px;fill:#fff;flex-shrink:0}
+
+/* ── INFO ── */
+.info-wrap{padding:16px}
+.i-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.i-title{font-family:'Fredoka One',cursive;font-size:16px;color:var(--O);margin-bottom:10px}
+.i-row{display:flex;gap:10px;margin-bottom:8px;font-size:13px}
+.i-lbl{color:var(--muted);width:90px;flex-shrink:0;font-weight:600}
+.i-val{color:var(--dark);font-weight:500}
+
+/* ── PROMO BANNER ── */
+.promo-band{background:var(--O);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.promo-ico{font-size:24px}
+.promo-txt{font-size:12px;font-weight:700;color:#fff;line-height:1.4}
+.promo-sub{font-size:11px;color:rgba(255,255,255,.75);font-weight:400}
+
+/* ── BESTSELLER strip ── */
+.bs-strip{padding:12px 16px 4px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+.bs-strip::-webkit-scrollbar{display:none}
+.bs-card{flex-shrink:0;width:100px;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer}
+.bs-img{height:70px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--gray)}
+.bs-lbl{font-size:11px;font-weight:700;padding:6px 6px 7px;text-align:center;color:var(--dark)}
+
+.spacer20{height:20px}
+</style>
+
+<div id="app">
+
+  <div class="topbar">
+    <div>
+      <div class="tl"><span class="tla">La</span><span class="tlb">Luna</span></div>
+      <div class="tsub">Grill &amp; Cafe</div>
+    </div>
+    <button class="cart-icon-btn" onclick="switchTab('cart')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="ci-badge" id="topBadge">0</span>
+    </button>
+  </div>
+
+  <div class="nav">
+    <button class="nt on" onclick="switchTab('home')">Home</button>
+    <button class="nt" onclick="switchTab('menu')">Menu</button>
+    <button class="nt" onclick="switchTab('cart')">My Order</button>
+    <button class="nt" onclick="switchTab('info')">Info</button>
+  </div>
+
+  <!-- ===== HOME ===== -->
+  <div class="view on" id="view-home">
+    <div class="hero">
+      <div class="hero-arc"></div><div class="hero-arc2"></div>
+      <div class="h-tag">Order Online Now</div>
+      <div class="h-title">Grilled Fresh,<br><em>Served with Love.</em></div>
+      <div class="h-sub">Authentic Filipino grill favorites, hearty mains, pizza, pasta, and cafe drinks — all in one place.</div>
+      <div class="h-btns">
+        <button class="h-btn primary" onclick="switchTab('menu')">Order Now</button>
+        <button class="h-btn outline" onclick="switchTab('info')">Find Us</button>
+      </div>
+    </div>
+
+    <div class="promo-band">
+      <div class="promo-ico">🔥</div>
+      <div><div class="promo-txt">Hot Deal: Combo Meals from ₱120!</div><div class="promo-sub">Chicken + 2 Rice starting at C1</div></div>
+    </div>
+
+    <div style="padding:14px 16px 6px">
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--G)">Bestsellers</div>
+    </div>
+    <div class="bs-strip">
+      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🍗</div><div class="bs-lbl">12pcs Wings</div></div>
+      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🍕</div><div class="bs-lbl">La Luna Pizza</div></div>
+      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🍝</div><div class="bs-lbl">Carbonara</div></div>
+      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🧋</div><div class="bs-lbl">Milktea</div></div>
+      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🥤</div><div class="bs-lbl">Frappe</div></div>
+      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">☕</div><div class="bs-lbl">Cafe Latte</div></div>
+    </div>
+
+    <div style="padding:14px 16px 6px;margin-top:4px">
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--G)">How to Order</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 16px 16px">
+      <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center">
+        <div style="font-size:24px;margin-bottom:6px">🛒</div>
+        <div style="font-size:11px;font-weight:700;color:var(--G)">1. Pick Items</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">Browse & add to cart</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center">
+        <div style="font-size:24px;margin-bottom:6px">📝</div>
+        <div style="font-size:11px;font-weight:700;color:var(--G)">2. Fill Details</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">Name, contact & type</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center">
+        <div style="font-size:24px;margin-bottom:6px">💬</div>
+        <div style="font-size:11px;font-weight:700;color:var(--G)">3. Send via Messenger</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">We confirm your order</div>
+      </div>
+    </div>
+    <div class="spacer20"></div>
+  </div>
+
+  <!-- ===== MENU ===== -->
+  <div class="view" id="view-menu">
+    <div class="cats" id="catStrip">
+      <button class="chip on" onclick="filterCat('All',this)">All</button>
+      <button class="chip" onclick="filterCat('Appetizer',this)">Appetizer</button>
+      <button class="chip" onclick="filterCat('Pizza',this)">Pizza</button>
+      <button class="chip" onclick="filterCat('Pasta',this)">Pasta</button>
+      <button class="chip" onclick="filterCat('Mains',this)">Mains</button>
+      <button class="chip" onclick="filterCat('Combo',this)">Combo Meals</button>
+      <button class="chip" onclick="filterCat('Coffee',this)">Coffee</button>
+      <button class="chip" onclick="filterCat('Milktea',this)">Milktea</button>
+      <button class="chip" onclick="filterCat('Frappe',this)">Frappe</button>
+      <button class="chip" onclick="filterCat('Shakes',this)">Fruit Shakes</button>
+      <button class="chip" onclick="filterCat('Addons',this)">Add-ons</button>
+    </div>
+    <div id="menuBody"></div>
+    <div class="spacer20"></div>
+  </div>
+
+  <!-- ===== CART / CHECKOUT ===== -->
+  <div class="view" id="view-cart">
+    <div class="cart-wrap">
+      <div class="pg-title">My Order</div>
+      <div id="cartBody"></div>
+    </div>
+  </div>
+
+  <!-- ===== INFO ===== -->
+  <div class="view" id="view-info">
+    <div class="info-wrap">
+      <div class="i-card">
+        <div class="i-title">Location &amp; Hours</div>
+        <div class="i-row"><span class="i-lbl">Address</span><span class="i-val">La Luna Grill &amp; Cafe</span></div>
+        <div class="i-row"><span class="i-lbl">Mon – Fri</span><span class="i-val">8:00 AM – 9:00 PM</span></div>
+        <div class="i-row"><span class="i-lbl">Sat – Sun</span><span class="i-val">8:00 AM – 10:00 PM</span></div>
+        <div class="i-row"><span class="i-lbl">Contact</span><span class="i-val" style="color:var(--O)">Message us on FB</span></div>
+      </div>
+      <div class="i-card">
+        <div class="i-title">About La Luna</div>
+        <div style="font-size:13px;color:#555;line-height:1.7">La Luna Grill &amp; Cafe serves hearty Filipino-inspired grills, pasta, pizza, and a full cafe menu with coffee, milktea, frappes, and fruit shakes. Great food for every occasion!</div>
+      </div>
+      <div class="i-card">
+        <div class="i-title">Order via Facebook Messenger</div>
+        <div style="font-size:13px;color:#555;line-height:1.6;margin-bottom:12px">Place your order and get real-time confirmation straight through our FB Messenger. We typically reply within minutes!</div>
+        <a href="https://m.me/303918802794006" target="_blank" style="text-decoration:none">
+          <div class="msg-btn" style="background:#1877F2">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.92 1.19 5.49 3.14 7.28V22l2.94-1.62c.78.22 1.61.33 2.47.33 5.64 0 10-4.13 10-9.7C22.55 6.13 17.64 2 12 2zm.99 13.08l-2.55-2.72-4.98 2.72 5.48-5.81 2.61 2.72 4.93-2.72-5.49 5.81z"/></svg>
+            Message Us on Facebook
+          </div>
+        </a>
+      </div>
+      <div class="i-card">
+        <div class="i-title">Add-ons for Drinks</div>
+        <div class="i-row"><span class="i-lbl">Pearl</span><span class="i-val" style="color:var(--O);font-weight:700">+₱15</span></div>
+        <div class="i-row"><span class="i-lbl">Nata</span><span class="i-val" style="color:var(--O);font-weight:700">+₱15</span></div>
+        <div class="i-row"><span class="i-lbl">Cream Cheese</span><span class="i-val" style="color:var(--O);font-weight:700">+₱15</span></div>
+      </div>
+    </div>
+    <div class="spacer20"></div>
+  </div>
+
+  <div class="order-bar" id="orderBar" onclick="switchTab('cart')">
+    <div class="ob-left">
+      <div class="ob-badge" id="obBadge">0</div>
+      <span class="ob-lbl">View My Order</span>
+    </div>
+    <span class="ob-total" id="obTotal">₱0</span>
+  </div>
+</div>
+
+<script>
+const MENU=[
+  {id:1,cat:'Appetizer',name:'Shawarma',price:100,ico:'🌯',hot:false,note:''},
+  {id:2,cat:'Appetizer',name:'French Fries',price:110,ico:'🍟',hot:false,note:''},
+  {id:3,cat:'Appetizer',name:"Chik N' Fries",price:145,ico:'🍗',hot:false,note:''},
+  {id:4,cat:'Pizza',name:'Hawaiian (Solo)',price:99,ico:'🍕',hot:false,note:''},
+  {id:5,cat:'Pizza',name:'Pepperoni (Solo)',price:99,ico:'🍕',hot:false,note:''},
+  {id:6,cat:'Pizza',name:'La Luna (Solo)',price:99,ico:'🍕',hot:true,note:'House special'},
+  {id:7,cat:'Pasta',name:'Seafood Marinara',price:179,ico:'🍝',hot:false,note:''},
+  {id:8,cat:'Pasta',name:'Bacon & Mushroom',price:179,ico:'🍝',hot:false,note:''},
+  {id:9,cat:'Pasta',name:'Carbonara',price:179,ico:'🍝',hot:true,note:'Bestseller'},
+  {id:10,cat:'Mains',name:'Sisig Platter',price:250,ico:'🍛',hot:true,note:'Bestseller'},
+  {id:11,cat:'Mains',name:'6pcs Chicken Wings',price:189,ico:'🍗',hot:false,note:''},
+  {id:12,cat:'Mains',name:'12pcs Chicken Wings',price:299,ico:'🍗',hot:true,note:'Honey Butter, Soy Garlic & Buffalo'},
+  {id:13,cat:'Combo',name:'C1 – 3pcs BBQ w/ 2 Rice',price:120,ico:'🍱',hot:false,note:''},
+  {id:14,cat:'Combo',name:'C2 – Quarter Leg w/ 2 Rice',price:150,ico:'🍱',hot:false,note:''},
+  {id:15,cat:'Combo',name:'C3 – Quarter Wing w/ 2 Rice',price:180,ico:'🍱',hot:false,note:'Grilled'},
+  {id:16,cat:'Combo',name:'C4 – Sisig w/ Rice',price:160,ico:'🍱',hot:true,note:'Bestseller'},
+  {id:17,cat:'Combo',name:'C5 – 3pcs Chix Wings w/ Rice',price:160,ico:'🍱',hot:false,note:'3 flavor options'},
+  {id:18,cat:'Coffee',name:'Double Espresso',price:70,ico:'☕',hot:false,note:'Hot only'},
+  {id:19,cat:'Coffee',name:'Americano',price:80,ico:'☕',hot:false,note:'Hot ₱80 / Iced ₱100'},
+  {id:20,cat:'Coffee',name:'Cappucino',price:125,ico:'☕',hot:false,note:'Hot ₱125 / Iced ₱135'},
+  {id:21,cat:'Coffee',name:'Cafe Latte',price:125,ico:'☕',hot:true,note:'Hot ₱125 / Iced ₱135'},
+  {id:22,cat:'Coffee',name:'Spanish Latte',price:125,ico:'☕',hot:false,note:'Hot ₱125 / Iced ₱135'},
+  {id:23,cat:'Coffee',name:'Hazelnut Latte',price:125,ico:'☕',hot:false,note:'Hot ₱125 / Iced ₱135'},
+  {id:24,cat:'Coffee',name:'Salted Caramel',price:130,ico:'☕',hot:false,note:'Hot ₱130 / Iced ₱140'},
+  {id:25,cat:'Coffee',name:'Caramel Macchiato',price:130,ico:'☕',hot:false,note:'Hot ₱130 / Iced ₱140'},
+  {id:26,cat:'Milktea',name:'Taro',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
+  {id:27,cat:'Milktea',name:'Okinawa',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
+  {id:28,cat:'Milktea',name:'Wintermelon',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
+  {id:29,cat:'Milktea',name:'Caramel Sugar',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
+  {id:30,cat:'Milktea',name:'Chocolate',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
+  {id:31,cat:'Milktea',name:"Cookies & Cream",price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
+  {id:32,cat:'Frappe',name:'Caramel',price:165,ico:'🥤',hot:false,note:''},
+  {id:33,cat:'Frappe',name:'Mochaccino',price:165,ico:'🥤',hot:false,note:''},
+  {id:34,cat:'Frappe',name:'Toffee-Nut',price:165,ico:'🥤',hot:false,note:''},
+  {id:35,cat:'Frappe',name:'Peppermint Mocha',price:165,ico:'🥤',hot:false,note:''},
+  {id:36,cat:'Frappe',name:'Pumpkin Spice',price:165,ico:'🥤',hot:false,note:''},
+  {id:37,cat:'Frappe',name:'Biscoff',price:170,ico:'🥤',hot:true,note:'Customer fave!'},
+  {id:38,cat:'Frappe',name:'Nutella',price:170,ico:'🥤',hot:false,note:''},
+  {id:39,cat:'Shakes',name:'Mango',price:120,ico:'🥭',hot:false,note:''},
+  {id:40,cat:'Shakes',name:'Avocado',price:120,ico:'🥑',hot:false,note:''},
+  {id:41,cat:'Shakes',name:'Seasonal Fruit',price:120,ico:'🍓',hot:false,note:'Availability may vary'},
+  {id:42,cat:'Addons',name:'Pearl',price:15,ico:'✨',hot:false,note:'For drinks'},
+  {id:43,cat:'Addons',name:'Nata',price:15,ico:'✨',hot:false,note:'For drinks'},
+  {id:44,cat:'Addons',name:'Cream Cheese',price:15,ico:'✨',hot:false,note:'For drinks'},
+];
+
+const CATS_META={
+  Appetizer:{ico:'🍟',label:'Appetizer'},
+  Pizza:{ico:'🍕',label:'Pizza (Solo)'},
+  Pasta:{ico:'🍝',label:'Pasta'},
+  Mains:{ico:'🍗',label:'Mains'},
+  Combo:{ico:'🍱',label:'Combo Meals'},
+  Coffee:{ico:'☕',label:'Coffee'},
+  Milktea:{ico:'🧋',label:'Milktea'},
+  Frappe:{ico:'🥤',label:'Frappe'},
+  Shakes:{ico:'🥭',label:'Fruit Shakes'},
+  Addons:{ico:'✨',label:'Add-ons'},
+};
+const CAT_ORDER=['Appetizer','Pizza','Pasta','Mains','Combo','Coffee','Milktea','Frappe','Shakes','Addons'];
+
+let cart={};
+let curCat='All';
+let orderType='Dine-in';
+
+function renderMenu(){
+  const items=curCat==='All'?MENU:MENU.filter(i=>i.cat===curCat);
+  const groups=items.reduce((g,i)=>{(g[i.cat]=g[i.cat]||[]).push(i);return g},{});
+  let html='';
+  CAT_ORDER.forEach(cat=>{
+    if(!groups[cat])return;
+    const m=CATS_META[cat];
+    html+=`<div class="sec-hdr"><span class="sec-hdr-ico">${m.ico}</span><span class="sec-hdr-lbl">${m.label}</span><span class="sec-hdr-line"></span></div>`;
+    html+=`<div class="menu-grid">`;
+    groups[cat].forEach(item=>{
+      const qty=cart[item.id]||0;
+      html+=`<div class="mcard">
+        <div class="mcard-img">${item.ico}${item.hot?'<div class="mcard-badge">Popular</div>':''}</div>
+        <div class="mcard-body">
+          <div class="mcard-name">${item.name}</div>
+          ${item.note?`<div class="mcard-note">${item.note}</div>`:''}
+          <div class="mcard-foot">
+            <span class="mcard-price">₱${item.price}</span>
+            <button class="mcard-add${qty?' on':''}" onclick="addItem(${item.id})">${qty||'+'}</button>
+          </div>
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  document.getElementById('menuBody').innerHTML=html;
+}
+
+function addItem(id){
+  cart[id]=(cart[id]||0)+1;
+  renderMenu();renderCart();syncBars();
+}
+function removeItem(id){
+  if(cart[id]>1)cart[id]--;else delete cart[id];
+  renderMenu();renderCart();syncBars();
+}
+
+function syncBars(){
+  const count=Object.values(cart).reduce((s,v)=>s+v,0);
+  const total=Object.keys(cart).reduce((s,k)=>{const it=MENU.find(m=>m.id==k);return s+it.price*cart[k];},0);
+  document.getElementById('topBadge').textContent=count;
+  document.getElementById('obBadge').textContent=count;
+  document.getElementById('obTotal').textContent='₱'+total;
+  const bar=document.getElementById('orderBar');
+  bar.style.display=count>0?'flex':'none';
+}
+
+function renderCart(){
+  const el=document.getElementById('cartBody');
+  const keys=Object.keys(cart).filter(k=>cart[k]>0);
+  if(!keys.length){
+    el.innerHTML=`<div class="empty-cart"><div class="empty-ico">🛒</div><div style="font-weight:700;margin-bottom:6px;font-size:15px">Your cart is empty</div><div style="font-size:13px">Add items from the menu!</div><br><button onclick="switchTab('menu')" style="background:var(--G);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">Browse Menu</button></div>`;
+    return;
+  }
+  let sub=0;
+  let itemsHtml=keys.map(k=>{
+    const it=MENU.find(m=>m.id==k);
+    const tot=it.price*cart[k];sub+=tot;
+    return`<div class="cart-item">
+      <div class="ci-ico">${it.ico}</div>
+      <div class="ci-info">
+        <div class="ci-name">${it.name}</div>
+        <div class="ci-unit">₱${it.price} each</div>
+        <div class="ci-ctrls">
+          <button class="ci-btn" onclick="removeItem(${k})">−</button>
+          <span class="ci-qty">${cart[k]}</span>
+          <button class="ci-btn" onclick="addItem(${k})">+</button>
+        </div>
+      </div>
+      <div class="ci-price">₱${tot}</div>
+    </div>`;
+  }).join('');
+
+  const msgText=buildMessage(sub);
+  const encoded=encodeURIComponent(msgText);
+  const fbLink=`https://m.me/303918802794006?text=${encoded}`;
+
+  el.innerHTML=`
+    ${itemsHtml}
+    <div class="totals">
+      <div class="tr"><span>Subtotal (${Object.values(cart).reduce((s,v)=>s+v,0)} items)</span><span>₱${sub}</span></div>
+      <div class="tr grand"><span>Total</span><span>₱${sub}</span></div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-title">Your Details</div>
+      <div class="form-row"><div class="form-lbl">Full Name</div><input class="form-inp" id="f-name" type="text" placeholder="e.g. Juan dela Cruz"></div>
+      <div class="form-row"><div class="form-lbl">Contact Number</div><input class="form-inp" id="f-phone" type="tel" placeholder="e.g. 09XX XXX XXXX"></div>
+      <div class="form-row">
+        <div class="form-lbl">Order Type</div>
+        <div class="radio-row">
+          <div class="radio-opt${orderType==='Dine-in'?' on':''}" onclick="setType('Dine-in',this)">
+            <div class="radio-dot"></div>Dine-in
+          </div>
+          <div class="radio-opt${orderType==='Takeout'?' on':''}" onclick="setType('Takeout',this)">
+            <div class="radio-dot"></div>Takeout
+          </div>
+        </div>
+      </div>
+      <div class="form-row"><div class="form-lbl">Special Instructions (optional)</div><textarea class="form-inp" id="f-notes" rows="2" placeholder="Allergies, extra rice, etc." style="resize:none"></textarea></div>
+    </div>
+
+    <a href="${fbLink}" target="_blank" id="msgLink" style="text-decoration:none">
+      <div class="msg-btn">
+        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#fff;flex-shrink:0"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.92 1.19 5.49 3.14 7.28V22l2.94-1.62c.78.22 1.61.33 2.47.33 5.64 0 10-4.13 10-9.7C22.55 6.13 17.64 2 12 2zm.99 13.08l-2.55-2.72-4.98 2.72 5.48-5.81 2.61 2.72 4.93-2.72-5.49 5.81z"/></svg>
+        Send Order via Messenger
+      </div>
+    </a>
+    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.5">Tapping the button will open Facebook Messenger with your order pre-filled. We'll confirm within minutes!</div>
+    <div class="spacer20"></div>`;
+
+  document.getElementById('f-name').addEventListener('input',updateLink);
+  document.getElementById('f-phone').addEventListener('input',updateLink);
+  document.getElementById('f-notes').addEventListener('input',updateLink);
+}
+
+function setType(t,el){
+  orderType=t;
+  document.querySelectorAll('.radio-opt').forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+  el.querySelector('.radio-dot').style.background='var(--G)';
+  updateLink();
+}
+
+function buildMessage(sub){
+  const name=document.getElementById('f-name')?document.getElementById('f-name').value||'(not provided)':'';
+  const phone=document.getElementById('f-phone')?document.getElementById('f-phone').value||'(not provided)':'';
+  const notes=document.getElementById('f-notes')?document.getElementById('f-notes').value||'None':'';
+  const items=Object.keys(cart).filter(k=>cart[k]>0).map(k=>{
+    const it=MENU.find(m=>m.id==k);
+    return`  • ${it.name} x${cart[k]} = ₱${it.price*cart[k]}`;
+  }).join('\n');
+  const total=Object.keys(cart).reduce((s,k)=>{const it=MENU.find(m=>m.id==k);return s+it.price*cart[k];},0);
+  return`Hi La Luna! I'd like to place an order 🌙\n\n👤 Name: ${name}\n📞 Contact: ${phone}\n🍽️ Type: ${orderType}\n\n📋 Order:\n${items}\n\n💰 Total: ₱${total}\n\n📝 Notes: ${notes}\n\nPlease confirm. Thank you!`;
+}
+
+function updateLink(){
+  const link=document.getElementById('msgLink');
+  if(!link)return;
+  const sub=Object.keys(cart).reduce((s,k)=>{const it=MENU.find(m=>m.id==k);return s+it.price*cart[k];},0);
+  link.href=`https://m.me/303918802794006?text=${encodeURIComponent(buildMessage(sub))}`;
+}
+
+function filterCat(cat,btn){
+  curCat=cat;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  btn.classList.add('on');
+  renderMenu();
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('view-'+tab).classList.add('on');
+  document.querySelectorAll('.nt').forEach((t,i)=>{
+    t.classList.remove('on');
+    if(['home','menu','cart','info'][i]===tab)t.classList.add('on');
+  });
+  if(tab==='cart')renderCart();
+}
+
+renderMenu();syncBars();
+</script>
