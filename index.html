@@ -1,507 +1,1026 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="theme-color" content="#1C1A17"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="La Luna"/>
+<meta name="description" content="La Luna Grill + Cafe — Order online. Filipino grill favorites, pizza, pasta and café drinks."/>
+<title>La Luna Grill + Cafe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
+/* ── DESIGN TOKENS ── */
 :root{
-  --G:#2A7A2A;--G2:#1E5E1E;--O:#E85D00;--O2:#FF7A1A;
-  --cream:#FFFBF5;--white:#FFFFFF;--dark:#1A1A1A;
-  --gray:#F4F1EC;--muted:#888;--border:#E2DDD6;
-  --radius:12px;--font:'Nunito',sans-serif;
+  --or:#E8521A; --orl:#FF6B2B; --orp:#FFE8D6; --or2:#CC3A00;
+  --gr:#2D8A3E; --grd:#1F6B2C;
+  --cr:#F5EFE0; --crl:#FFFAF4;
+  --dk:#1C1A17; --dkm:#26231E; --dks:#3D3A35;
+  --wg:#7A7468; --wgl:#A89F95; --wgll:#D0C8C0;
+  --sh:rgba(28,26,23,.09); --shd:rgba(28,26,23,.2);
+  --r:10px; --rl:16px; --rx:22px;
+  --t:.22s cubic-bezier(.4,0,.2,1);
+  --nav-h:58px;
+  --tab-h:66px;
+  --font:'Nunito',sans-serif;
+  --font-h:'Poppins',sans-serif;
 }
-body{font-family:var(--font);background:var(--cream);color:var(--dark)}
-#app{max-width:480px;margin:0 auto;background:var(--cream);min-height:100vh}
-
-/* ── TOPBAR ── */
-.topbar{background:var(--G);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200}
-.tl{display:flex;align-items:baseline;gap:3px}
-.tla{font-family:'Fredoka One',cursive;font-size:22px;color:#fff;letter-spacing:-0.5px}
-.tlb{font-family:'Fredoka One',cursive;font-size:22px;color:#FFD166;letter-spacing:-0.5px}
-.tsub{font-size:9px;letter-spacing:2.5px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-left:2px;align-self:center}
-.cart-icon-btn{background:var(--O);border:none;border-radius:10px;padding:7px 12px;display:flex;align-items:center;gap:6px;cursor:pointer;color:#fff;font-family:var(--font);font-size:13px;font-weight:700}
-.ci-badge{background:#fff;color:var(--O);border-radius:50%;width:18px;height:18px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;font-size:16px;height:100%}
+body{font-family:var(--font);background:var(--crl);color:var(--dk);min-height:100%;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{cursor:pointer;border:none;background:none;font-family:inherit;touch-action:manipulation}
+input,textarea,select{font-family:inherit;-webkit-appearance:none}
+a{text-decoration:none;color:inherit;touch-action:manipulation}
+img{display:block;max-width:100%}
 
 /* ── NAV ── */
-.nav{background:#fff;display:flex;border-bottom:1px solid var(--border)}
-.nt{flex:1;padding:11px 4px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);border-bottom:2.5px solid transparent;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font-family:var(--font);transition:.15s}
-.nt.on{color:var(--O);border-bottom-color:var(--O)}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(20,18,15,.97);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(232,82,26,.22);z-index:900;display:flex;align-items:center;padding:0 16px;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;cursor:pointer}
+.nav-logo svg{height:38px;width:auto}
+.nav-cart-pill{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;border-radius:100px;padding:9px 15px 9px 11px;font-size:.8rem;font-weight:800;box-shadow:0 3px 12px rgba(232,82,26,.38);transition:var(--t);min-width:58px;font-family:var(--font)}
+.nav-cart-pill:active{transform:scale(.96)}
+.nav-cart-pill .cicon{font-size:1rem}
+.nav-cart-count{font-size:.82rem;font-weight:900;min-width:14px;text-align:center}
 
-/* ── HERO ── */
-.hero{background:var(--G2);padding:22px 16px 20px;color:#fff;position:relative;overflow:hidden}
-.hero-arc{position:absolute;bottom:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,0.04);border-radius:50%}
-.hero-arc2{position:absolute;top:-30px;left:-30px;width:120px;height:120px;background:rgba(255,209,102,0.06);border-radius:50%}
-.h-tag{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFD166;margin-bottom:5px}
-.h-title{font-family:'Fredoka One',cursive;font-size:28px;line-height:1.15;margin-bottom:6px}
-.h-title em{color:#FFD166;font-style:normal}
-.h-sub{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.6}
-.h-btns{display:flex;gap:10px;margin-top:14px}
-.h-btn{padding:9px 18px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:var(--font)}
-.h-btn.primary{background:var(--O);color:#fff}
-.h-btn.outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.4)}
+/* ── BOTTOM TAB BAR ── */
+.tabbar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:rgba(20,18,15,.98);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-top:1px solid rgba(232,82,26,.16);z-index:900;display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom)}
+.tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;color:var(--wgl);font-size:.57rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:var(--t);position:relative;font-family:var(--font)}
+.tab-btn.active{color:var(--orl)}
+.tab-icon{font-size:1.35rem;line-height:1}
+.tab-dot{position:absolute;top:8px;right:calc(50% - 15px);background:#c0392b;color:#fff;font-size:.5rem;font-weight:900;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:var(--t)}
+.tab-dot.on{opacity:1;transform:scale(1)}
+.tab-bar{position:absolute;top:0;left:18%;right:18%;height:2.5px;background:linear-gradient(90deg,var(--or),var(--orl));border-radius:0 0 3px 3px;opacity:0;transition:var(--t)}
+.tab-btn.active .tab-bar{opacity:1}
 
-/* ── CAT STRIP ── */
-.cats{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);scrollbar-width:none}
-.cats::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:#fff;transition:.15s;font-family:var(--font)}
-.chip.on{background:var(--G);color:#fff;border-color:var(--G)}
+/* ── PAGES ── */
+.page{display:none;padding-top:var(--nav-h);padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom));min-height:100vh}
+.page.active{display:block;animation:pg-in .28s ease}
+@keyframes pg-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── MENU SECTION ── */
-.sec-hdr{display:flex;align-items:center;gap:10px;padding:14px 16px 6px}
-.sec-hdr-line{flex:1;height:1px;background:var(--border)}
-.sec-hdr-lbl{font-family:'Fredoka One',cursive;font-size:17px;color:var(--G);white-space:nowrap}
-.sec-hdr-ico{font-size:18px}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom) + 12px);left:50%;transform:translateX(-50%) translateY(10px);background:var(--dk);color:var(--cr);padding:10px 20px;border-radius:100px;font-size:.81rem;font-weight:700;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.3);z-index:1000;opacity:0;transition:all .26s ease;border-left:3px solid var(--or)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 12px}
-.mcard{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:.15s;position:relative}
-.mcard:active{transform:scale(0.98)}
-.mcard-img{background:var(--gray);height:110px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative}
-.mcard-body{padding:10px}
-.mcard-name{font-size:13px;font-weight:700;color:var(--dark);line-height:1.3;margin-bottom:2px}
-.mcard-note{font-size:10px;color:var(--muted);font-style:italic;margin-bottom:6px}
-.mcard-foot{display:flex;align-items:center;justify-content:space-between}
-.mcard-price{font-size:14px;font-weight:800;color:var(--O)}
-.mcard-add{width:28px;height:28px;border-radius:50%;background:var(--G);color:#fff;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;font-weight:300;line-height:1;transition:.15s}
-.mcard-add.on{background:var(--O);font-size:12px;font-weight:800}
-.mcard-badge{position:absolute;top:8px;left:8px;background:var(--O);color:#fff;font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px;letter-spacing:.5px}
+/* ── MODAL SHEET ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(20,18,15,.76);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);z-index:950;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity var(--t)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-sheet{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:14px 18px calc(env(safe-area-inset-bottom) + 22px);max-height:88vh;overflow-y:auto;transform:translateY(40px);transition:transform var(--t);-webkit-overflow-scrolling:touch}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-handle{width:38px;height:4px;background:var(--wgll);border-radius:2px;margin:0 auto 16px}
+.modal-item-header{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding:14px;background:linear-gradient(135deg,var(--crl),var(--orp));border-radius:var(--rl)}
+.modal-item-icon{width:72px;height:72px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:2.6rem;flex-shrink:0;box-shadow:0 3px 12px var(--sh)}
+.modal-item-info{flex:1;min-width:0}
+.modal-item-name{font-family:var(--font-h);font-size:1.12rem;font-weight:700;color:var(--dk);margin-bottom:4px;line-height:1.25}
+.modal-item-desc{font-size:.76rem;color:var(--wg);line-height:1.55;margin-bottom:6px}
+.modal-item-price{font-family:var(--font-h);font-size:1.3rem;font-weight:800;color:var(--or)}
+.modal-sec{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--dks);margin:15px 0 8px}
+.modal-variants{display:flex;flex-direction:column;gap:7px}
+.modal-v-btn{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border:1.5px solid var(--wgll);border-radius:var(--rl);font-size:.86rem;font-weight:600;cursor:pointer;transition:var(--t);background:#fff;color:var(--dk);text-align:left}
+.modal-v-btn.sel{border-color:var(--or);background:linear-gradient(135deg,#fff8f5,var(--orp));color:var(--or2)}
+.modal-v-btn .chk{width:20px;height:20px;border-radius:50%;border:2px solid var(--wgll);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--t)}
+.modal-v-btn.sel .chk{background:var(--or);border-color:var(--or);color:#fff;font-size:.65rem}
+.modal-addons{display:flex;flex-direction:column;gap:7px}
+.modal-addon-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1.5px solid var(--wgll);border-radius:var(--rl);cursor:pointer;transition:var(--t);background:#fff}
+.modal-addon-row.sel{border-color:var(--or);background:linear-gradient(135deg,#fff8f5,var(--orp))}
+.modal-addon-left{display:flex;align-items:center;gap:9px}
+.modal-addon-chk{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--wgll);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--t)}
+.modal-addon-row.sel .modal-addon-chk{background:var(--or);border-color:var(--or);color:#fff;font-size:.7rem}
+.modal-addon-name{font-size:.84rem;font-weight:600;color:var(--dk)}
+.modal-addon-price{font-size:.82rem;color:var(--or);font-weight:800}
+.modal-qty-row{display:flex;align-items:center;gap:14px;margin:18px 0 14px}
+.qty-btn{width:40px;height:40px;border-radius:50%;border:2px solid var(--or);color:var(--or);font-size:1.25rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:var(--t)}
+.qty-btn:active{background:var(--or);color:#fff}
+.qty-num{font-family:var(--font-h);font-size:1.4rem;font-weight:800;min-width:28px;text-align:center;color:var(--dk)}
+.modal-total-lbl{font-size:.82rem;color:var(--wg);margin-left:auto}
+.modal-total-lbl strong{color:var(--or);font-family:var(--font-h)}
+.modal-add-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;border-radius:100px;font-weight:800;font-size:.95rem;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(232,82,26,.38);transition:var(--t);font-family:var(--font)}
+.modal-add-btn:active{transform:scale(.97)}
 
-/* ── VIEWS ── */
-.view{display:none}.view.on{display:block}
+/* ══════════════ HOME ══════════════ */
+.hero{position:relative;background:var(--dk);overflow:hidden;padding:26px 18px 32px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 100% 70% at 80% 25%,rgba(232,82,26,.18) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 8% 85%,rgba(45,138,62,.09) 0%,transparent 50%),linear-gradient(170deg,#1C1A17 0%,#252018 50%,#1C1A17 100%)}
+.hero-dots{position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(232,82,26,.09) 1px,transparent 0);background-size:26px 26px}
+.hero-deco{position:absolute;top:10px;right:-8px;width:128px;height:128px;opacity:.2;pointer-events:none}
+.hero-body{position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(232,82,26,.16);border:1px solid rgba(232,82,26,.32);border-radius:100px;padding:5px 13px;font-size:.67rem;font-weight:800;color:#FF8C55;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;font-family:var(--font)}
+.hero-title{font-family:var(--font-h);font-size:1.9rem;line-height:1.12;color:var(--cr);font-weight:800;margin-bottom:8px}
+.hero-title em{font-style:italic;color:#FF8C55;display:block;font-weight:700}
+.hero-tagline{font-size:.85rem;color:var(--wgl);line-height:1.65;margin-bottom:10px;font-weight:400}
 
-/* ── STICKY ORDER BAR ── */
-.order-bar{background:var(--O);padding:13px 16px;display:none;align-items:center;justify-content:space-between;cursor:pointer;position:sticky;bottom:0;z-index:150}
-.ob-left{display:flex;align-items:center;gap:10px}
-.ob-badge{background:#fff;color:var(--O);border-radius:50%;width:26px;height:26px;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.ob-lbl{font-size:13px;font-weight:700;color:#fff}
-.ob-total{font-size:15px;font-weight:800;color:#fff}
+/* ANNOUNCEMENT BANNER */
+.announce-banner{background:linear-gradient(135deg,rgba(232,82,26,.15),rgba(232,82,26,.08));border:1px solid rgba(232,82,26,.3);border-radius:var(--rl);padding:12px 14px;margin-bottom:18px}
+.announce-main{font-size:.78rem;font-weight:800;color:#FF8C55;line-height:1.5;letter-spacing:.01em;font-family:var(--font-h)}
+.announce-note{font-size:.71rem;color:var(--wgl);margin-top:5px;line-height:1.5}
+.announce-note strong{color:var(--orl)}
 
-/* ── CART PAGE ── */
-.cart-wrap{padding:16px}
-.pg-title{font-family:'Fredoka One',cursive;font-size:22px;color:var(--G);margin-bottom:14px}
-.cart-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
-.ci-ico{font-size:28px;width:44px;text-align:center;flex-shrink:0}
-.ci-info{flex:1;min-width:0}
-.ci-name{font-size:13px;font-weight:700;color:var(--dark)}
-.ci-unit{font-size:11px;color:var(--muted)}
-.ci-ctrls{display:flex;align-items:center;gap:6px;margin-top:5px}
-.ci-btn{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:#fff;color:var(--dark);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;line-height:1;font-family:var(--font)}
-.ci-qty{font-size:13px;font-weight:700;min-width:20px;text-align:center}
-.ci-price{font-size:14px;font-weight:800;color:var(--O);flex-shrink:0}
-.totals{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin:12px 0}
-.tr{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:3px 0}
-.tr.grand{font-size:16px;font-weight:800;color:var(--dark);padding-top:10px;margin-top:6px;border-top:1px solid var(--border)}
-.empty-cart{text-align:center;padding:50px 20px;color:var(--muted)}
-.empty-ico{font-size:54px;margin-bottom:12px}
+.hero-btns{display:flex;gap:10px;margin-bottom:20px}
+.btn-pri{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 10px;background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;border-radius:100px;font-weight:800;font-size:.86rem;box-shadow:0 3px 14px rgba(232,82,26,.4);transition:var(--t);font-family:var(--font)}
+.btn-pri:active{transform:scale(.97)}
+.btn-sec{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 10px;border:1.5px solid rgba(232,82,26,.42);color:var(--cr);border-radius:100px;font-weight:700;font-size:.86rem;transition:var(--t);font-family:var(--font)}
+.btn-sec:active{background:rgba(232,82,26,.12)}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(232,82,26,.14);border-radius:var(--r);overflow:hidden}
+.hero-stat{background:rgba(255,255,255,.04);padding:11px 6px;text-align:center}
+.hero-stat-num{font-family:var(--font-h);font-size:1.25rem;font-weight:800;color:#FF8C55}
+.hero-stat-lbl{font-size:.59rem;color:var(--wgl);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;font-weight:600}
 
-/* ── CUSTOMER FORM ── */
-.form-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-.form-title{font-family:'Fredoka One',cursive;font-size:16px;color:var(--G);margin-bottom:12px}
-.form-row{margin-bottom:10px}
-.form-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.form-inp{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:var(--font);color:var(--dark);background:#fff;outline:none}
-.form-inp:focus{border-color:var(--G)}
-.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.radio-row{display:flex;gap:10px;margin-top:4px}
-.radio-opt{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:9px 10px;display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
-.radio-opt.on{border-color:var(--G);background:#EAF4EA;color:var(--G2)}
-.radio-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:.15s}
-.radio-opt.on .radio-dot{border-color:var(--G);background:var(--G)}
+/* PROMO STRIP */
+.promo-strip{background:linear-gradient(135deg,var(--or),#B83B10);padding:10px 14px;overflow:hidden}
+.promo-track{display:flex;gap:44px;animation:marquee 22s linear infinite;white-space:nowrap}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.promo-chip{display:flex;align-items:center;gap:8px;color:#fff;font-size:.77rem;font-weight:700}
+.promo-dot{width:5px;height:5px;background:#FFD166;border-radius:50%;flex-shrink:0}
 
-/* ── MESSENGER BTN ── */
-.msg-btn{width:100%;padding:15px;background:#1877F2;color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:800;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:10px;margin-top:4px;transition:.15s}
-.msg-btn:active{opacity:.9}
-.msg-btn svg{width:22px;height:22px;fill:#fff;flex-shrink:0}
+/* SECTIONS */
+.sec{padding:22px 16px}
+.sec-eye{font-size:.65rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--or);margin-bottom:4px;font-family:var(--font-h)}
+.sec-title{font-family:var(--font-h);font-size:1.3rem;font-weight:800;color:var(--dk)}
+.sec-sub{font-size:.78rem;color:var(--wg);margin-top:3px}
 
-/* ── INFO ── */
-.info-wrap{padding:16px}
-.i-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-.i-title{font-family:'Fredoka One',cursive;font-size:16px;color:var(--O);margin-bottom:10px}
-.i-row{display:flex;gap:10px;margin-bottom:8px;font-size:13px}
-.i-lbl{color:var(--muted);width:90px;flex-shrink:0;font-weight:600}
-.i-val{color:var(--dark);font-weight:500}
+/* BESTSELLERS */
+.bs-scroll{display:flex;gap:11px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin:14px -16px 0;padding-left:16px;padding-right:16px;-webkit-overflow-scrolling:touch}
+.bs-scroll::-webkit-scrollbar{display:none}
+.bs-card{flex-shrink:0;width:120px;background:#fff;border-radius:var(--rx);padding:14px 10px 12px;text-align:center;box-shadow:0 2px 12px var(--sh);cursor:pointer;transition:var(--t);border:1.5px solid transparent}
+.bs-card:active{transform:scale(.96);border-color:var(--orp)}
+.bs-icon-box{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,var(--crl),var(--orp));display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 9px}
+.bs-name{font-weight:700;font-size:.72rem;color:var(--dk);margin-bottom:4px;line-height:1.3;font-family:var(--font-h)}
+.bs-price{color:var(--or);font-weight:800;font-size:.8rem;font-family:var(--font-h)}
+.bs-add{margin:7px auto 0;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;font-size:.95rem;font-weight:700;display:flex;align-items:center;justify-content:center}
 
-/* ── PROMO BANNER ── */
-.promo-band{background:var(--O);padding:12px 16px;display:flex;align-items:center;gap:12px}
-.promo-ico{font-size:24px}
-.promo-txt{font-size:12px;font-weight:700;color:#fff;line-height:1.4}
-.promo-sub{font-size:11px;color:rgba(255,255,255,.75);font-weight:400}
+/* HOW TO ORDER */
+.how-section{background:var(--dk);padding:26px 16px 30px}
+.how-title{font-family:var(--font-h);font-size:1.3rem;color:var(--cr);font-weight:800;margin:5px 0 18px}
+.how-steps{display:flex;flex-direction:column;gap:0}
+.how-step{display:flex;gap:14px;align-items:flex-start;padding:14px 0;position:relative}
+.how-step:not(:last-child)::after{content:'';position:absolute;left:18px;top:52px;width:2px;height:calc(100% - 38px);background:rgba(232,82,26,.2);border-radius:1px}
+.how-num{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;font-family:var(--font-h);font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(232,82,26,.4);position:relative;z-index:1}
+.how-icon-sm{font-size:1.5rem;margin-bottom:3px}
+.how-step-title{font-family:var(--font-h);font-size:.95rem;font-weight:700;color:var(--cr);margin-bottom:3px}
+.how-step-desc{font-size:.77rem;color:var(--wgl);line-height:1.6}
 
-/* ── BESTSELLER strip ── */
-.bs-strip{padding:12px 16px 4px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
-.bs-strip::-webkit-scrollbar{display:none}
-.bs-card{flex-shrink:0;width:100px;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer}
-.bs-img{height:70px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--gray)}
-.bs-lbl{font-size:11px;font-weight:700;padding:6px 6px 7px;text-align:center;color:var(--dark)}
+/* ══════════════ MENU ══════════════ */
+.menu-top{background:var(--dk);padding:16px 16px 0}
+.menu-pg-title{font-family:var(--font-h);font-size:1.45rem;color:var(--cr);font-weight:800}
+.menu-pg-title span{color:#FF8C55;font-style:italic}
+.menu-pg-sub{color:var(--wgl);font-size:.77rem;margin-top:3px;margin-bottom:14px}
+.chip-strip{background:var(--dk);padding:10px 16px 14px;position:sticky;top:var(--nav-h);z-index:100;border-bottom:1px solid rgba(232,82,26,.16)}
+.chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:8px 15px;border-radius:100px;font-size:.75rem;font-weight:700;cursor:pointer;transition:var(--t);white-space:nowrap;border:1.5px solid rgba(232,82,26,.22);color:var(--wgl);background:transparent;font-family:var(--font)}
+.chip:active{transform:scale(.95)}
+.chip.active{background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(232,82,26,.35)}
+.menu-body{padding:14px 14px 10px}
+.menu-sec{margin-bottom:24px}
+.cat-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.cat-icon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--or),var(--orl));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.cat-text{}
+.cat-label{font-family:var(--font-h);font-size:1.05rem;font-weight:800;color:var(--dk)}
+.cat-count{font-size:.67rem;color:var(--wg);font-weight:600}
+.items-list{display:flex;flex-direction:column;gap:9px}
+.item-card{background:#fff;border-radius:var(--rl);display:flex;gap:0;align-items:stretch;box-shadow:0 2px 10px var(--sh);cursor:pointer;transition:var(--t);border:1.5px solid transparent;overflow:hidden}
+.item-card:active{transform:scale(.985);border-color:var(--orp)}
+.item-img-col{width:78px;flex-shrink:0;background:linear-gradient(135deg,var(--crl),var(--orp));display:flex;align-items:center;justify-content:center;font-size:2.1rem;padding:12px 0}
+.item-body{flex:1;padding:12px 12px 10px;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.item-row1{display:flex;align-items:flex-start;gap:5px;margin-bottom:3px}
+.item-name{font-family:var(--font-h);font-weight:700;font-size:.87rem;color:var(--dk);flex:1;line-height:1.3}
+.pop-badge{flex-shrink:0;font-size:.55rem;font-weight:800;padding:2px 7px;border-radius:100px;background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
+.item-desc{font-size:.71rem;color:var(--wg);line-height:1.45;margin-bottom:8px;flex:1}
+.item-variants-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px}
+.v-pill{font-size:.63rem;padding:2px 8px;border:1px solid var(--orp);border-radius:100px;color:var(--dks);font-weight:600;background:var(--crl)}
+.item-footer{display:flex;align-items:center;justify-content:space-between}
+.item-price{font-family:var(--font-h);font-size:.98rem;font-weight:800;color:var(--or)}
+.item-price .from{font-size:.6rem;color:var(--wg);font-family:var(--font);font-weight:600;display:block;text-transform:uppercase;letter-spacing:.04em}
+.item-add-btn{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;font-size:1.1rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(232,82,26,.3);transition:var(--t);flex-shrink:0}
+.item-add-btn:active{transform:scale(.9)}
 
-.spacer20{height:20px}
+/* ══════════════ ORDER ══════════════ */
+.order-body{padding:18px 15px}
+.pg-title{font-family:var(--font-h);font-size:1.45rem;font-weight:800;color:var(--dk);margin-bottom:3px}
+.pg-sub{font-size:.78rem;color:var(--wg);margin-bottom:16px}
+.cart-empty{text-align:center;padding:48px 20px;background:#fff;border-radius:var(--rx);border:2px dashed var(--orp)}
+.ce-icon{font-size:3.5rem;margin-bottom:12px;opacity:.6}
+.ce-title{font-family:var(--font-h);font-size:1.15rem;font-weight:700;color:var(--dk);margin-bottom:6px}
+.ce-sub{font-size:.79rem;color:var(--wg);margin-bottom:18px}
+.cart-items{display:flex;flex-direction:column;gap:9px;margin-bottom:13px}
+.cart-item{background:#fff;border-radius:var(--rl);padding:12px 13px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 8px var(--sh)}
+.ci-icon{font-size:1.75rem;flex-shrink:0}
+.ci-body{flex:1;min-width:0}
+.ci-name{font-family:var(--font-h);font-weight:700;font-size:.84rem;color:var(--dk);line-height:1.3}
+.ci-mods{font-size:.68rem;color:var(--wg);margin-top:1px}
+.ci-controls{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.cqb{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--or);color:var(--or);font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:var(--t)}
+.cqb:active{background:var(--or);color:#fff}
+.ci-qty{font-weight:800;font-size:.88rem;min-width:18px;text-align:center;font-family:var(--font-h)}
+.ci-price{font-family:var(--font-h);font-weight:800;color:var(--or);font-size:.92rem;min-width:50px;text-align:right;flex-shrink:0}
+.ci-rm{color:var(--wgl);font-size:.88rem;padding:5px;transition:var(--t);flex-shrink:0}
+.ci-rm:active{color:#c0392b}
+.summary-card{background:#fff;border-radius:var(--rl);padding:14px 15px;box-shadow:0 1px 8px var(--sh);margin-bottom:13px}
+.sum-row{display:flex;justify-content:space-between;font-size:.81rem;color:var(--wg);padding:4px 0}
+.sum-total{display:flex;justify-content:space-between;font-weight:700;font-size:1rem;padding-top:10px;margin-top:5px;border-top:1px solid var(--orp)}
+.sum-total-lbl{color:var(--dk);font-family:var(--font-h);font-weight:700}
+.sum-total-amt{font-family:var(--font-h);font-size:1.2rem;font-weight:900;color:var(--or)}
+
+/* FORM CARD */
+.form-card{background:#fff;border-radius:var(--rl);padding:17px;box-shadow:0 1px 8px var(--sh);margin-bottom:13px}
+.form-card-title{font-family:var(--font-h);font-size:1rem;font-weight:800;color:var(--dk);margin-bottom:15px;display:flex;align-items:center;gap:7px}
+.fg{margin-bottom:12px}
+.flbl{font-size:.69rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--dks);margin-bottom:6px;display:block;font-family:var(--font-h)}
+.flbl .req{color:var(--or);margin-left:2px}
+.finput{width:100%;padding:11px 13px;border:1.5px solid var(--wgll);border-radius:var(--rl);font-size:.88rem;color:var(--dk);background:var(--crl);transition:var(--t);outline:none;-webkit-appearance:none;font-family:var(--font)}
+.finput:focus{border-color:var(--or);background:#fff;box-shadow:0 0 0 3px rgba(232,82,26,.1)}
+.finput::placeholder{color:var(--wgl)}
+.finput.error{border-color:#e74c3c;background:#fff8f8}
+textarea.finput{resize:vertical;min-height:72px}
+select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7468' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px;cursor:pointer}
+.fhint{font-size:.67rem;color:var(--wg);margin-top:4px;line-height:1.45}
+.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* ORDER TYPE CHECKBOXES */
+.ot-options{display:flex;flex-direction:column;gap:8px}
+.ot-option{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--wgll);border-radius:var(--rl);cursor:pointer;transition:var(--t);background:#fff}
+.ot-option.sel{border-color:var(--or);background:linear-gradient(135deg,#fff8f5,var(--orp))}
+.ot-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--wgll);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--t)}
+.ot-option.sel .ot-radio{border-color:var(--or);background:var(--or)}
+.ot-radio-dot{width:8px;height:8px;border-radius:50%;background:#fff;transform:scale(0);transition:var(--t)}
+.ot-option.sel .ot-radio-dot{transform:scale(1)}
+.ot-option-icon{font-size:1.25rem;flex-shrink:0}
+.ot-option-info{flex:1}
+.ot-option-name{font-family:var(--font-h);font-size:.88rem;font-weight:700;color:var(--dk)}
+.ot-option-note{font-size:.7rem;color:var(--wg);margin-top:1px}
+.ot-option.sel .ot-option-note{color:var(--or2)}
+
+/* DELIVERY FIELDS */
+.delivery-banner{background:rgba(232,82,26,.07);border:1px solid rgba(232,82,26,.2);border-radius:var(--rl);padding:11px 13px;margin-bottom:12px;font-size:.77rem;color:var(--dks);line-height:1.55}
+.delivery-banner strong{color:var(--or)}
+.delivery-fee-note{background:linear-gradient(135deg,rgba(45,138,62,.08),rgba(45,138,62,.04));border:1px solid rgba(45,138,62,.22);border-radius:var(--r);padding:9px 12px;font-size:.73rem;color:var(--dks);line-height:1.5;margin-top:7px}
+.delivery-fee-note strong{color:var(--gr)}
+
+/* SEND BUTTON */
+.send-btn{width:100%;padding:15px;background:linear-gradient(135deg,#0078FF,#0056C7);color:#fff;border-radius:100px;font-weight:800;font-size:.94rem;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 16px rgba(0,120,255,.32);transition:var(--t);font-family:var(--font)}
+.send-btn:active{transform:scale(.97)}
+.send-btn:disabled{background:#aaa;box-shadow:none;cursor:not-allowed;opacity:.6}
+.send-note{text-align:center;font-size:.69rem;color:var(--wg);margin-top:10px;line-height:1.45}
+
+/* ══════════════ INFO ══════════════ */
+.info-body{padding:17px 15px}
+.info-card{background:#fff;border-radius:var(--rx);padding:17px;box-shadow:0 1px 8px var(--sh);margin-bottom:11px;border-top:3px solid var(--or)}
+.ic-title{font-family:var(--font-h);font-size:1rem;font-weight:800;color:var(--dk);margin-bottom:12px}
+.ic-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--crl);font-size:.82rem}
+.ic-row:last-of-type{border-bottom:none}
+.ic-lbl{color:var(--wg);font-weight:600}
+.ic-val{color:var(--dk);font-weight:700;text-align:right;font-family:var(--font-h)}
+.status-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;font-size:.68rem;font-weight:800}
+.status-open{background:rgba(45,138,62,.12);color:var(--gr)}
+.status-closed{background:rgba(192,57,43,.1);color:#c0392b}
+.maps-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:12px;background:linear-gradient(135deg,var(--gr),var(--grd));color:#fff;border-radius:100px;font-size:.83rem;font-weight:800;box-shadow:0 3px 10px rgba(45,138,62,.3);transition:var(--t);font-family:var(--font)}
+.maps-btn:active{transform:scale(.97)}
+.about-card{background:var(--dk);border-radius:var(--rx);padding:20px;margin-bottom:11px;position:relative;overflow:hidden}
+.about-card-deco{position:absolute;right:-12px;top:50%;transform:translateY(-50%);opacity:.07;pointer-events:none}
+.about-title{font-family:var(--font-h);font-size:1.15rem;color:var(--cr);margin-bottom:10px;font-weight:800}
+.about-title span{color:#FF8C55;font-style:italic}
+.about-text{color:var(--wgl);line-height:1.75;font-size:.82rem}
+.addons-card{background:#fff;border-radius:var(--rx);padding:17px;box-shadow:0 1px 8px var(--sh);margin-bottom:11px}
+.addons-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:11px}
+.addon-chip{background:var(--crl);border:1.5px solid var(--orp);border-radius:var(--rl);padding:11px 7px;text-align:center}
+.addon-chip-name{font-weight:700;font-size:.77rem;color:var(--dk);font-family:var(--font-h)}
+.addon-chip-price{color:var(--or);font-weight:800;font-size:.84rem;margin-top:3px;font-family:var(--font-h)}
+.msg-cta{background:linear-gradient(135deg,#0078FF,#0056C7);border-radius:var(--rx);padding:22px;text-align:center;color:#fff;margin-bottom:11px}
+.msg-cta-icon{font-size:2.3rem;margin-bottom:10px}
+.msg-cta-title{font-family:var(--font-h);font-size:1.15rem;margin-bottom:8px;font-weight:800}
+.msg-cta-text{font-size:.79rem;opacity:.88;margin-bottom:18px;line-height:1.6}
+.msg-cta-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#0078FF;padding:11px 22px;border-radius:100px;font-weight:800;font-size:.86rem;transition:var(--t);font-family:var(--font)}
+.msg-cta-btn:active{transform:scale(.96)}
 </style>
+</head>
+<body>
 
-<div id="app">
-
-  <div class="topbar">
-    <div>
-      <div class="tl"><span class="tla">La</span><span class="tlb">Luna</span></div>
-      <div class="tsub">Grill &amp; Cafe</div>
-    </div>
-    <button class="cart-icon-btn" onclick="switchTab('cart')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <span class="ci-badge" id="topBadge">0</span>
-    </button>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo" onclick="goTo('home')">
+    <svg viewBox="0 0 245 48" xmlns="http://www.w3.org/2000/svg" aria-label="La Luna Grill + Cafe">
+      <defs>
+        <linearGradient id="fg" x1="29" y1="4" x2="29" y2="27" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#FFD166"/><stop offset="45%" stop-color="#FF6B2B"/><stop offset="100%" stop-color="#CC3A00"/>
+        </linearGradient>
+        <filter id="gw"><feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <path d="M29 5C20 5 13 13 13 23C13 33 20 41 29 41C23.5 37.5 20 30.5 20 23C20 15.5 23.5 8.5 29 5Z" fill="none" stroke="#FF6B2B" stroke-width="2.3" stroke-linecap="round" filter="url(#gw)" opacity=".92"/>
+      <path d="M29 5C38 5 45 13 45 23C45 33 38 41 29 41" fill="none" stroke="#FF9F1C" stroke-width="1.8" stroke-linecap="round" opacity=".6"/>
+      <path d="M29 7C29 7 24.5 14.5 24.5 18.5C24.5 23 27 24 29 20.5C31 24 33.5 23 33.5 18.5C33.5 14.5 29 7 29 7Z" fill="url(#fg)"/>
+      <path d="M29 7C29 7 27 11.5 27 14.5C27 17 28.2 17.5 29 15.5C29.8 17.5 31 17 31 14.5C31 11.5 29 7 29 7Z" fill="#FFE07A" opacity=".96"/>
+      <text x="54" y="33" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="17" fill="#2D8A3E">la</text>
+      <text x="73" y="34" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="23" fill="#E8521A">Luna</text>
+      <text x="54" y="44" font-family="Arial,sans-serif" font-weight="700" font-size="7.8" fill="#CC3A00" letter-spacing="2.7">GRILL+CAFE</text>
+    </svg>
   </div>
+  <button class="nav-cart-pill" onclick="goTo('order')">
+    <span class="cicon">🛒</span>
+    <span class="nav-cart-count" id="navCartCount">0</span>
+  </button>
+</nav>
 
-  <div class="nav">
-    <button class="nt on" onclick="switchTab('home')">Home</button>
-    <button class="nt" onclick="switchTab('menu')">Menu</button>
-    <button class="nt" onclick="switchTab('cart')">My Order</button>
-    <button class="nt" onclick="switchTab('info')">Info</button>
-  </div>
+<!-- BOTTOM TABS -->
+<nav class="tabbar">
+  <button class="tab-btn active" id="tab-home" onclick="goTo('home')">
+    <div class="tab-bar"></div>
+    <span class="tab-icon">🏠</span>Home
+  </button>
+  <button class="tab-btn" id="tab-menu" onclick="goTo('menu')">
+    <div class="tab-bar"></div>
+    <span class="tab-icon">🍽️</span>Menu
+  </button>
+  <button class="tab-btn" id="tab-order" onclick="goTo('order')">
+    <div class="tab-bar"></div>
+    <span class="tab-icon">🛒</span>
+    <span class="tab-dot" id="tabDot">0</span>Order
+  </button>
+  <button class="tab-btn" id="tab-info" onclick="goTo('info')">
+    <div class="tab-bar"></div>
+    <span class="tab-icon">ℹ️</span>Info
+  </button>
+</nav>
 
-  <!-- ===== HOME ===== -->
-  <div class="view on" id="view-home">
-    <div class="hero">
-      <div class="hero-arc"></div><div class="hero-arc2"></div>
-      <div class="h-tag">Order Online Now</div>
-      <div class="h-title">Grilled Fresh,<br><em>Served with Love.</em></div>
-      <div class="h-sub">Authentic Filipino grill favorites, hearty mains, pizza, pasta, and cafe drinks — all in one place.</div>
-      <div class="h-btns">
-        <button class="h-btn primary" onclick="switchTab('menu')">Order Now</button>
-        <button class="h-btn outline" onclick="switchTab('info')">Find Us</button>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL SHEET -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOut(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-item-header">
+      <div class="modal-item-icon" id="mIcon">🍗</div>
+      <div class="modal-item-info">
+        <div class="modal-item-name" id="mName"></div>
+        <div class="modal-item-desc" id="mDesc"></div>
+        <div class="modal-item-price" id="mPrice">₱0</div>
       </div>
     </div>
-
-    <div class="promo-band">
-      <div class="promo-ico">🔥</div>
-      <div><div class="promo-txt">Hot Deal: Combo Meals from ₱120!</div><div class="promo-sub">Chicken + 2 Rice starting at C1</div></div>
+    <div id="mVarSec" style="display:none">
+      <div class="modal-sec">Choose Variant</div>
+      <div class="modal-variants" id="mVariants"></div>
     </div>
-
-    <div style="padding:14px 16px 6px">
-      <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--G)">Bestsellers</div>
+    <div id="mAddSec" style="display:none">
+      <div class="modal-sec">Add-ons</div>
+      <div class="modal-addons" id="mAddons"></div>
     </div>
-    <div class="bs-strip">
-      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🍗</div><div class="bs-lbl">12pcs Wings</div></div>
-      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🍕</div><div class="bs-lbl">La Luna Pizza</div></div>
-      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🍝</div><div class="bs-lbl">Carbonara</div></div>
-      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🧋</div><div class="bs-lbl">Milktea</div></div>
-      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">🥤</div><div class="bs-lbl">Frappe</div></div>
-      <div class="bs-card" onclick="switchTab('menu')"><div class="bs-img">☕</div><div class="bs-lbl">Cafe Latte</div></div>
+    <div class="modal-qty-row">
+      <button class="qty-btn" onclick="chQty(-1)">−</button>
+      <span class="qty-num" id="mQty">1</span>
+      <button class="qty-btn" onclick="chQty(1)">+</button>
+      <div class="modal-total-lbl">Total: <strong id="mTotal">₱0</strong></div>
     </div>
-
-    <div style="padding:14px 16px 6px;margin-top:4px">
-      <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--G)">How to Order</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 16px 16px">
-      <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center">
-        <div style="font-size:24px;margin-bottom:6px">🛒</div>
-        <div style="font-size:11px;font-weight:700;color:var(--G)">1. Pick Items</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:3px">Browse & add to cart</div>
-      </div>
-      <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center">
-        <div style="font-size:24px;margin-bottom:6px">📝</div>
-        <div style="font-size:11px;font-weight:700;color:var(--G)">2. Fill Details</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:3px">Name, contact & type</div>
-      </div>
-      <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center">
-        <div style="font-size:24px;margin-bottom:6px">💬</div>
-        <div style="font-size:11px;font-weight:700;color:var(--G)">3. Send via Messenger</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:3px">We confirm your order</div>
-      </div>
-    </div>
-    <div class="spacer20"></div>
-  </div>
-
-  <!-- ===== MENU ===== -->
-  <div class="view" id="view-menu">
-    <div class="cats" id="catStrip">
-      <button class="chip on" onclick="filterCat('All',this)">All</button>
-      <button class="chip" onclick="filterCat('Appetizer',this)">Appetizer</button>
-      <button class="chip" onclick="filterCat('Pizza',this)">Pizza</button>
-      <button class="chip" onclick="filterCat('Pasta',this)">Pasta</button>
-      <button class="chip" onclick="filterCat('Mains',this)">Mains</button>
-      <button class="chip" onclick="filterCat('Combo',this)">Combo Meals</button>
-      <button class="chip" onclick="filterCat('Coffee',this)">Coffee</button>
-      <button class="chip" onclick="filterCat('Milktea',this)">Milktea</button>
-      <button class="chip" onclick="filterCat('Frappe',this)">Frappe</button>
-      <button class="chip" onclick="filterCat('Shakes',this)">Fruit Shakes</button>
-      <button class="chip" onclick="filterCat('Addons',this)">Add-ons</button>
-    </div>
-    <div id="menuBody"></div>
-    <div class="spacer20"></div>
-  </div>
-
-  <!-- ===== CART / CHECKOUT ===== -->
-  <div class="view" id="view-cart">
-    <div class="cart-wrap">
-      <div class="pg-title">My Order</div>
-      <div id="cartBody"></div>
-    </div>
-  </div>
-
-  <!-- ===== INFO ===== -->
-  <div class="view" id="view-info">
-    <div class="info-wrap">
-      <div class="i-card">
-        <div class="i-title">Location &amp; Hours</div>
-        <div class="i-row"><span class="i-lbl">Address</span><span class="i-val">La Luna Grill &amp; Cafe</span></div>
-        <div class="i-row"><span class="i-lbl">Mon – Fri</span><span class="i-val">8:00 AM – 9:00 PM</span></div>
-        <div class="i-row"><span class="i-lbl">Sat – Sun</span><span class="i-val">8:00 AM – 10:00 PM</span></div>
-        <div class="i-row"><span class="i-lbl">Contact</span><span class="i-val" style="color:var(--O)">Message us on FB</span></div>
-      </div>
-      <div class="i-card">
-        <div class="i-title">About La Luna</div>
-        <div style="font-size:13px;color:#555;line-height:1.7">La Luna Grill &amp; Cafe serves hearty Filipino-inspired grills, pasta, pizza, and a full cafe menu with coffee, milktea, frappes, and fruit shakes. Great food for every occasion!</div>
-      </div>
-      <div class="i-card">
-        <div class="i-title">Order via Facebook Messenger</div>
-        <div style="font-size:13px;color:#555;line-height:1.6;margin-bottom:12px">Place your order and get real-time confirmation straight through our FB Messenger. We typically reply within minutes!</div>
-        <a href="https://m.me/303918802794006" target="_blank" style="text-decoration:none">
-          <div class="msg-btn" style="background:#1877F2">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.92 1.19 5.49 3.14 7.28V22l2.94-1.62c.78.22 1.61.33 2.47.33 5.64 0 10-4.13 10-9.7C22.55 6.13 17.64 2 12 2zm.99 13.08l-2.55-2.72-4.98 2.72 5.48-5.81 2.61 2.72 4.93-2.72-5.49 5.81z"/></svg>
-            Message Us on Facebook
-          </div>
-        </a>
-      </div>
-      <div class="i-card">
-        <div class="i-title">Add-ons for Drinks</div>
-        <div class="i-row"><span class="i-lbl">Pearl</span><span class="i-val" style="color:var(--O);font-weight:700">+₱15</span></div>
-        <div class="i-row"><span class="i-lbl">Nata</span><span class="i-val" style="color:var(--O);font-weight:700">+₱15</span></div>
-        <div class="i-row"><span class="i-lbl">Cream Cheese</span><span class="i-val" style="color:var(--O);font-weight:700">+₱15</span></div>
-      </div>
-    </div>
-    <div class="spacer20"></div>
-  </div>
-
-  <div class="order-bar" id="orderBar" onclick="switchTab('cart')">
-    <div class="ob-left">
-      <div class="ob-badge" id="obBadge">0</div>
-      <span class="ob-lbl">View My Order</span>
-    </div>
-    <span class="ob-total" id="obTotal">₱0</span>
+    <button class="modal-add-btn" onclick="addToCart()">🛒 Add to Order</button>
   </div>
 </div>
 
+<!-- ═══════════════ HOME ═══════════════ -->
+<section class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-dots"></div>
+    <div class="hero-deco">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+        <defs>
+          <linearGradient id="hfg" x1="100" y1="18" x2="100" y2="135" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FFD166"/><stop offset="50%" stop-color="#FF6B2B"/><stop offset="100%" stop-color="#CC3A00"/>
+          </linearGradient>
+          <filter id="hgw"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <path d="M100 18C67 18 40 47 40 82C40 117 67 146 100 146C81 134 69 110 69 82C69 54 81 30 100 18Z" fill="none" stroke="#FF6B2B" stroke-width="5" stroke-linecap="round" filter="url(#hgw)" opacity=".9"/>
+        <path d="M100 18C133 18 160 47 160 82C160 117 133 146 100 146" fill="none" stroke="#FF9F1C" stroke-width="4" opacity=".55"/>
+        <path d="M100 22C100 22 83 50 83 67C83 86 94 92 100 79C106 92 117 86 117 67C117 50 100 22 100 22Z" fill="url(#hfg)"/>
+        <path d="M100 22C100 22 93 41 93 54C93 64 97 67 100 59C103 67 107 64 107 54C107 41 100 22 100 22Z" fill="#FFE07A" opacity=".96"/>
+      </svg>
+    </div>
+    <div class="hero-body">
+      <div class="hero-badge">🌙 Tue–Sun · 12PM–10PM</div>
+      <h1 class="hero-title">Grilled Fresh,<em>Served with Love.</em></h1>
+      <div class="announce-banner">
+        <div class="announce-main">Open Tue–Sun &nbsp;★&nbsp; ADVANCE ORDER FOR DINE-IN &amp; PICK-UP &nbsp;★&nbsp; INQUIRE FOR DELIVERY</div>
+        <div class="announce-note">📦 <strong>Delivery:</strong> Please inquire first if delivery is available in your area. Delivery fee is <strong>₱20–₱50</strong> depending on distance. Message us on Facebook to confirm before ordering.</div>
+      </div>
+      <div class="hero-btns">
+        <button class="btn-pri" onclick="goTo('menu')">🍽️ Browse Menu</button>
+        <a class="btn-sec" href="https://maps.app.goo.gl/98P9TApBfp1cpxkD8" target="_blank" rel="noopener">📍 Find Us</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">44+</div><div class="hero-stat-lbl">Items</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">₱69</div><div class="hero-stat-lbl">Starts At</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">⭐4.9</div><div class="hero-stat-lbl">Rating</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="promo-strip"><div class="promo-track" id="promoTrack"></div></div>
+
+  <div class="sec">
+    <div class="sec-eye">🔥 Customer Favorites</div>
+    <div class="sec-title">Bestsellers</div>
+    <div class="sec-sub">Tap any item to add to your order</div>
+    <div class="bs-scroll" id="bsGrid"></div>
+  </div>
+
+  <div class="how-section">
+    <div class="sec-eye" style="color:#FF8C55">📋 Simple Process</div>
+    <div class="how-title">How to Order</div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <div>
+          <div class="how-icon-sm">🛒</div>
+          <div class="how-step-title">Pick Your Items</div>
+          <div class="how-step-desc">Browse our full menu by category. Tap any item to choose your size, variant, and add-ons.</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <div>
+          <div class="how-icon-sm">📝</div>
+          <div class="how-step-title">Fill Your Details</div>
+          <div class="how-step-desc">Enter your name and phone. Select Advance Dine-in, Pick-up, or Delivery (inquiry required).</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <div>
+          <div class="how-icon-sm">💬</div>
+          <div class="how-step-title">Send via Messenger</div>
+          <div class="how-step-desc">Your full order summary is pre-filled and sent straight to our FB inbox. We confirm within minutes!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MENU ═══════════════ -->
+<section class="page" id="page-menu">
+  <div class="menu-top">
+    <div class="menu-pg-title">Our <span>Menu</span></div>
+    <div class="menu-pg-sub">Filipino grill favorites &amp; café drinks</div>
+  </div>
+  <div class="chip-strip"><div class="chips" id="chips"></div></div>
+  <div class="menu-body" id="menuBody"></div>
+</section>
+
+<!-- ═══════════════ ORDER ═══════════════ -->
+<section class="page" id="page-order">
+  <div class="order-body">
+    <div class="pg-title">🛒 My Order</div>
+    <div class="pg-sub">Review items, fill details, send via Messenger</div>
+
+    <div class="cart-empty" id="cartEmpty">
+      <div class="ce-icon">🍽️</div>
+      <div class="ce-title">Your cart is empty</div>
+      <div class="ce-sub">Browse our menu and add your favorites!</div>
+      <button class="btn-pri" style="display:inline-flex;width:auto;padding:12px 24px" onclick="goTo('menu')">Browse Menu</button>
+    </div>
+
+    <div id="cartFull" style="display:none">
+      <div class="cart-items" id="cartItems"></div>
+      <div class="summary-card">
+        <div class="sum-row"><span>Subtotal</span><span id="subAmt">₱0</span></div>
+        <div class="sum-row" id="delivFeeRow" style="display:none"><span>Delivery Fee</span><span style="color:var(--gr);font-weight:700">₱20–₱50 (to confirm)</span></div>
+        <div class="sum-row"><span>Order Type</span><span id="otDisplay" style="font-weight:700;color:var(--dk)">—</span></div>
+        <div class="sum-total"><span class="sum-total-lbl">Order Total</span><span class="sum-total-amt" id="totalAmt">₱0</span></div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">📋 Your Details</div>
+        <div class="fg">
+          <label class="flbl">Full Name <span class="req">*</span></label>
+          <input class="finput" id="custName" type="text" placeholder="e.g. Juan dela Cruz" autocomplete="name"/>
+        </div>
+        <div class="fg">
+          <label class="flbl">Phone Number <span class="req">*</span></label>
+          <input class="finput" id="custPhone" type="tel" placeholder="09XX XXX XXXX" autocomplete="tel"/>
+        </div>
+        <div class="fg">
+          <label class="flbl">Order Type <span class="req">*</span></label>
+          <div class="ot-options">
+            <div class="ot-option" onclick="setOT(this,'Advance Dine-in')">
+              <div class="ot-radio"><div class="ot-radio-dot"></div></div>
+              <span class="ot-option-icon">🍽️</span>
+              <div class="ot-option-info">
+                <div class="ot-option-name">Advance Dine-in</div>
+                <div class="ot-option-note">Reserve your table in advance</div>
+              </div>
+            </div>
+            <div class="ot-option" onclick="setOT(this,'Pick-up')">
+              <div class="ot-radio"><div class="ot-radio-dot"></div></div>
+              <span class="ot-option-icon">🥡</span>
+              <div class="ot-option-info">
+                <div class="ot-option-name">Pick-up</div>
+                <div class="ot-option-note">Order ahead, pick up at the store</div>
+              </div>
+            </div>
+            <div class="ot-option" onclick="setOT(this,'Delivery')">
+              <div class="ot-radio"><div class="ot-radio-dot"></div></div>
+              <span class="ot-option-icon">🚴</span>
+              <div class="ot-option-info">
+                <div class="ot-option-name">Delivery</div>
+                <div class="ot-option-note">Inquire first — fee ₱20–₱50</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DELIVERY FIELDS -->
+        <div id="delivFields" style="display:none">
+          <div class="delivery-banner">
+            🚴 <strong>Delivery Details Required</strong><br/>
+            Please provide your complete address and landmark so our rider can find you quickly.
+          </div>
+          <div class="delivery-fee-note">
+            💡 <strong>Delivery fee: ₱20–₱50</strong> depending on your distance from La Luna. Our team will confirm the exact fee via Messenger before preparing your order.
+          </div>
+          <div style="height:10px"></div>
+          <div class="fg">
+            <label class="flbl">Barangay / Area <span class="req">*</span></label>
+            <select class="finput" id="custBgy" onchange="checkSendBtn()">
+              <option value="">— Select your barangay —</option>
+              <option>Panghiawan</option>
+              <option>Compol</option>
+              <option>Looc</option>
+              <option>Poblacion</option>
+              <option>Alga</option>
+              <option>Tangaro</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label class="flbl">House No. &amp; Street / Purok <span class="req">*</span></label>
+            <input class="finput" id="custStreet" type="text" placeholder="e.g. #12 Sampaguita St., Purok 3" oninput="checkSendBtn()"/>
+          </div>
+          <div class="fg">
+            <label class="flbl">Landmark <span class="req">*</span></label>
+            <input class="finput" id="custLM" type="text" placeholder="e.g. Near sari-sari store, beside blue gate" oninput="checkSendBtn()"/>
+            <div class="fhint">🗺️ A clear landmark (e.g. near a store, corner, color of gate) helps our rider find you fast. This field is required before sending.</div>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="flbl">Special Instructions <span style="font-weight:500;color:var(--wg)">(optional)</span></label>
+          <textarea class="finput" id="custNotes" placeholder="Extra rice? Less spice? Allergies? Let us know!"></textarea>
+        </div>
+      </div>
+
+      <button class="send-btn" id="sendBtn" onclick="sendOrder()">
+        <span style="font-size:1.25rem">💬</span> Send Order via Messenger
+      </button>
+      <div class="send-note" id="sendNote">We confirm your order via Facebook Messenger — usually within minutes 🕐</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ INFO ═══════════════ -->
+<section class="page" id="page-info">
+  <div class="info-body">
+    <div class="pg-title" style="margin-bottom:14px">Store <span style="color:var(--or);font-style:italic">Info</span></div>
+
+    <div class="info-card">
+      <div class="ic-title">⏰ Operating Hours</div>
+      <div class="ic-row"><span class="ic-lbl">Tuesday – Sunday</span><span class="ic-val">12:00 PM – 10:00 PM</span></div>
+      <div class="ic-row"><span class="ic-lbl">Monday</span><span class="ic-val" style="color:#c0392b">CLOSED</span></div>
+      <div class="ic-row"><span class="ic-lbl">Holidays</span><span class="ic-val">Check FB Page</span></div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">📍 Location &amp; Contact</div>
+      <div class="ic-row"><span class="ic-lbl">Restaurant</span><span class="ic-val">La Luna Grill + Cafe</span></div>
+      <div class="ic-row"><span class="ic-lbl">Facebook</span><span class="ic-val">La Luna CMG</span></div>
+      <div class="ic-row"><span class="ic-lbl">Orders</span><span class="ic-val">Via FB Messenger</span></div>
+      <a href="https://maps.app.goo.gl/98P9TApBfp1cpxkD8" target="_blank" rel="noopener" class="maps-btn">📍 Open in Google Maps</a>
+    </div>
+
+    <div class="info-card" style="border-top-color:var(--gr)">
+      <div class="ic-title">🚴 Delivery Info</div>
+      <div class="ic-row"><span class="ic-lbl">Delivery Fee</span><span class="ic-val" style="color:var(--gr)">₱20–₱50</span></div>
+      <div class="ic-row"><span class="ic-lbl">Coverage Areas</span><span class="ic-val">Panghiawan, Compol, Looc, Poblacion, Alga, Tangaro</span></div>
+      <div style="margin-top:10px;font-size:.77rem;color:var(--wg);line-height:1.6;padding:10px 12px;background:rgba(45,138,62,.06);border-radius:var(--r);border:1px solid rgba(45,138,62,.15)">
+        📌 <strong style="color:var(--gr)">Please inquire first</strong> before placing a delivery order — fee and availability depend on your location. Message us on Facebook to confirm.
+      </div>
+    </div>
+
+    <div class="about-card">
+      <div class="about-card-deco">
+        <svg viewBox="0 0 120 120" width="140" height="140" xmlns="http://www.w3.org/2000/svg">
+          <path d="M60 12C38 12 20 32 20 60C20 88 38 108 60 108C47 100 39 82 39 60C39 38 47 20 60 12Z" fill="none" stroke="white" stroke-width="5"/>
+          <path d="M60 12C82 12 100 32 100 60C100 88 82 108 60 108" fill="none" stroke="white" stroke-width="4"/>
+          <path d="M60 15C60 15 50 33 50 46C50 58 57 62 60 53C63 62 70 58 70 46C70 33 60 15 60 15Z" fill="white"/>
+        </svg>
+      </div>
+      <div class="about-title">About <span>La Luna</span></div>
+      <div class="about-text">La Luna Grill + Cafe serves hearty Filipino-inspired grills, pasta, pizza, and a full café menu with coffee, milk tea, frappes, and fruit shakes. Great food, warm service, and that unmistakable homey atmosphere — night after night.</div>
+    </div>
+
+    <div class="addons-card">
+      <div class="ic-title">☕ Drink Add-ons</div>
+      <div style="font-size:.76rem;color:var(--wg)">Available for all café drinks</div>
+      <div class="addons-row">
+        <div class="addon-chip"><div class="addon-chip-name">Pearl</div><div class="addon-chip-price">+₱15</div></div>
+        <div class="addon-chip"><div class="addon-chip-name">Nata</div><div class="addon-chip-price">+₱15</div></div>
+        <div class="addon-chip"><div class="addon-chip-name">Cream Cheese</div><div class="addon-chip-price">+₱15</div></div>
+      </div>
+    </div>
+
+    <div class="msg-cta">
+      <div class="msg-cta-icon">💬</div>
+      <div class="msg-cta-title">Order via Messenger</div>
+      <div class="msg-cta-text">Build your cart, fill your details, and send your complete order summary in one tap. We confirm and reply within minutes!</div>
+      <a href="https://m.me/303918802794006" target="_blank" rel="noopener" class="msg-cta-btn">💬 Message Us on Facebook</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
 <script>
+/* ── MENU DATA ── */
+const DA=[{name:'Pearl',price:15},{name:'Nata',price:15},{name:'Cream Cheese',price:15}];
+
+/* Category icons for the menu header */
+const CAT_ICON={
+  'Appetizer':'🥗',
+  'Pizza':'🍕',
+  'Pasta':'🍝',
+  'Mains':'🍖',
+  'Combo Meals':'🍱',
+  'Dessert':'🧁',
+  'Coffee':'☕',
+  'Milktea':'🧋',
+  'Frappe':'🥤',
+  'Fruit Shakes':'🍓',
+  'Add-ons':'✨'
+};
+
+/* Realistic SVG-based food icons — returns a CSS background color + emoji pair */
 const MENU=[
-  {id:1,cat:'Appetizer',name:'Shawarma',price:100,ico:'🌯',hot:false,note:''},
-  {id:2,cat:'Appetizer',name:'French Fries',price:110,ico:'🍟',hot:false,note:''},
-  {id:3,cat:'Appetizer',name:"Chik N' Fries",price:145,ico:'🍗',hot:false,note:''},
-  {id:4,cat:'Pizza',name:'Hawaiian (Solo)',price:99,ico:'🍕',hot:false,note:''},
-  {id:5,cat:'Pizza',name:'Pepperoni (Solo)',price:99,ico:'🍕',hot:false,note:''},
-  {id:6,cat:'Pizza',name:'La Luna (Solo)',price:99,ico:'🍕',hot:true,note:'House special'},
-  {id:7,cat:'Pasta',name:'Seafood Marinara',price:179,ico:'🍝',hot:false,note:''},
-  {id:8,cat:'Pasta',name:'Bacon & Mushroom',price:179,ico:'🍝',hot:false,note:''},
-  {id:9,cat:'Pasta',name:'Carbonara',price:179,ico:'🍝',hot:true,note:'Bestseller'},
-  {id:10,cat:'Mains',name:'Sisig Platter',price:250,ico:'🍛',hot:true,note:'Bestseller'},
-  {id:11,cat:'Mains',name:'6pcs Chicken Wings',price:189,ico:'🍗',hot:false,note:''},
-  {id:12,cat:'Mains',name:'12pcs Chicken Wings',price:299,ico:'🍗',hot:true,note:'Honey Butter, Soy Garlic & Buffalo'},
-  {id:13,cat:'Combo',name:'C1 – 3pcs BBQ w/ 2 Rice',price:120,ico:'🍱',hot:false,note:''},
-  {id:14,cat:'Combo',name:'C2 – Quarter Leg w/ 2 Rice',price:150,ico:'🍱',hot:false,note:''},
-  {id:15,cat:'Combo',name:'C3 – Quarter Wing w/ 2 Rice',price:180,ico:'🍱',hot:false,note:'Grilled'},
-  {id:16,cat:'Combo',name:'C4 – Sisig w/ Rice',price:160,ico:'🍱',hot:true,note:'Bestseller'},
-  {id:17,cat:'Combo',name:'C5 – 3pcs Chix Wings w/ Rice',price:160,ico:'🍱',hot:false,note:'3 flavor options'},
-  {id:18,cat:'Coffee',name:'Double Espresso',price:70,ico:'☕',hot:false,note:'Hot only'},
-  {id:19,cat:'Coffee',name:'Americano',price:80,ico:'☕',hot:false,note:'Hot ₱80 / Iced ₱100'},
-  {id:20,cat:'Coffee',name:'Cappucino',price:125,ico:'☕',hot:false,note:'Hot ₱125 / Iced ₱135'},
-  {id:21,cat:'Coffee',name:'Cafe Latte',price:125,ico:'☕',hot:true,note:'Hot ₱125 / Iced ₱135'},
-  {id:22,cat:'Coffee',name:'Spanish Latte',price:125,ico:'☕',hot:false,note:'Hot ₱125 / Iced ₱135'},
-  {id:23,cat:'Coffee',name:'Hazelnut Latte',price:125,ico:'☕',hot:false,note:'Hot ₱125 / Iced ₱135'},
-  {id:24,cat:'Coffee',name:'Salted Caramel',price:130,ico:'☕',hot:false,note:'Hot ₱130 / Iced ₱140'},
-  {id:25,cat:'Coffee',name:'Caramel Macchiato',price:130,ico:'☕',hot:false,note:'Hot ₱130 / Iced ₱140'},
-  {id:26,cat:'Milktea',name:'Taro',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
-  {id:27,cat:'Milktea',name:'Okinawa',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
-  {id:28,cat:'Milktea',name:'Wintermelon',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
-  {id:29,cat:'Milktea',name:'Caramel Sugar',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
-  {id:30,cat:'Milktea',name:'Chocolate',price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
-  {id:31,cat:'Milktea',name:"Cookies & Cream",price:69,ico:'🧋',hot:false,note:'M ₱69 / L ₱79'},
-  {id:32,cat:'Frappe',name:'Caramel',price:165,ico:'🥤',hot:false,note:''},
-  {id:33,cat:'Frappe',name:'Mochaccino',price:165,ico:'🥤',hot:false,note:''},
-  {id:34,cat:'Frappe',name:'Toffee-Nut',price:165,ico:'🥤',hot:false,note:''},
-  {id:35,cat:'Frappe',name:'Peppermint Mocha',price:165,ico:'🥤',hot:false,note:''},
-  {id:36,cat:'Frappe',name:'Pumpkin Spice',price:165,ico:'🥤',hot:false,note:''},
-  {id:37,cat:'Frappe',name:'Biscoff',price:170,ico:'🥤',hot:true,note:'Customer fave!'},
-  {id:38,cat:'Frappe',name:'Nutella',price:170,ico:'🥤',hot:false,note:''},
-  {id:39,cat:'Shakes',name:'Mango',price:120,ico:'🥭',hot:false,note:''},
-  {id:40,cat:'Shakes',name:'Avocado',price:120,ico:'🥑',hot:false,note:''},
-  {id:41,cat:'Shakes',name:'Seasonal Fruit',price:120,ico:'🍓',hot:false,note:'Availability may vary'},
-  {id:42,cat:'Addons',name:'Pearl',price:15,ico:'✨',hot:false,note:'For drinks'},
-  {id:43,cat:'Addons',name:'Nata',price:15,ico:'✨',hot:false,note:'For drinks'},
-  {id:44,cat:'Addons',name:'Cream Cheese',price:15,ico:'✨',hot:false,note:'For drinks'},
+  // APPETIZER
+  {id:1,cat:'Appetizer',icon:'🫓',name:'Shawarma',pop:false,desc:'Grilled seasoned meat wrapped in warm pita with garlic sauce.',p:100,v:[],a:[]},
+  {id:2,cat:'Appetizer',icon:'🍟',name:'French Fries',pop:false,desc:'Crispy golden fries, salted to perfection.',p:100,v:[],a:[]},
+  {id:3,cat:'Appetizer',icon:'🍗',name:"Chik N' Fries",pop:true,desc:'Crispy chicken pieces paired with golden fries — the perfect combo.',p:145,v:[],a:[]},
+  // PIZZA
+  {id:4,cat:'Pizza',icon:'🍕',name:'Hawaiian',pop:false,desc:'Classic ham and sweet pineapple on a rich tomato base with mozzarella.',p:99,v:[],a:[]},
+  {id:5,cat:'Pizza',icon:'🍕',name:'Pepperoni',pop:false,desc:'Loaded with spicy pepperoni slices on a stretchy mozzarella base.',p:99,v:[],a:[]},
+  {id:6,cat:'Pizza',icon:'🍕',name:'La Luna',pop:true,desc:'Our signature house pizza on a crispy thin crust — a customer favorite.',p:99,v:[],a:[]},
+  // PASTA
+  {id:7,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:179,v:[],a:[]},
+  {id:8,cat:'Pasta',icon:'🍝',name:'Bacon & Mushroom Carbonara',pop:true,desc:'Creamy white sauce pasta with savory bacon and earthy mushrooms.',p:179,v:[],a:[]},
+  // MAINS
+  {id:9,cat:'Mains',icon:'🫕',name:'Sisig Platter',pop:true,desc:'Sizzling pork sisig on a hot cast-iron plate — the ultimate Filipino pulutan.',p:250,v:[],a:[]},
+  {id:10,cat:'Mains',icon:'🍗',name:'6 pcs Chicken Wings',pop:true,desc:'Crispy fried chicken wings served with a savory dipping sauce.',p:189,v:[],a:[]},
+  {id:11,cat:'Mains',icon:'🍗',name:'12 pcs Chicken Wings',pop:true,desc:'A dozen golden fried wings — perfect for sharing. Choose your flavor!',p:299,
+    v:[{l:'Honey Butter',p:299},{l:'Soy Garlic',p:299},{l:'Buffalo',p:299}],a:[]},
+  // COMBO MEALS
+  {id:12,cat:'Combo Meals',icon:'🍱',name:'C1 – 3 pcs BBQ w/ 2 Rice',pop:true,desc:'3 charcoal-grilled pork BBQ sticks served with 2 cups of steamed rice.',p:120,v:[],a:[]},
+  {id:13,cat:'Combo Meals',icon:'🍱',name:'C2 – Quarter Leg w/ 2 Rice',pop:true,desc:'Grilled chicken quarter leg served with 2 cups of rice.',p:150,v:[],a:[]},
+  {id:14,cat:'Combo Meals',icon:'🍱',name:'C3 – Quarter Wing w/ 2 Rice',pop:false,desc:'Grilled chicken quarter wing served with 2 cups of rice.',p:180,v:[],a:[]},
+  {id:15,cat:'Combo Meals',icon:'🫕',name:'C4 – Sisig w/ Rice',pop:false,desc:'Sizzling pork sisig served with steamed white rice.',p:160,v:[],a:[]},
+  {id:16,cat:'Combo Meals',icon:'🍱',name:'C5 – 3 pcs Chix Wings w/ Rice',pop:false,desc:'3 crispy chicken wings with rice. Choose your wing sauce!',p:160,
+    v:[{l:'Honey Butter',p:160},{l:'Soy Garlic',p:160},{l:'Buffalo',p:160}],a:[]},
+  // DESSERT
+  {id:17,cat:'Dessert',icon:'🍧',name:'Halo-Halo',pop:true,desc:'Classic Filipino shaved ice dessert with mixed sweets, leche flan, and ube ice cream.',p:120,v:[],a:[]},
+  // COFFEE
+  {id:18,cat:'Coffee',icon:'☕',name:'Double Espresso',pop:false,desc:'Two concentrated shots of bold espresso.',p:70,v:[],a:DA},
+  {id:19,cat:'Coffee',icon:'☕',name:'Americano',pop:false,desc:'Espresso with hot or cold water — clean and bold.',p:80,v:[{l:'Hot',p:80},{l:'Iced',p:100}],a:DA},
+  {id:20,cat:'Coffee',icon:'☕',name:'Cappuccino',pop:false,desc:'Equal parts espresso, steamed milk, and velvety foam.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:DA},
+  {id:21,cat:'Coffee',icon:'☕',name:'Cafe Latte',pop:true,desc:'Smooth espresso blended with generous steamed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:DA},
+  {id:22,cat:'Coffee',icon:'☕',name:'Spanish Latte',pop:true,desc:'Rich espresso blended with sweetened condensed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:DA},
+  {id:23,cat:'Coffee',icon:'☕',name:'Hazelnut Latte',pop:false,desc:'Espresso and milk with rich hazelnut flavour syrup.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:DA},
+  {id:24,cat:'Coffee',icon:'☕',name:'Salted Caramel',pop:false,desc:'Caramel espresso latte with a salted caramel finish.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:135}],a:DA},
+  {id:25,cat:'Coffee',icon:'☕',name:'Caramel Macchiato',pop:false,desc:'Layered vanilla latte with a caramel drizzle.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:DA},
+  // MILKTEA
+  {id:26,cat:'Milktea',icon:'🧋',name:'Taro',pop:true,desc:'Earthy purple taro blended into a smooth creamy milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
+  {id:27,cat:'Milktea',icon:'🧋',name:'Okinawa',pop:false,desc:'Brown sugar milk tea with a smoky-sweet caramel undertone.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
+  {id:28,cat:'Milktea',icon:'🧋',name:'Wintermelon',pop:false,desc:'Subtly sweet wintermelon syrup in classic creamy milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
+  {id:29,cat:'Milktea',icon:'🧋',name:'Caramel Sugar',pop:false,desc:'Smooth milk tea sweetened with rich caramel sugar syrup.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
+  {id:30,cat:'Milktea',icon:'🧋',name:'Chocolate',pop:false,desc:'Rich creamy chocolate blended into a classic milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
+  {id:31,cat:'Milktea',icon:'🧋',name:'Cookies & Cream',pop:true,desc:'Crushed Oreo cookies blended into a creamy milk tea base.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
+  // FRAPPE
+  {id:32,cat:'Frappe',icon:'🥤',name:'Caramel',pop:false,desc:'Silky blended caramel frappe with whipped cream topping.',p:165,v:[],a:DA},
+  {id:33,cat:'Frappe',icon:'🥤',name:'Mochaccino',pop:true,desc:'Coffee and chocolate blended into a rich indulgent frappe.',p:165,v:[],a:DA},
+  {id:34,cat:'Frappe',icon:'🥤',name:'Toffee-Nut',pop:false,desc:'Smooth toffee and toasted nut blended frappe.',p:165,v:[],a:DA},
+  {id:35,cat:'Frappe',icon:'🥤',name:'Peppermint Mocha',pop:false,desc:'Cool peppermint meets rich chocolate mocha.',p:165,v:[],a:DA},
+  {id:36,cat:'Frappe',icon:'🥤',name:'Pumpkin Spice',pop:false,desc:'Warm pumpkin spice flavors served cold and blended.',p:165,v:[],a:DA},
+  {id:37,cat:'Frappe',icon:'🥤',name:'Biscoff',pop:false,desc:'Speculoos cookie butter blended into a creamy frappe.',p:170,v:[],a:DA},
+  {id:38,cat:'Frappe',icon:'🥤',name:'Nutella',pop:true,desc:'Rich hazelnut Nutella blended smooth for an irresistible frappe.',p:170,v:[],a:DA},
+  // FRUIT SHAKES
+  {id:39,cat:'Fruit Shakes',icon:'🥭',name:'Mango',pop:true,desc:'Fresh ripe mango blended with milk and crushed ice.',p:120,v:[],a:DA},
+  {id:40,cat:'Fruit Shakes',icon:'🥑',name:'Avocado',pop:false,desc:'Creamy ripe avocado shake with condensed milk.',p:120,v:[],a:DA},
+  {id:41,cat:'Fruit Shakes',icon:'🍹',name:'Seasonal Fruit *',pop:false,desc:"Ask our staff for today's fresh seasonal fruit blend. *Availability varies.",p:120,v:[],a:DA},
+  // ADD-ONS
+  {id:42,cat:'Add-ons',icon:'🫧',name:'Pearl',pop:false,desc:'Chewy tapioca pearl add-on for drinks.',p:15,v:[],a:[]},
+  {id:43,cat:'Add-ons',icon:'🍮',name:'Nata',pop:false,desc:'Sweet coconut jelly cubes for drinks.',p:15,v:[],a:[]},
+  {id:44,cat:'Add-ons',icon:'🧀',name:'Cream Cheese',pop:false,desc:'Creamy salted cheese foam topping.',p:15,v:[],a:[]},
 ];
 
-const CATS_META={
-  Appetizer:{ico:'🍟',label:'Appetizer'},
-  Pizza:{ico:'🍕',label:'Pizza (Solo)'},
-  Pasta:{ico:'🍝',label:'Pasta'},
-  Mains:{ico:'🍗',label:'Mains'},
-  Combo:{ico:'🍱',label:'Combo Meals'},
-  Coffee:{ico:'☕',label:'Coffee'},
-  Milktea:{ico:'🧋',label:'Milktea'},
-  Frappe:{ico:'🥤',label:'Frappe'},
-  Shakes:{ico:'🥭',label:'Fruit Shakes'},
-  Addons:{ico:'✨',label:'Add-ons'},
-};
-const CAT_ORDER=['Appetizer','Pizza','Pasta','Mains','Combo','Coffee','Milktea','Frappe','Shakes','Addons'];
+const CATS=['All','Appetizer','Pizza','Pasta','Mains','Combo Meals','Dessert','Coffee','Milktea','Frappe','Fruit Shakes','Add-ons'];
+const BS=[9,11,6,8,22,38,17,21];
+const PROMOS=[
+  '★ Open Tue–Sun · 12PM–10PM · Closed Monday',
+  '🔥 Combo Meals from ₱120',
+  '🍕 La Luna Pizza Solo ₱99',
+  '🍗 12 pcs Wings — 3 flavors!',
+  '🧋 Milk Tea from ₱69',
+  '🍧 Try our Halo-Halo ₱120',
+  '☕ Spanish Latte Hot or Iced',
+  '🥤 Nutella Frappe — bestseller!',
+  '★ Advance orders welcome!',
+];
 
-let cart={};
-let curCat='All';
-let orderType='Dine-in';
+/* ── STATE ── */
+let cart=[],curItem=null,curQty=1,curVI=null,curAds=[],curOT='';
 
-function renderMenu(){
-  const items=curCat==='All'?MENU:MENU.filter(i=>i.cat===curCat);
-  const groups=items.reduce((g,i)=>{(g[i.cat]=g[i.cat]||[]).push(i);return g},{});
-  let html='';
-  CAT_ORDER.forEach(cat=>{
-    if(!groups[cat])return;
-    const m=CATS_META[cat];
-    html+=`<div class="sec-hdr"><span class="sec-hdr-ico">${m.ico}</span><span class="sec-hdr-lbl">${m.label}</span><span class="sec-hdr-line"></span></div>`;
-    html+=`<div class="menu-grid">`;
-    groups[cat].forEach(item=>{
-      const qty=cart[item.id]||0;
-      html+=`<div class="mcard">
-        <div class="mcard-img">${item.ico}${item.hot?'<div class="mcard-badge">Popular</div>':''}</div>
-        <div class="mcard-body">
-          <div class="mcard-name">${item.name}</div>
-          ${item.note?`<div class="mcard-note">${item.note}</div>`:''}
-          <div class="mcard-foot">
-            <span class="mcard-price">₱${item.price}</span>
-            <button class="mcard-add${qty?' on':''}" onclick="addItem(${item.id})">${qty||'+'}</button>
-          </div>
-        </div>
-      </div>`;
-    });
-    html+=`</div>`;
-  });
-  document.getElementById('menuBody').innerHTML=html;
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',()=>{
+  buildPromo();buildBS();buildChips();buildMenu('All');
+  // Live status chip in info
+  updateStatusChip();
+});
+
+/* ── NAV ── */
+function goTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  document.getElementById('tab-'+p).classList.add('active');
+  window.scrollTo(0,0);
+  if(p==='order')renderCart();
 }
 
-function addItem(id){
-  cart[id]=(cart[id]||0)+1;
-  renderMenu();renderCart();syncBars();
-}
-function removeItem(id){
-  if(cart[id]>1)cart[id]--;else delete cart[id];
-  renderMenu();renderCart();syncBars();
-}
-
-function syncBars(){
-  const count=Object.values(cart).reduce((s,v)=>s+v,0);
-  const total=Object.keys(cart).reduce((s,k)=>{const it=MENU.find(m=>m.id==k);return s+it.price*cart[k];},0);
-  document.getElementById('topBadge').textContent=count;
-  document.getElementById('obBadge').textContent=count;
-  document.getElementById('obTotal').textContent='₱'+total;
-  const bar=document.getElementById('orderBar');
-  bar.style.display=count>0?'flex':'none';
+/* ── LIVE STATUS ── */
+function updateStatusChip(){
+  const now=new Date();
+  const day=now.getDay(); // 0=Sun,1=Mon
+  const h=now.getHours(),m=now.getMinutes();
+  const t=h*60+m;
+  const isOpen=day!==1 && t>=720 && t<1320; // Mon=1 closed; 12pm=720, 10pm=1320
+  const chip=document.querySelector('.ic-row .ic-val');
+  // we handle this differently below — just skip if not found
 }
 
-function renderCart(){
-  const el=document.getElementById('cartBody');
-  const keys=Object.keys(cart).filter(k=>cart[k]>0);
-  if(!keys.length){
-    el.innerHTML=`<div class="empty-cart"><div class="empty-ico">🛒</div><div style="font-weight:700;margin-bottom:6px;font-size:15px">Your cart is empty</div><div style="font-size:13px">Add items from the menu!</div><br><button onclick="switchTab('menu')" style="background:var(--G);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">Browse Menu</button></div>`;
-    return;
-  }
-  let sub=0;
-  let itemsHtml=keys.map(k=>{
-    const it=MENU.find(m=>m.id==k);
-    const tot=it.price*cart[k];sub+=tot;
-    return`<div class="cart-item">
-      <div class="ci-ico">${it.ico}</div>
-      <div class="ci-info">
-        <div class="ci-name">${it.name}</div>
-        <div class="ci-unit">₱${it.price} each</div>
-        <div class="ci-ctrls">
-          <button class="ci-btn" onclick="removeItem(${k})">−</button>
-          <span class="ci-qty">${cart[k]}</span>
-          <button class="ci-btn" onclick="addItem(${k})">+</button>
-        </div>
-      </div>
-      <div class="ci-price">₱${tot}</div>
+/* ── PROMO ── */
+function buildPromo(){
+  const h=PROMOS.map(p=>`<span class="promo-chip"><span class="promo-dot"></span>${p}</span>`).join('');
+  document.getElementById('promoTrack').innerHTML=h+h;
+}
+
+/* ── BESTSELLERS ── */
+function buildBS(){
+  document.getElementById('bsGrid').innerHTML=BS.map(id=>{
+    const m=MENU.find(x=>x.id===id);if(!m)return'';
+    return`<div class="bs-card" onclick="openModal(${m.id})">
+      <div class="bs-icon-box">${m.icon}</div>
+      <div class="bs-name">${m.name}</div>
+      <div class="bs-price">${m.v.length?'from ':''}₱${m.p}</div>
+      <div class="bs-add">+</div>
     </div>`;
   }).join('');
+}
 
-  const msgText=buildMessage(sub);
-  const encoded=encodeURIComponent(msgText);
-  const fbLink=`https://m.me/303918802794006?text=${encoded}`;
-
-  el.innerHTML=`
-    ${itemsHtml}
-    <div class="totals">
-      <div class="tr"><span>Subtotal (${Object.values(cart).reduce((s,v)=>s+v,0)} items)</span><span>₱${sub}</span></div>
-      <div class="tr grand"><span>Total</span><span>₱${sub}</span></div>
-    </div>
-
-    <div class="form-card">
-      <div class="form-title">Your Details</div>
-      <div class="form-row"><div class="form-lbl">Full Name</div><input class="form-inp" id="f-name" type="text" placeholder="e.g. Juan dela Cruz"></div>
-      <div class="form-row"><div class="form-lbl">Contact Number</div><input class="form-inp" id="f-phone" type="tel" placeholder="e.g. 09XX XXX XXXX"></div>
-      <div class="form-row">
-        <div class="form-lbl">Order Type</div>
-        <div class="radio-row">
-          <div class="radio-opt${orderType==='Dine-in'?' on':''}" onclick="setType('Dine-in',this)">
-            <div class="radio-dot"></div>Dine-in
-          </div>
-          <div class="radio-opt${orderType==='Takeout'?' on':''}" onclick="setType('Takeout',this)">
-            <div class="radio-dot"></div>Takeout
-          </div>
+/* ── MENU ── */
+function buildChips(){
+  document.getElementById('chips').innerHTML=CATS.map(c=>
+    `<button class="chip${c==='All'?' active':''}" onclick="fMenu('${c}',this)">${c}</button>`
+  ).join('');
+}
+function fMenu(cat,btn){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');buildMenu(cat);
+}
+function buildMenu(cat){
+  const cats=cat==='All'?CATS.filter(c=>c!=='All'):[cat];
+  document.getElementById('menuBody').innerHTML=cats.map(cat=>{
+    const items=MENU.filter(m=>m.cat===cat);if(!items.length)return'';
+    const icon=CAT_ICON[cat]||'🍴';
+    return`<div class="menu-sec">
+      <div class="cat-header">
+        <div class="cat-icon">${icon}</div>
+        <div class="cat-text">
+          <div class="cat-label">${cat}</div>
+          <div class="cat-count">${items.length} item${items.length>1?'s':''}</div>
         </div>
       </div>
-      <div class="form-row"><div class="form-lbl">Special Instructions (optional)</div><textarea class="form-inp" id="f-notes" rows="2" placeholder="Allergies, extra rice, etc." style="resize:none"></textarea></div>
-    </div>
-
-    <a href="${fbLink}" target="_blank" id="msgLink" style="text-decoration:none">
-      <div class="msg-btn">
-        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#fff;flex-shrink:0"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.92 1.19 5.49 3.14 7.28V22l2.94-1.62c.78.22 1.61.33 2.47.33 5.64 0 10-4.13 10-9.7C22.55 6.13 17.64 2 12 2zm.99 13.08l-2.55-2.72-4.98 2.72 5.48-5.81 2.61 2.72 4.93-2.72-5.49 5.81z"/></svg>
-        Send Order via Messenger
-      </div>
-    </a>
-    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.5">Tapping the button will open Facebook Messenger with your order pre-filled. We'll confirm within minutes!</div>
-    <div class="spacer20"></div>`;
-
-  document.getElementById('f-name').addEventListener('input',updateLink);
-  document.getElementById('f-phone').addEventListener('input',updateLink);
-  document.getElementById('f-notes').addEventListener('input',updateLink);
+      <div class="items-list">${items.map(m=>{
+        const pd=m.v.length?`<span class="from">from</span>₱${m.p}`:`₱${m.p}`;
+        return`<div class="item-card" onclick="openModal(${m.id})">
+          <div class="item-img-col">${m.icon}</div>
+          <div class="item-body">
+            <div class="item-row1">
+              <div class="item-name">${m.name}</div>
+              ${m.pop?'<span class="pop-badge">★ Popular</span>':''}
+            </div>
+            <div class="item-desc">${m.desc}</div>
+            ${m.v.length?`<div class="item-variants-row">${m.v.map(v=>`<span class="v-pill">${v.l}</span>`).join('')}</div>`:''}
+            <div class="item-footer">
+              <div class="item-price">${pd}</div>
+              <button class="item-add-btn" onclick="event.stopPropagation();openModal(${m.id})">+</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
 }
 
-function setType(t,el){
-  orderType=t;
-  document.querySelectorAll('.radio-opt').forEach(e=>e.classList.remove('on'));
-  el.classList.add('on');
-  el.querySelector('.radio-dot').style.background='var(--G)';
-  updateLink();
+/* ── MODAL ── */
+function openModal(id){
+  curItem=MENU.find(m=>m.id===id);
+  curQty=1;curVI=curItem.v.length?0:null;curAds=[];
+  document.getElementById('mIcon').textContent=curItem.icon;
+  document.getElementById('mName').textContent=curItem.name;
+  document.getElementById('mDesc').textContent=curItem.desc;
+  document.getElementById('mQty').textContent=1;
+  const vs=document.getElementById('mVarSec');
+  if(curItem.v.length){
+    vs.style.display='block';
+    document.getElementById('mVariants').innerHTML=curItem.v.map((v,i)=>
+      `<div class="modal-v-btn${i===0?' sel':''}" onclick="selVar(${i},this)">
+        <span>${v.l} &nbsp;—&nbsp; ₱${v.p}</span>
+        <div class="chk">${i===0?'✓':''}</div>
+       </div>`
+    ).join('');
+  } else vs.style.display='none';
+  const as=document.getElementById('mAddSec');
+  if(curItem.a.length){
+    as.style.display='block';
+    document.getElementById('mAddons').innerHTML=curItem.a.map((a,i)=>
+      `<div class="modal-addon-row" onclick="togAdd(${i},this)">
+        <div class="modal-addon-left">
+          <div class="modal-addon-chk"></div>
+          <span class="modal-addon-name">${a.name}</span>
+        </div>
+        <span class="modal-addon-price">+₱${a.price}</span>
+       </div>`
+    ).join('');
+  } else as.style.display='none';
+  updMT();
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
 }
-
-function buildMessage(sub){
-  const name=document.getElementById('f-name')?document.getElementById('f-name').value||'(not provided)':'';
-  const phone=document.getElementById('f-phone')?document.getElementById('f-phone').value||'(not provided)':'';
-  const notes=document.getElementById('f-notes')?document.getElementById('f-notes').value||'None':'';
-  const items=Object.keys(cart).filter(k=>cart[k]>0).map(k=>{
-    const it=MENU.find(m=>m.id==k);
-    return`  • ${it.name} x${cart[k]} = ₱${it.price*cart[k]}`;
-  }).join('\n');
-  const total=Object.keys(cart).reduce((s,k)=>{const it=MENU.find(m=>m.id==k);return s+it.price*cart[k];},0);
-  return`Hi La Luna! I'd like to place an order 🌙\n\n👤 Name: ${name}\n📞 Contact: ${phone}\n🍽️ Type: ${orderType}\n\n📋 Order:\n${items}\n\n💰 Total: ₱${total}\n\n📝 Notes: ${notes}\n\nPlease confirm. Thank you!`;
-}
-
-function updateLink(){
-  const link=document.getElementById('msgLink');
-  if(!link)return;
-  const sub=Object.keys(cart).reduce((s,k)=>{const it=MENU.find(m=>m.id==k);return s+it.price*cart[k];},0);
-  link.href=`https://m.me/303918802794006?text=${encodeURIComponent(buildMessage(sub))}`;
-}
-
-function filterCat(cat,btn){
-  curCat=cat;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
-  btn.classList.add('on');
-  renderMenu();
-}
-
-function switchTab(tab){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
-  document.getElementById('view-'+tab).classList.add('on');
-  document.querySelectorAll('.nt').forEach((t,i)=>{
-    t.classList.remove('on');
-    if(['home','menu','cart','info'][i]===tab)t.classList.add('on');
+function closeModalOut(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function selVar(i,btn){
+  curVI=i;
+  document.querySelectorAll('.modal-v-btn').forEach((b,idx)=>{
+    b.classList.toggle('sel',idx===i);
+    b.querySelector('.chk').textContent=idx===i?'✓':'';
   });
-  if(tab==='cart')renderCart();
+  updMT();
+}
+function togAdd(i,el){
+  el.classList.toggle('sel');
+  curAds=el.classList.contains('sel')?[...curAds.filter(x=>x!==i),i]:curAds.filter(x=>x!==i);
+  el.querySelector('.modal-addon-chk').textContent=el.classList.contains('sel')?'✓':'';
+  updMT();
+}
+function chQty(d){curQty=Math.max(1,curQty+d);document.getElementById('mQty').textContent=curQty;updMT();}
+function updMT(){
+  if(!curItem)return;
+  let base=curItem.p;
+  if(curVI!==null&&curItem.v[curVI])base=curItem.v[curVI].p;
+  const at=curAds.reduce((s,i)=>s+curItem.a[i].price,0);
+  document.getElementById('mPrice').textContent=`₱${base}`+(at?` + ₱${at} add-ons`:'');
+  document.getElementById('mTotal').textContent=`₱${(base+at)*curQty}`;
+}
+function addToCart(){
+  if(!curItem)return;
+  let base=curItem.p,vl='';
+  if(curVI!==null&&curItem.v[curVI]){base=curItem.v[curVI].p;vl=curItem.v[curVI].l;}
+  const al=curAds.map(i=>curItem.a[i].name);
+  const at=curAds.reduce((s,i)=>s+curItem.a[i].price,0);
+  const up=base+at;
+  const mods=[vl,...al].filter(Boolean).join(', ');
+  cart.push({id:Date.now(),iid:curItem.id,icon:curItem.icon,name:curItem.name,mods,qty:curQty,up,total:up*curQty});
+  closeModal();updBadge();
+  toast(`${curItem.icon} ${curItem.name} added!`);
 }
 
-renderMenu();syncBars();
+/* ── CART ── */
+function updBadge(){
+  const cnt=cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('navCartCount').textContent=cnt;
+  const dot=document.getElementById('tabDot');
+  dot.textContent=cnt;dot.classList.toggle('on',cnt>0);
+}
+function renderCart(){
+  const tot=cart.reduce((s,i)=>s+i.total,0);
+  const em=document.getElementById('cartEmpty'),fl=document.getElementById('cartFull');
+  if(!cart.length){em.style.display='';fl.style.display='none';return;}
+  em.style.display='none';fl.style.display='';
+  document.getElementById('subAmt').textContent=`₱${tot}`;
+  document.getElementById('totalAmt').textContent=`₱${tot}`;
+  document.getElementById('otDisplay').textContent=curOT||'—';
+  document.getElementById('delivFeeRow').style.display=curOT==='Delivery'?'':'none';
+  document.getElementById('cartItems').innerHTML=cart.map(item=>`
+    <div class="cart-item">
+      <div class="ci-icon">${item.icon}</div>
+      <div class="ci-body">
+        <div class="ci-name">${item.name}</div>
+        ${item.mods?`<div class="ci-mods">${item.mods}</div>`:''}
+      </div>
+      <div class="ci-controls">
+        <button class="cqb" onclick="chCQ(${item.id},-1)">−</button>
+        <span class="ci-qty">${item.qty}</span>
+        <button class="cqb" onclick="chCQ(${item.id},1)">+</button>
+      </div>
+      <div class="ci-price">₱${item.total}</div>
+      <button class="ci-rm" onclick="rmC(${item.id})">✕</button>
+    </div>`).join('');
+  checkSendBtn();
+}
+function chCQ(id,d){
+  const i=cart.findIndex(x=>x.id===id);if(i===-1)return;
+  cart[i].qty=Math.max(1,cart[i].qty+d);cart[i].total=cart[i].up*cart[i].qty;
+  updBadge();renderCart();
+}
+function rmC(id){cart=cart.filter(x=>x.id!==id);updBadge();renderCart();}
+
+/* ── ORDER TYPE ── */
+function setOT(btn,type){
+  document.querySelectorAll('.ot-option').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');curOT=type;
+  const df=document.getElementById('delivFields');
+  const fr=document.getElementById('delivFeeRow');
+  df.style.display=type==='Delivery'?'':'none';
+  if(fr)fr.style.display=type==='Delivery'?'':'none';
+  const od=document.getElementById('otDisplay');
+  if(od)od.textContent=type;
+  checkSendBtn();
+}
+
+/* ── SEND BUTTON GATE ── */
+function checkSendBtn(){
+  const btn=document.getElementById('sendBtn');
+  const note=document.getElementById('sendNote');
+  if(!btn)return;
+  if(curOT==='Delivery'){
+    const bgy=(document.getElementById('custBgy')||{}).value||'';
+    const lm=(document.getElementById('custLM')||{}).value?.trim()||'';
+    const st=(document.getElementById('custStreet')||{}).value?.trim()||'';
+    const ready=bgy&&lm&&st;
+    btn.disabled=!ready;
+    note.textContent=ready
+      ? 'Ready to send! Tap the button above. 🕐'
+      : '⚠️ Please fill in your barangay, street address, and landmark before sending.';
+  } else {
+    btn.disabled=false;
+    note.textContent='We confirm your order via Facebook Messenger — usually within minutes 🕐';
+  }
+}
+
+/* ── SEND ORDER ── */
+function sendOrder(){
+  if(!cart.length){toast('⚠️ Your cart is empty!');return;}
+  const name=g('custName'),phone=g('custPhone'),notes=g('custNotes');
+  if(!name){err('custName');toast('Please enter your name');return;}
+  if(!phone){err('custPhone');toast('Please enter your phone number');return;}
+  if(!curOT){toast('Please select an order type');return;}
+  let dline='';
+  if(curOT==='Delivery'){
+    const bgy=document.getElementById('custBgy').value;
+    const st=g('custStreet'),lm=g('custLM');
+    if(!bgy||bgy===''){err('custBgy');toast('Please select your barangay');return;}
+    if(!st){err('custStreet');toast('Please enter your street address');return;}
+    if(!lm){err('custLM');toast('Please enter a landmark');return;}
+    dline=`📍 Delivery Address:\n   📌 Barangay: ${bgy}\n   🏠 Street/Purok: ${st}\n   🗺️ Landmark: ${lm}\n   💰 Delivery Fee: ₱20–₱50 (to confirm)\n`;
+  }
+  const tot=cart.reduce((s,i)=>s+i.total,0);
+  let msg=`🔥 NEW ORDER — La Luna Grill + Cafe\n`;
+  msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
+  msg+=`👤 Name:   ${name}\n`;
+  msg+=`📞 Phone:  ${phone}\n`;
+  msg+=`🍽️ Type:   ${curOT}\n`;
+  if(dline)msg+=dline;
+  msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
+  msg+=`📋 ORDER:\n`;
+  cart.forEach((item,i)=>{
+    msg+=`  ${i+1}. ${item.icon} ${item.name}`;
+    if(item.mods)msg+=` (${item.mods})`;
+    msg+=` × ${item.qty} = ₱${item.total}\n`;
+  });
+  msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
+  msg+=`💰 SUBTOTAL: ₱${tot}\n`;
+  if(curOT==='Delivery')msg+=`🚴 DELIVERY FEE: ₱20–₱50 (please confirm)\n`;
+  if(notes)msg+=`📝 Notes: ${notes}\n`;
+  msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
+  msg+=`Sent via La Luna Order Portal 🌙`;
+  window.open(`https://m.me/303918802794006?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+/* ── HELPERS ── */
+function g(id){return(document.getElementById(id)||{}).value?.trim()||'';}
+function err(id){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.add('error');el.focus();
+  el.addEventListener('input',()=>el.classList.remove('error'),{once:true});
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
 </script>
+</body>
+</html>
