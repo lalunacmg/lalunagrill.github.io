@@ -283,7 +283,20 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .pin-status.warn{background:rgba(232,82,26,.06);border-color:rgba(232,82,26,.2)}
 .pin-status.warn strong{color:var(--or)}
 
-/* TIME PICKER FIELDS */
+/* PAYMENT OPTIONS */
+.pay-options{display:flex;flex-direction:column;gap:8px}
+.pay-option{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--wgll);border-radius:var(--rl);cursor:pointer;transition:var(--t);background:#fff}
+.pay-option.sel{border-color:var(--gr);background:linear-gradient(135deg,#f0faf2,rgba(45,138,62,.06))}
+.pay-option:active{transform:scale(.98)}
+.pay-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--wgll);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--t)}
+.pay-option.sel .pay-radio{border-color:var(--gr);background:var(--gr)}
+.pay-radio-dot{width:8px;height:8px;border-radius:50%;background:#fff;transform:scale(0);transition:var(--t)}
+.pay-option.sel .pay-radio-dot{transform:scale(1)}
+.pay-icon{font-size:1.3rem;flex-shrink:0}
+.pay-info{}
+.pay-name{font-family:var(--font-h);font-size:.88rem;font-weight:700;color:var(--dk)}
+.pay-note{font-size:.7rem;color:var(--wg);margin-top:1px}
+.pay-option.sel .pay-note{color:var(--gr)}
 .time-fields{display:none;margin-top:0}
 .time-fields.show{display:block}
 .time-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -307,6 +320,9 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .popup-btn-secondary{padding:13px;border:1.5px solid var(--wgll);color:var(--wg);border-radius:100px;font-weight:700;font-size:.88rem;font-family:var(--font);transition:var(--t);background:#fff;cursor:pointer;width:100%}
 .popup-btn-secondary:active{background:var(--crl)}
 .popup-messenger-note{font-size:.72rem;color:var(--wgl);margin-top:8px;line-height:1.45}
+.popup-fallback{background:rgba(232,82,26,.06);border:1px solid rgba(232,82,26,.18);border-radius:var(--rl);padding:14px;margin-top:2px;margin-bottom:14px;text-align:center}
+.popup-fallback-link{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#0078FF,#0056C7);color:#fff;padding:12px 20px;border-radius:100px;font-size:.85rem;font-weight:800;font-family:var(--font);box-shadow:0 3px 10px rgba(0,120,255,.3);transition:var(--t)}
+.popup-fallback-link:active{transform:scale(.97)}
 
 /* ══════════════ INFO ══════════════ */
 .info-body{padding:17px 15px}
@@ -537,11 +553,11 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
         <div class="form-card-title">📋 Your Details</div>
         <div class="fg">
           <label class="flbl">Full Name <span class="req">*</span></label>
-          <input class="finput" id="custName" type="text" placeholder="e.g. Juan dela Cruz" autocomplete="name"/>
+          <input class="finput" id="custName" type="text" placeholder="e.g. Juan dela Cruz" autocomplete="name" oninput="checkSendBtn()"/>
         </div>
         <div class="fg">
           <label class="flbl">Phone Number <span class="req">*</span></label>
-          <input class="finput" id="custPhone" type="tel" placeholder="09XX XXX XXXX" autocomplete="tel"/>
+          <input class="finput" id="custPhone" type="tel" placeholder="09XX XXX XXXX" autocomplete="tel" oninput="checkSendBtn()"/>
         </div>
         <div class="fg">
           <label class="flbl">Order Type <span class="req">*</span></label>
@@ -656,12 +672,34 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
           <label class="flbl">Special Instructions <span style="font-weight:500;color:var(--wg)">(optional)</span></label>
           <textarea class="finput" id="custNotes" placeholder="Extra rice? Less spice? Allergies? Let us know!"></textarea>
         </div>
+
+        <div class="fg">
+          <label class="flbl">Payment Method <span class="req">*</span></label>
+          <div class="pay-options">
+            <div class="pay-option" onclick="setPayment(this,'Cash')">
+              <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+              <span class="pay-icon">💵</span>
+              <div class="pay-info">
+                <div class="pay-name">Cash</div>
+                <div class="pay-note">Pay upon dine-in, pick-up, or delivery</div>
+              </div>
+            </div>
+            <div class="pay-option" onclick="setPayment(this,'GCash')">
+              <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+              <span class="pay-icon">📱</span>
+              <div class="pay-info">
+                <div class="pay-name">GCash</div>
+                <div class="pay-note">We'll send GCash details via Messenger</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <button class="send-btn" id="sendBtn" onclick="sendOrder()">
-        <span style="font-size:1.25rem">💬</span> Send Order via Messenger
+      <button class="send-btn" id="sendBtn" onclick="sendOrder()" disabled>
+        <span style="font-size:1.25rem">💬</span> Place Order via Messenger
       </button>
-      <div class="send-note" id="sendNote">We confirm your order via Facebook Messenger — usually within minutes 🕐</div>
+      <div class="send-note" id="sendNote">Please fill in all required fields above to place your order.</div>
     </div>
   </div>
 </section>
@@ -746,17 +784,24 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 <!-- ORDER SENT POPUP -->
 <div class="order-popup-overlay" id="orderPopup">
   <div class="order-popup">
-    <div class="popup-icon-wrap">
+    <div class="popup-icon-wrap" id="popupIconWrap">
       <span class="popup-icon">💬</span>
     </div>
-    <div class="popup-title">Order Sent!</div>
-    <div class="popup-subtitle">Your order has been forwarded to La Luna's Facebook Messenger.</div>
+    <div class="popup-title" id="popupTitle">Redirecting to Messenger…</div>
+    <div class="popup-subtitle" id="popupSubtitle">Your complete order has been prepared and Messenger is opening now.</div>
     <div class="popup-detail" id="popupDetail"></div>
+    <div class="popup-fallback" id="popupFallback" style="display:none">
+      <p style="font-size:.78rem;color:var(--wg);margin-bottom:10px;line-height:1.5">If Messenger did not open, please tap the button below or click the link to send your order manually.</p>
+      <a id="popupFallbackLink" href="#" target="_blank" rel="noopener" class="popup-fallback-link">💬 Open Messenger &amp; Send Order</a>
+    </div>
     <div class="popup-actions">
-      <button class="popup-btn-primary" onclick="openMessenger()">💬 Open Messenger to Confirm</button>
+      <button class="popup-btn-primary" onclick="openMessenger()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style="flex-shrink:0;vertical-align:middle;margin-right:6px"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8l3.131 3.259L19.752 8l-6.561 6.963z"/></svg>
+        Open Messenger
+      </button>
       <button class="popup-btn-secondary" onclick="closePopupNewOrder()">🛒 Place Another Order</button>
     </div>
-    <div class="popup-messenger-note">📌 If Messenger didn't open automatically, tap the button above. We'll confirm your order within minutes!</div>
+    <div class="popup-messenger-note" id="popupNote">Messenger should open automatically. La Luna will confirm your order within minutes! ✅</div>
   </div>
 </div>
 
@@ -860,7 +905,7 @@ const PROMOS=[
 ];
 
 /* ── STATE ── */
-let cart=[],curItem=null,curQty=1,curVI=null,curAds=[],curOT='';
+let cart=[],curItem=null,curQty=1,curVI=null,curAds=[],curOT='',curPayment='';
 
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded',()=>{
@@ -1134,16 +1179,22 @@ function setOT(btn,type){
     document.getElementById('custDate').value='';
     document.getElementById('custTime').value='';
   }
-  // Delivery fields
   const df=document.getElementById('delivFields');
   const fr=document.getElementById('delivFeeRow');
   df.style.display=type==='Delivery'?'':'none';
   if(fr)fr.style.display=type==='Delivery'?'':'none';
   const od=document.getElementById('otDisplay');
   if(od)od.textContent=type;
-  // Set min date to today
   const today=new Date().toISOString().split('T')[0];
   document.getElementById('custDate').min=today;
+  checkSendBtn();
+}
+
+/* ── PAYMENT METHOD ── */
+let curPayment='';
+function setPayment(btn,method){
+  document.querySelectorAll('.pay-option').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');curPayment=method;
   checkSendBtn();
 }
 
@@ -1199,8 +1250,9 @@ function checkSendBtn(){
   const btn=document.getElementById('sendBtn');
   const note=document.getElementById('sendNote');
   if(!btn)return;
-  let ready=true;
   let missing=[];
+  if(!curOT) missing.push('order type');
+  if(!curPayment) missing.push('payment method');
   if(curOT==='Delivery'){
     const bgy=(document.getElementById('custBgy')||{}).value||'';
     const lm=(document.getElementById('custLM')||{}).value?.trim()||'';
@@ -1214,73 +1266,86 @@ function checkSendBtn(){
     if(!d)missing.push('date');
     if(!t)missing.push('time');
   }
-  ready=missing.length===0 && curOT!=='';
+  const ready=missing.length===0;
   btn.disabled=!ready;
-  if(!curOT){
-    note.textContent='⚠️ Please select your order type above.';
-  } else if(missing.length>0){
-    note.textContent=`⚠️ Please fill in: ${missing.join(', ')}.`;
+  if(missing.length>0){
+    note.textContent=`Fill in: ${missing.join(', ')}.`;
+    note.style.color='var(--wg)';
   } else {
-    note.textContent='✅ Ready to send! Tap the button above.';
+    note.textContent='✅ All set! Tap "Place Order via Messenger" above.';
     note.style.color='var(--gr)';
-    setTimeout(()=>note.style.color='',2000);
   }
 }
 
-/* ── FORMAT TIME ── */
+/* ── FORMAT DATE/TIME ── */
 function fmtDateTime(dateVal,timeVal){
   if(!dateVal||!timeVal)return '';
   const d=new Date(dateVal+'T'+timeVal);
   if(isNaN(d))return `${dateVal} at ${timeVal}`;
   const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const day=days[d.getDay()];
-  const hr=d.getHours();
-  const min=d.getMinutes().toString().padStart(2,'0');
+  const hr=d.getHours(),min=d.getMinutes().toString().padStart(2,'0');
   const ampm=hr>=12?'PM':'AM';
   const hr12=hr%12||12;
-  return `${day}, ${months[d.getMonth()]} ${d.getDate()} at ${hr12}:${min} ${ampm}`;
+  return `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()} at ${hr12}:${min} ${ampm}`;
 }
 
-/* ── BUILD ORDER MESSAGE ── */
+/* ── BUILD STRUCTURED MESSAGE ── */
 function buildMsg(){
   const name=g('custName'),phone=g('custPhone'),notes=g('custNotes');
-  let tline='';
+  const tot=cart.reduce((s,i)=>s+i.total,0);
+
+  // Items list
+  let itemLines='';
+  cart.forEach((item,i)=>{
+    itemLines+=`  ${i+1}. ${item.name}`;
+    if(item.mods) itemLines+=` (${item.mods})`;
+    itemLines+=` x${item.qty} - ₱${item.total}\n`;
+  });
+
+  // Order type line + time if applicable
+  let orderTypeLine=curOT;
   if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
     const d=g('custDate'),t=g('custTime');
-    tline=`⏰ ${curOT==='Advance Dine-in'?'Dine-in':'Pick-up'} Time: ${fmtDateTime(d,t)}\n`;
+    if(d&&t) orderTypeLine+=` — ${fmtDateTime(d,t)}`;
   }
-  let dline='';
+
+  // Delivery address block
+  let addressBlock='N/A';
   if(curOT==='Delivery'){
     const bgy=document.getElementById('custBgy').value;
     const st=g('custStreet'),lm=g('custLM');
-    dline=`📍 Delivery Address:\n   📌 Barangay: ${bgy}\n   🏠 Street/Purok: ${st}\n   🗺️ Landmark: ${lm}\n`;
-    if(pinnedLat&&pinnedLng){
-      dline+=`   🌐 GPS Pin: ${pinnedLat}, ${pinnedLng}\n   🔗 Map: https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng}\n`;
-    }
-    dline+=`   💰 Delivery Fee: ₱20–₱50 (to confirm)\n`;
+    addressBlock=`${st}, ${bgy}`;
+    if(lm) addressBlock+=`\n  Landmark: ${lm}`;
+    if(pinnedLat&&pinnedLng) addressBlock+=`\n  GPS: https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng}`;
   }
-  const tot=cart.reduce((s,i)=>s+i.total,0);
-  let msg=`🔥 NEW ORDER — La Luna Grill + Cafe\n`;
-  msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
-  msg+=`👤 Name:   ${name}\n`;
-  msg+=`📞 Phone:  ${phone}\n`;
-  msg+=`🍽️ Type:   ${curOT}\n`;
-  if(tline)msg+=tline;
-  if(dline)msg+=dline;
-  msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
-  msg+=`📋 ORDER:\n`;
-  cart.forEach((item,i)=>{
-    msg+=`  ${i+1}. ${item.icon} ${item.name}`;
-    if(item.mods)msg+=` (${item.mods})`;
-    msg+=` × ${item.qty} = ₱${item.total}\n`;
-  });
-  msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
-  msg+=`💰 SUBTOTAL: ₱${tot}\n`;
-  if(curOT==='Delivery')msg+=`🚴 DELIVERY FEE: ₱20–₱50 (please confirm)\n`;
-  if(notes)msg+=`📝 Notes: ${notes}\n`;
-  msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
-  msg+=`Sent via La Luna Order Portal 🌙`;
+
+  // Delivery fee
+  const delivFee=curOT==='Delivery'?'₱20–₱50 (to confirm)':'—';
+  const totalLine=curOT==='Delivery'?`₱${tot} + delivery fee`:`₱${tot}`;
+
+  const msg=
+`Hello! I would like to place an order from La Luna Grill & Cafe.
+
+🧾 Order Details:
+Name: ${name}
+Contact Number: ${phone}
+Order Type: ${orderTypeLine}
+Delivery Address: ${addressBlock}
+
+🛒 Items Ordered:
+${itemLines}
+📊 Order Summary:
+Subtotal: ₱${tot}
+Delivery Fee: ${delivFee}
+Total Amount: ${totalLine}
+Payment Method: ${curPayment}
+
+📝 Additional Notes:
+${notes||'None'}
+
+Please confirm my order. Thank you!`;
+
   return msg;
 }
 
@@ -1291,18 +1356,14 @@ function sendOrder(){
   if(!name){err('custName');toast('Please enter your name');return;}
   if(!phone){err('custPhone');toast('Please enter your phone number');return;}
   if(!curOT){toast('Please select an order type');return;}
-  // Validate time for Dine-in / Pick-up
+  if(!curPayment){toast('Please select a payment method');return;}
+  // Validate date/time for dine-in/pickup
   if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
     const d=g('custDate'),t=g('custTime');
     if(!d){err('custDate');toast('Please select a date');return;}
     if(!t){err('custTime');toast('Please select a time');return;}
-    // Validate day is not Monday
     const picked=new Date(d+'T12:00:00');
-    if(picked.getDay()===1){
-      err('custDate');
-      toast('⚠️ We are closed on Mondays. Please pick another day.');
-      return;
-    }
+    if(picked.getDay()===1){err('custDate');toast('⚠️ We are closed on Mondays. Please pick another day.');return;}
   }
   // Validate delivery fields
   if(curOT==='Delivery'){
@@ -1312,43 +1373,80 @@ function sendOrder(){
     if(!st){err('custStreet');toast('Please enter your street address');return;}
     if(!lm){err('custLM');toast('Please enter a landmark');return;}
   }
-  // Build message
+
+  // Build the structured message and encode URL
   const msg=buildMsg();
   const pageId='303918802794006';
-  const messengerUrl=`https://m.me/${pageId}?text=${encodeURIComponent(msg)}`;
-  lastMsgUrl=messengerUrl;
-  // Attempt auto-open
-  const win=window.open(messengerUrl,'_blank');
-  // Show success popup regardless (mobile may block popup but URL is still copied)
-  showOrderPopup(win);
+  const encodedMsg=encodeURIComponent(msg);
+  lastMsgUrl=`https://m.me/${pageId}?text=${encodedMsg}`;
+
+  // Show popup first (so it's visible even if redirect happens instantly)
+  showOrderPopup();
+
+  // Attempt immediate redirect — works best on mobile (opens Messenger app)
+  try {
+    window.location.href=lastMsgUrl;
+  } catch(ex){
+    // If location.href fails (some browsers), fall back to window.open
+    try { window.open(lastMsgUrl,'_blank'); } catch(ex2){}
+  }
+
+  // After 2.5s check if we're still here (redirect didn't navigate away = browser blocked)
+  setTimeout(()=>{
+    const popup=document.getElementById('orderPopup');
+    if(popup.classList.contains('show')){
+      // User is still on page — show fallback
+      document.getElementById('popupFallback').style.display='block';
+      document.getElementById('popupFallbackLink').href=lastMsgUrl;
+      document.getElementById('popupTitle').textContent='Order Ready to Send!';
+      document.getElementById('popupSubtitle').textContent='Your order is prepared. Tap below to open Messenger and send it.';
+      document.getElementById('popupNote').textContent='If Messenger does not open, please click the link again or send us your order manually.';
+    }
+  },2500);
 }
 
 /* ── ORDER SENT POPUP ── */
-function showOrderPopup(winOpened){
+function showOrderPopup(){
   const name=g('custName');
   const tot=cart.reduce((s,i)=>s+i.total,0);
   const detail=document.getElementById('popupDetail');
   let timeInfo='';
   if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
     const d=g('custDate'),t=g('custTime');
-    timeInfo=`<br/><strong>📅 ${curOT==='Advance Dine-in'?'Dine-in':'Pick-up'} time:</strong> ${fmtDateTime(d,t)}`;
+    if(d&&t) timeInfo=`<br/><strong>📅 ${curOT==='Advance Dine-in'?'Dine-in':'Pick-up'}:</strong> ${fmtDateTime(d,t)}`;
   }
-  detail.innerHTML=`<strong>👤 ${name}</strong> — ${curOT}<br/><strong>💰 Subtotal: ₱${tot}</strong>${timeInfo}<br/><br/>Your order details have been prepared${winOpened?' and Messenger was opened':' — tap below to open Messenger'} to send directly to La Luna.`;
+  let delivInfo='';
+  if(curOT==='Delivery'){
+    const bgy=document.getElementById('custBgy').value;
+    delivInfo=`<br/><strong>📍 Barangay:</strong> ${bgy}`;
+  }
+  detail.innerHTML=`
+    <div style="text-align:left;line-height:1.7">
+      <strong>👤 ${name}</strong><br/>
+      <strong>📞 ${phone||g('custPhone')}</strong><br/>
+      <strong>🍽️ ${curOT}</strong>${timeInfo}${delivInfo}<br/>
+      <strong>🛒 ${cart.length} item${cart.length>1?'s':''}</strong> · Subtotal: <strong style="color:var(--or)">₱${tot}</strong><br/>
+      <strong>💳 ${curPayment}</strong>
+    </div>`;
+  // Reset fallback state
+  document.getElementById('popupFallback').style.display='none';
+  document.getElementById('popupTitle').textContent='Redirecting to Messenger…';
+  document.getElementById('popupSubtitle').textContent='Your complete order has been prepared. Messenger is opening now.';
+  document.getElementById('popupNote').textContent='Messenger should open automatically. La Luna will confirm your order within minutes! ✅';
   document.getElementById('orderPopup').classList.add('show');
   document.body.style.overflow='hidden';
 }
 
 function openMessenger(){
-  if(lastMsgUrl)window.open(lastMsgUrl,'_blank');
+  if(lastMsgUrl) window.open(lastMsgUrl,'_blank');
 }
 
 function closePopupNewOrder(){
   document.getElementById('orderPopup').classList.remove('show');
   document.body.style.overflow='';
-  // Reset cart and form
   cart=[];updBadge();
-  curOT='';pinnedLat=null;pinnedLng=null;
-  document.querySelectorAll('.ot-option').forEach(b=>b.classList.remove('sel'));
+  curOT='';curPayment='';pinnedLat=null;pinnedLng=null;
+  document.querySelectorAll('.ot-option,.pay-option').forEach(b=>b.classList.remove('sel'));
   document.getElementById('timeFields').classList.remove('show');
   document.getElementById('delivFields').style.display='none';
   document.getElementById('delivFeeRow').style.display='none';
