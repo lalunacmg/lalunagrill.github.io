@@ -283,6 +283,31 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .pin-status.warn{background:rgba(232,82,26,.06);border-color:rgba(232,82,26,.2)}
 .pin-status.warn strong{color:var(--or)}
 
+/* TIME PICKER FIELDS */
+.time-fields{display:none;margin-top:0}
+.time-fields.show{display:block}
+.time-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.time-slot-group{margin-bottom:0}
+.time-note{font-size:.7rem;color:var(--wg);margin-top:5px;line-height:1.4;padding:7px 10px;background:rgba(232,82,26,.05);border-radius:var(--r);border:1px solid rgba(232,82,26,.12)}
+
+/* ORDER SENT POPUP */
+.order-popup-overlay{position:fixed;inset:0;background:rgba(20,18,15,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s ease}
+.order-popup-overlay.show{opacity:1;pointer-events:all}
+.order-popup{background:#fff;border-radius:28px;padding:32px 24px 28px;width:100%;max-width:380px;text-align:center;transform:scale(.88) translateY(20px);transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 64px rgba(0,0,0,.25)}
+.order-popup-overlay.show .order-popup{transform:scale(1) translateY(0)}
+.popup-icon-wrap{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#0078FF,#0056C7);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 8px 24px rgba(0,120,255,.35)}
+.popup-icon{font-size:2.5rem;line-height:1}
+.popup-title{font-family:var(--font-h);font-size:1.35rem;font-weight:800;color:var(--dk);margin-bottom:8px}
+.popup-subtitle{font-size:.85rem;color:var(--wg);line-height:1.6;margin-bottom:6px}
+.popup-detail{font-size:.78rem;color:var(--wg);line-height:1.55;margin-bottom:22px;padding:10px 12px;background:var(--crl);border-radius:var(--r)}
+.popup-detail strong{color:var(--dk)}
+.popup-actions{display:flex;flex-direction:column;gap:10px}
+.popup-btn-primary{padding:14px;background:linear-gradient(135deg,var(--or),var(--orl));color:#fff;border-radius:100px;font-weight:800;font-size:.9rem;font-family:var(--font);transition:var(--t);border:none;cursor:pointer;width:100%}
+.popup-btn-primary:active{transform:scale(.97)}
+.popup-btn-secondary{padding:13px;border:1.5px solid var(--wgll);color:var(--wg);border-radius:100px;font-weight:700;font-size:.88rem;font-family:var(--font);transition:var(--t);background:#fff;cursor:pointer;width:100%}
+.popup-btn-secondary:active{background:var(--crl)}
+.popup-messenger-note{font-size:.72rem;color:var(--wgl);margin-top:8px;line-height:1.45}
+
 /* ══════════════ INFO ══════════════ */
 .info-body{padding:17px 15px}
 .info-card{background:#fff;border-radius:var(--rx);padding:17px;box-shadow:0 1px 8px var(--sh);margin-bottom:11px;border-top:3px solid var(--or)}
@@ -548,6 +573,24 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
           </div>
         </div>
 
+        <!-- TIME PICKER — shown for Advance Dine-in and Pick-up -->
+        <div class="time-fields" id="timeFields">
+          <div class="fg">
+            <label class="flbl" id="timeLabel">📅 Date &amp; Time <span class="req">*</span></label>
+            <div class="time-grid">
+              <div class="time-slot-group">
+                <label class="flbl" style="font-size:.65rem">Date</label>
+                <input class="finput" type="date" id="custDate" oninput="checkSendBtn()" min=""/>
+              </div>
+              <div class="time-slot-group">
+                <label class="flbl" style="font-size:.65rem">Time</label>
+                <input class="finput" type="time" id="custTime" oninput="checkSendBtn()" min="12:00" max="21:30"/>
+              </div>
+            </div>
+            <div class="time-note" id="timeNote">⏰ Store hours: Tuesday–Sunday, 12:00 PM – 10:00 PM. Closed Mondays. Please book at least 30 minutes ahead.</div>
+          </div>
+        </div>
+
         <!-- DELIVERY FIELDS -->
         <div id="delivFields" style="display:none">
           <div class="delivery-banner">
@@ -699,6 +742,23 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
     </div>
   </div>
 </section>
+
+<!-- ORDER SENT POPUP -->
+<div class="order-popup-overlay" id="orderPopup">
+  <div class="order-popup">
+    <div class="popup-icon-wrap">
+      <span class="popup-icon">💬</span>
+    </div>
+    <div class="popup-title">Order Sent!</div>
+    <div class="popup-subtitle">Your order has been forwarded to La Luna's Facebook Messenger.</div>
+    <div class="popup-detail" id="popupDetail"></div>
+    <div class="popup-actions">
+      <button class="popup-btn-primary" onclick="openMessenger()">💬 Open Messenger to Confirm</button>
+      <button class="popup-btn-secondary" onclick="closePopupNewOrder()">🛒 Place Another Order</button>
+    </div>
+    <div class="popup-messenger-note">📌 If Messenger didn't open automatically, tap the button above. We'll confirm your order within minutes!</div>
+  </div>
+</div>
 
 <!-- ═══════════════ SCRIPTS ═══════════════ -->
 <script>
@@ -1057,17 +1117,39 @@ function rmC(id){cart=cart.filter(x=>x.id!==id);updBadge();renderCart();}
 function setOT(btn,type){
   document.querySelectorAll('.ot-option').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');curOT=type;
+  // Time fields — show for Dine-in and Pick-up only
+  const tf=document.getElementById('timeFields');
+  const tl=document.getElementById('timeLabel');
+  const tn=document.getElementById('timeNote');
+  if(type==='Advance Dine-in'){
+    tf.classList.add('show');
+    tl.innerHTML='📅 Date &amp; Time of Dine-in <span class="req">*</span>';
+    tn.textContent='⏰ Store hours: Tue–Sun, 12:00 PM – 10:00 PM. Closed Mondays. Please book at least 30 minutes ahead.';
+  } else if(type==='Pick-up'){
+    tf.classList.add('show');
+    tl.innerHTML='📅 Date &amp; Time of Pick-up <span class="req">*</span>';
+    tn.textContent='⏰ Store hours: Tue–Sun, 12:00 PM – 10:00 PM. Closed Mondays. Please order at least 30 minutes before pick-up time.';
+  } else {
+    tf.classList.remove('show');
+    document.getElementById('custDate').value='';
+    document.getElementById('custTime').value='';
+  }
+  // Delivery fields
   const df=document.getElementById('delivFields');
   const fr=document.getElementById('delivFeeRow');
   df.style.display=type==='Delivery'?'':'none';
   if(fr)fr.style.display=type==='Delivery'?'':'none';
   const od=document.getElementById('otDisplay');
   if(od)od.textContent=type;
+  // Set min date to today
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('custDate').min=today;
   checkSendBtn();
 }
 
 /* ── MAP / LOCATION ── */
 let pinnedLat=null, pinnedLng=null, pinnedLabel='';
+let lastMsgUrl='';
 
 function useMyLocation(){
   const btn=document.querySelector('.map-gps-btn');
@@ -1084,8 +1166,6 @@ function useMyLocation(){
       pinnedLat=pos.coords.latitude.toFixed(6);
       pinnedLng=pos.coords.longitude.toFixed(6);
       pinnedLabel=`${pinnedLat}, ${pinnedLng}`;
-      // Update iframe src to center on detected location
-      const z=17;
       const frame=document.getElementById('delivMapFrame');
       if(frame){
         const bbox=calcBbox(parseFloat(pinnedLat),parseFloat(pinnedLng),0.004);
@@ -1098,11 +1178,11 @@ function useMyLocation(){
       btn.style.background='linear-gradient(135deg,#1a6b2a,#0f4a1c)';
       checkSendBtn();
     },
-    err=>{
+    e=>{
       pinnedLat=null;pinnedLng=null;
       const msgs={1:'Location access denied. Please allow location permission and try again.',2:'Unable to detect your location. Please fill in your address manually.',3:'Location request timed out. Please try again.'};
       status.className='pin-status show warn';
-      status.innerHTML=`⚠️ <strong>Could not get location:</strong> ${msgs[err.code]||'Unknown error.'}`;
+      status.innerHTML=`⚠️ <strong>Could not get location:</strong> ${msgs[e.code]||'Unknown error.'}`;
       btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Try Again';
       btn.disabled=false;
     },
@@ -1119,35 +1199,61 @@ function checkSendBtn(){
   const btn=document.getElementById('sendBtn');
   const note=document.getElementById('sendNote');
   if(!btn)return;
+  let ready=true;
+  let missing=[];
   if(curOT==='Delivery'){
     const bgy=(document.getElementById('custBgy')||{}).value||'';
     const lm=(document.getElementById('custLM')||{}).value?.trim()||'';
     const st=(document.getElementById('custStreet')||{}).value?.trim()||'';
-    const ready=bgy&&lm&&st;
-    btn.disabled=!ready;
-    note.textContent=ready
-      ? 'Ready to send! Tap the button above. 🕐'
-      : '⚠️ Please fill in your barangay, street address, and landmark before sending.';
+    if(!bgy)missing.push('barangay');
+    if(!st)missing.push('street address');
+    if(!lm)missing.push('landmark');
+  } else if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
+    const d=(document.getElementById('custDate')||{}).value||'';
+    const t=(document.getElementById('custTime')||{}).value||'';
+    if(!d)missing.push('date');
+    if(!t)missing.push('time');
+  }
+  ready=missing.length===0 && curOT!=='';
+  btn.disabled=!ready;
+  if(!curOT){
+    note.textContent='⚠️ Please select your order type above.';
+  } else if(missing.length>0){
+    note.textContent=`⚠️ Please fill in: ${missing.join(', ')}.`;
   } else {
-    btn.disabled=false;
-    note.textContent='We confirm your order via Facebook Messenger — usually within minutes 🕐';
+    note.textContent='✅ Ready to send! Tap the button above.';
+    note.style.color='var(--gr)';
+    setTimeout(()=>note.style.color='',2000);
   }
 }
 
-/* ── SEND ORDER ── */
-function sendOrder(){
-  if(!cart.length){toast('⚠️ Your cart is empty!');return;}
+/* ── FORMAT TIME ── */
+function fmtDateTime(dateVal,timeVal){
+  if(!dateVal||!timeVal)return '';
+  const d=new Date(dateVal+'T'+timeVal);
+  if(isNaN(d))return `${dateVal} at ${timeVal}`;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const day=days[d.getDay()];
+  const hr=d.getHours();
+  const min=d.getMinutes().toString().padStart(2,'0');
+  const ampm=hr>=12?'PM':'AM';
+  const hr12=hr%12||12;
+  return `${day}, ${months[d.getMonth()]} ${d.getDate()} at ${hr12}:${min} ${ampm}`;
+}
+
+/* ── BUILD ORDER MESSAGE ── */
+function buildMsg(){
   const name=g('custName'),phone=g('custPhone'),notes=g('custNotes');
-  if(!name){err('custName');toast('Please enter your name');return;}
-  if(!phone){err('custPhone');toast('Please enter your phone number');return;}
-  if(!curOT){toast('Please select an order type');return;}
+  let tline='';
+  if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
+    const d=g('custDate'),t=g('custTime');
+    tline=`⏰ ${curOT==='Advance Dine-in'?'Dine-in':'Pick-up'} Time: ${fmtDateTime(d,t)}\n`;
+  }
   let dline='';
   if(curOT==='Delivery'){
     const bgy=document.getElementById('custBgy').value;
     const st=g('custStreet'),lm=g('custLM');
-    if(!bgy||bgy===''){err('custBgy');toast('Please select your barangay');return;}
-    if(!st){err('custStreet');toast('Please enter your street address');return;}
-    if(!lm){err('custLM');toast('Please enter a landmark');return;}
     dline=`📍 Delivery Address:\n   📌 Barangay: ${bgy}\n   🏠 Street/Purok: ${st}\n   🗺️ Landmark: ${lm}\n`;
     if(pinnedLat&&pinnedLng){
       dline+=`   🌐 GPS Pin: ${pinnedLat}, ${pinnedLng}\n   🔗 Map: https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng}\n`;
@@ -1160,6 +1266,7 @@ function sendOrder(){
   msg+=`👤 Name:   ${name}\n`;
   msg+=`📞 Phone:  ${phone}\n`;
   msg+=`🍽️ Type:   ${curOT}\n`;
+  if(tline)msg+=tline;
   if(dline)msg+=dline;
   msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
   msg+=`📋 ORDER:\n`;
@@ -1174,7 +1281,86 @@ function sendOrder(){
   if(notes)msg+=`📝 Notes: ${notes}\n`;
   msg+=`━━━━━━━━━━━━━━━━━━━━━\n`;
   msg+=`Sent via La Luna Order Portal 🌙`;
-  window.open(`https://m.me/303918802794006?text=${encodeURIComponent(msg)}`,'_blank');
+  return msg;
+}
+
+/* ── SEND ORDER ── */
+function sendOrder(){
+  if(!cart.length){toast('⚠️ Your cart is empty!');return;}
+  const name=g('custName'),phone=g('custPhone');
+  if(!name){err('custName');toast('Please enter your name');return;}
+  if(!phone){err('custPhone');toast('Please enter your phone number');return;}
+  if(!curOT){toast('Please select an order type');return;}
+  // Validate time for Dine-in / Pick-up
+  if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
+    const d=g('custDate'),t=g('custTime');
+    if(!d){err('custDate');toast('Please select a date');return;}
+    if(!t){err('custTime');toast('Please select a time');return;}
+    // Validate day is not Monday
+    const picked=new Date(d+'T12:00:00');
+    if(picked.getDay()===1){
+      err('custDate');
+      toast('⚠️ We are closed on Mondays. Please pick another day.');
+      return;
+    }
+  }
+  // Validate delivery fields
+  if(curOT==='Delivery'){
+    const bgy=document.getElementById('custBgy').value;
+    const st=g('custStreet'),lm=g('custLM');
+    if(!bgy||bgy===''){err('custBgy');toast('Please select your barangay');return;}
+    if(!st){err('custStreet');toast('Please enter your street address');return;}
+    if(!lm){err('custLM');toast('Please enter a landmark');return;}
+  }
+  // Build message
+  const msg=buildMsg();
+  const pageId='303918802794006';
+  const messengerUrl=`https://m.me/${pageId}?text=${encodeURIComponent(msg)}`;
+  lastMsgUrl=messengerUrl;
+  // Attempt auto-open
+  const win=window.open(messengerUrl,'_blank');
+  // Show success popup regardless (mobile may block popup but URL is still copied)
+  showOrderPopup(win);
+}
+
+/* ── ORDER SENT POPUP ── */
+function showOrderPopup(winOpened){
+  const name=g('custName');
+  const tot=cart.reduce((s,i)=>s+i.total,0);
+  const detail=document.getElementById('popupDetail');
+  let timeInfo='';
+  if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
+    const d=g('custDate'),t=g('custTime');
+    timeInfo=`<br/><strong>📅 ${curOT==='Advance Dine-in'?'Dine-in':'Pick-up'} time:</strong> ${fmtDateTime(d,t)}`;
+  }
+  detail.innerHTML=`<strong>👤 ${name}</strong> — ${curOT}<br/><strong>💰 Subtotal: ₱${tot}</strong>${timeInfo}<br/><br/>Your order details have been prepared${winOpened?' and Messenger was opened':' — tap below to open Messenger'} to send directly to La Luna.`;
+  document.getElementById('orderPopup').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function openMessenger(){
+  if(lastMsgUrl)window.open(lastMsgUrl,'_blank');
+}
+
+function closePopupNewOrder(){
+  document.getElementById('orderPopup').classList.remove('show');
+  document.body.style.overflow='';
+  // Reset cart and form
+  cart=[];updBadge();
+  curOT='';pinnedLat=null;pinnedLng=null;
+  document.querySelectorAll('.ot-option').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('timeFields').classList.remove('show');
+  document.getElementById('delivFields').style.display='none';
+  document.getElementById('delivFeeRow').style.display='none';
+  ['custName','custPhone','custDate','custTime','custStreet','custLM','custNotes'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  const bgy=document.getElementById('custBgy');if(bgy)bgy.value='';
+  const ps=document.getElementById('pinStatus');if(ps){ps.className='pin-status';ps.innerHTML='';}
+  const gpsBtn=document.querySelector('.map-gps-btn');
+  if(gpsBtn){gpsBtn.disabled=false;gpsBtn.style.background='';gpsBtn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg> Use My Location';}
+  renderCart();
+  goTo('home');
 }
 
 /* ── HELPERS ── */
