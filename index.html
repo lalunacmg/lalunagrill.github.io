@@ -264,6 +264,25 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .send-btn:disabled{background:#aaa;box-shadow:none;cursor:not-allowed;opacity:.6}
 .send-note{text-align:center;font-size:.69rem;color:var(--wg);margin-top:10px;line-height:1.45}
 
+/* DUAL FLAVOR */
+.modal-dual-note{font-size:.73rem;color:var(--or2);font-weight:700;padding:8px 11px;background:var(--orp);border-radius:var(--r);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.modal-v-btn.dual-sel{border-color:var(--or);background:linear-gradient(135deg,#fff8f5,var(--orp));color:var(--or2)}
+.dual-badge{width:20px;height:20px;border-radius:50%;background:var(--or);color:#fff;font-size:.65rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dual-empty{width:20px;height:20px;border-radius:50%;border:2px solid var(--wgll);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* LOCATION PIN MAP */
+.map-pin-wrap{position:relative;width:100%;height:220px;border-radius:var(--rl);overflow:hidden;border:1.5px solid var(--wgll);margin-bottom:10px;background:#e6ede6}
+#delivMapFrame{width:100%;height:100%;border:none;display:block}
+.map-overlay-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-100%);pointer-events:none;z-index:10;filter:drop-shadow(0 3px 5px rgba(0,0,0,.4))}
+.map-actions{display:flex;gap:8px;margin-bottom:10px}
+.map-gps-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;background:linear-gradient(135deg,var(--gr),var(--grd));color:#fff;border-radius:100px;font-size:.79rem;font-weight:800;box-shadow:0 2px 8px rgba(45,138,62,.28);transition:var(--t);font-family:var(--font);border:none;cursor:pointer}
+.map-gps-btn:active{transform:scale(.97)}
+.pin-status{background:linear-gradient(135deg,rgba(45,138,62,.08),rgba(45,138,62,.04));border:1px solid rgba(45,138,62,.22);border-radius:var(--r);padding:9px 12px;font-size:.72rem;color:var(--dks);line-height:1.55;display:none}
+.pin-status.show{display:block}
+.pin-status strong{color:var(--gr)}
+.pin-status.warn{background:rgba(232,82,26,.06);border-color:rgba(232,82,26,.2)}
+.pin-status.warn strong{color:var(--or)}
+
 /* ══════════════ INFO ══════════════ */
 .info-body{padding:17px 15px}
 .info-card{background:#fff;border-radius:var(--rx);padding:17px;box-shadow:0 1px 8px var(--sh);margin-bottom:11px;border-top:3px solid var(--or)}
@@ -275,8 +294,10 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .status-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;font-size:.68rem;font-weight:800}
 .status-open{background:rgba(45,138,62,.12);color:var(--gr)}
 .status-closed{background:rgba(192,57,43,.1);color:#c0392b}
-.maps-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:12px;background:linear-gradient(135deg,var(--gr),var(--grd));color:#fff;border-radius:100px;font-size:.83rem;font-weight:800;box-shadow:0 3px 10px rgba(45,138,62,.3);transition:var(--t);font-family:var(--font)}
+.maps-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:0;padding:12px;background:linear-gradient(135deg,var(--gr),var(--grd));color:#fff;border-radius:100px;font-size:.83rem;font-weight:800;box-shadow:0 3px 10px rgba(45,138,62,.3);transition:var(--t);font-family:var(--font)}
 .maps-btn:active{transform:scale(.97)}
+.fb-follow-btn{display:flex;align-items:center;justify-content:center;gap:9px;padding:12px;background:linear-gradient(135deg,#1877F2,#0a5dc4);color:#fff;border-radius:100px;font-size:.83rem;font-weight:800;box-shadow:0 3px 10px rgba(24,119,242,.3);transition:var(--t);font-family:var(--font)}
+.fb-follow-btn:active{transform:scale(.97)}
 .about-card{background:var(--dk);border-radius:var(--rx);padding:20px;margin-bottom:11px;position:relative;overflow:hidden}
 .about-card-deco{position:absolute;right:-12px;top:50%;transform:translateY(-50%);opacity:.07;pointer-events:none}
 .about-title{font-family:var(--font-h);font-size:1.15rem;color:var(--cr);margin-bottom:10px;font-weight:800}
@@ -537,6 +558,34 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
             💡 <strong>Delivery fee: ₱20–₱50</strong> depending on your distance from La Luna. Our team will confirm the exact fee via Messenger before preparing your order.
           </div>
           <div style="height:10px"></div>
+
+          <!-- PIN LOCATION MAP -->
+          <div class="fg">
+            <label class="flbl">📍 Pin Your Delivery Location <span class="req">*</span></label>
+            <div class="fhint" style="margin-bottom:8px">Tap "Use My Location" to auto-detect, or drag the map to position the red pin on your exact location.</div>
+            <div class="map-pin-wrap" id="mapWrap">
+              <iframe id="delivMapFrame"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=122.3,10.2,122.7,10.6&amp;layer=mapnik"
+                allowfullscreen loading="lazy" title="Delivery location map">
+              </iframe>
+              <!-- Pin overlay centered on map -->
+              <div class="map-overlay-pin" id="mapPin">
+                <svg width="32" height="42" viewBox="0 0 32 42" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 0C7.163 0 0 7.163 0 16c0 10.627 14.4 25.193 15.04 25.848a1.333 1.333 0 001.92 0C17.6 41.193 32 26.627 32 16 32 7.163 24.837 0 16 0z" fill="#E8521A"/>
+                  <circle cx="16" cy="16" r="7" fill="white"/>
+                  <circle cx="16" cy="16" r="4" fill="#E8521A"/>
+                </svg>
+              </div>
+            </div>
+            <div class="map-actions">
+              <button type="button" class="map-gps-btn" onclick="useMyLocation()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg>
+                Use My Location
+              </button>
+            </div>
+            <div class="pin-status" id="pinStatus"></div>
+          </div>
+
           <div class="fg">
             <label class="flbl">Barangay / Area <span class="req">*</span></label>
             <select class="finput" id="custBgy" onchange="checkSendBtn()">
@@ -556,7 +605,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
           <div class="fg">
             <label class="flbl">Landmark <span class="req">*</span></label>
             <input class="finput" id="custLM" type="text" placeholder="e.g. Near sari-sari store, beside blue gate" oninput="checkSendBtn()"/>
-            <div class="fhint">🗺️ A clear landmark (e.g. near a store, corner, color of gate) helps our rider find you fast. This field is required before sending.</div>
+            <div class="fhint">🗺️ A clear landmark helps our rider find you fast. Required before sending.</div>
           </div>
         </div>
 
@@ -589,9 +638,15 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
     <div class="info-card">
       <div class="ic-title">📍 Location &amp; Contact</div>
       <div class="ic-row"><span class="ic-lbl">Restaurant</span><span class="ic-val">La Luna Grill + Cafe</span></div>
-      <div class="ic-row"><span class="ic-lbl">Facebook</span><span class="ic-val">La Luna CMG</span></div>
+      <div class="ic-row"><span class="ic-lbl">Facebook</span><span class="ic-val">La Luna Grill &amp; Cafe</span></div>
       <div class="ic-row"><span class="ic-lbl">Orders</span><span class="ic-val">Via FB Messenger</span></div>
-      <a href="https://maps.app.goo.gl/98P9TApBfp1cpxkD8" target="_blank" rel="noopener" class="maps-btn">📍 Open in Google Maps</a>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <a href="https://maps.app.goo.gl/98P9TApBfp1cpxkD8" target="_blank" rel="noopener" class="maps-btn">📍 Open in Google Maps</a>
+        <a href="https://www.facebook.com/laluna.cmg" target="_blank" rel="noopener" class="fb-follow-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Follow us on Facebook
+        </a>
+      </div>
     </div>
 
     <div class="info-card" style="border-top-color:var(--gr)">
@@ -616,8 +671,19 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
     </div>
 
     <div class="addons-card">
-      <div class="ic-title">☕ Drink Add-ons</div>
-      <div style="font-size:.76rem;color:var(--wg)">Available for all café drinks</div>
+      <div class="ic-title">✨ Add-ons</div>
+      <div style="font-size:.76rem;color:var(--wg);margin-bottom:12px">Available per drink category</div>
+      <div style="font-size:.74rem;font-weight:700;color:var(--dks);margin-bottom:6px;font-family:var(--font-h)">☕ Coffee</div>
+      <div class="addons-row" style="margin-bottom:12px">
+        <div class="addon-chip"><div class="addon-chip-name">Extra Shot</div><div class="addon-chip-price">+₱25</div></div>
+        <div class="addon-chip"><div class="addon-chip-name">Sugar</div><div class="addon-chip-price" style="color:var(--gr)">Free</div></div>
+      </div>
+      <div style="font-size:.74rem;font-weight:700;color:var(--dks);margin-bottom:6px;font-family:var(--font-h)">🧋 Milk Tea &amp; 🍓 Fruit Shakes</div>
+      <div class="addons-row" style="margin-bottom:12px">
+        <div class="addon-chip"><div class="addon-chip-name">Pearl</div><div class="addon-chip-price">+₱15</div></div>
+        <div class="addon-chip"><div class="addon-chip-name">Nata</div><div class="addon-chip-price">+₱15</div></div>
+      </div>
+      <div style="font-size:.74rem;font-weight:700;color:var(--dks);margin-bottom:6px;font-family:var(--font-h)">🧋 Milk Tea Only</div>
       <div class="addons-row">
         <div class="addon-chip"><div class="addon-chip-name">Pearl</div><div class="addon-chip-price">+₱15</div></div>
         <div class="addon-chip"><div class="addon-chip-name">Nata</div><div class="addon-chip-price">+₱15</div></div>
@@ -638,11 +704,13 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 <script>
 /* ── MENU DATA ── */
 const DA=[{name:'Pearl',price:15},{name:'Nata',price:15},{name:'Cream Cheese',price:15}];
+const CA=[{name:'Extra Espresso Shot',price:25},{name:'Sugar',price:0}];
+const FA=[{name:'Pearl',price:15},{name:'Nata',price:15}];
 
 /* Category icons for the menu header */
 const CAT_ICON={
   'Appetizer':'🥗',
-  'Pizza':'🍕',
+  'Pizza (Solo)':'🍕',
   'Pasta':'🍝',
   'Mains':'🍖',
   'Combo Meals':'🍱',
@@ -658,20 +726,21 @@ const CAT_ICON={
 const MENU=[
   // APPETIZER
   {id:1,cat:'Appetizer',icon:'🫓',name:'Shawarma',pop:false,desc:'Grilled seasoned meat wrapped in warm pita with garlic sauce.',p:100,v:[],a:[]},
-  {id:2,cat:'Appetizer',icon:'🍟',name:'French Fries',pop:false,desc:'Crispy golden fries, salted to perfection.',p:100,v:[],a:[]},
+  {id:2,cat:'Appetizer',icon:'🍟',name:'French Fries',pop:false,desc:'Crispy golden fries, salted to perfection.',p:110,v:[],a:[]},
   {id:3,cat:'Appetizer',icon:'🍗',name:"Chik N' Fries",pop:true,desc:'Crispy chicken pieces paired with golden fries — the perfect combo.',p:145,v:[],a:[]},
-  // PIZZA
-  {id:4,cat:'Pizza',icon:'🍕',name:'Hawaiian',pop:false,desc:'Classic ham and sweet pineapple on a rich tomato base with mozzarella.',p:99,v:[],a:[]},
-  {id:5,cat:'Pizza',icon:'🍕',name:'Pepperoni',pop:false,desc:'Loaded with spicy pepperoni slices on a stretchy mozzarella base.',p:99,v:[],a:[]},
-  {id:6,cat:'Pizza',icon:'🍕',name:'La Luna',pop:true,desc:'Our signature house pizza on a crispy thin crust — a customer favorite.',p:99,v:[],a:[]},
+  // PIZZA (SOLO)
+  {id:4,cat:'Pizza (Solo)',icon:'🍕',name:'Hawaiian',pop:false,desc:'Classic ham and sweet pineapple on a rich tomato base with mozzarella.',p:99,v:[],a:[]},
+  {id:5,cat:'Pizza (Solo)',icon:'🍕',name:'Pepperoni',pop:false,desc:'Loaded with spicy pepperoni slices on a stretchy mozzarella base.',p:99,v:[],a:[]},
+  {id:6,cat:'Pizza (Solo)',icon:'🍕',name:'La Luna',pop:true,desc:'Our signature house pizza on a crispy thin crust — a customer favorite.',p:99,v:[],a:[]},
   // PASTA
   {id:7,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:179,v:[],a:[]},
   {id:8,cat:'Pasta',icon:'🍝',name:'Bacon & Mushroom Carbonara',pop:true,desc:'Creamy white sauce pasta with savory bacon and earthy mushrooms.',p:179,v:[],a:[]},
   // MAINS
   {id:9,cat:'Mains',icon:'🫕',name:'Sisig Platter',pop:true,desc:'Sizzling pork sisig on a hot cast-iron plate — the ultimate Filipino pulutan.',p:250,v:[],a:[]},
-  {id:10,cat:'Mains',icon:'🍗',name:'6 pcs Chicken Wings',pop:true,desc:'Crispy fried chicken wings served with a savory dipping sauce.',p:189,v:[],a:[]},
-  {id:11,cat:'Mains',icon:'🍗',name:'12 pcs Chicken Wings',pop:true,desc:'A dozen golden fried wings — perfect for sharing. Choose your flavor!',p:299,
-    v:[{l:'Honey Butter',p:299},{l:'Soy Garlic',p:299},{l:'Buffalo',p:299}],a:[]},
+  {id:10,cat:'Mains',icon:'🍗',name:'6 pcs Chicken Wings',pop:true,desc:'Crispy fried chicken wings served with a savory dipping sauce. Choose your flavor!',p:189,
+    v:[{l:'Honey Butter',p:189},{l:'Soy Garlic',p:189},{l:'Buffalo',p:189}],a:[]},
+  {id:11,cat:'Mains',icon:'🍗',name:'12 pcs Chicken Wings',pop:true,desc:'A dozen golden fried wings — perfect for sharing. Pick 2 different flavors!',p:299,
+    v:[{l:'Honey Butter',p:299},{l:'Soy Garlic',p:299},{l:'Buffalo',p:299}],a:[],dual:true},
   // COMBO MEALS
   {id:12,cat:'Combo Meals',icon:'🍱',name:'C1 – 3 pcs BBQ w/ 2 Rice',pop:true,desc:'3 charcoal-grilled pork BBQ sticks served with 2 cups of steamed rice.',p:120,v:[],a:[]},
   {id:13,cat:'Combo Meals',icon:'🍱',name:'C2 – Quarter Leg w/ 2 Rice',pop:true,desc:'Grilled chicken quarter leg served with 2 cups of rice.',p:150,v:[],a:[]},
@@ -682,14 +751,14 @@ const MENU=[
   // DESSERT
   {id:17,cat:'Dessert',icon:'🍧',name:'Halo-Halo',pop:true,desc:'Classic Filipino shaved ice dessert with mixed sweets, leche flan, and ube ice cream.',p:120,v:[],a:[]},
   // COFFEE
-  {id:18,cat:'Coffee',icon:'☕',name:'Double Espresso',pop:false,desc:'Two concentrated shots of bold espresso.',p:70,v:[],a:DA},
-  {id:19,cat:'Coffee',icon:'☕',name:'Americano',pop:false,desc:'Espresso with hot or cold water — clean and bold.',p:80,v:[{l:'Hot',p:80},{l:'Iced',p:100}],a:DA},
-  {id:20,cat:'Coffee',icon:'☕',name:'Cappuccino',pop:false,desc:'Equal parts espresso, steamed milk, and velvety foam.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:DA},
-  {id:21,cat:'Coffee',icon:'☕',name:'Cafe Latte',pop:true,desc:'Smooth espresso blended with generous steamed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:DA},
-  {id:22,cat:'Coffee',icon:'☕',name:'Spanish Latte',pop:true,desc:'Rich espresso blended with sweetened condensed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:DA},
-  {id:23,cat:'Coffee',icon:'☕',name:'Hazelnut Latte',pop:false,desc:'Espresso and milk with rich hazelnut flavour syrup.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:DA},
-  {id:24,cat:'Coffee',icon:'☕',name:'Salted Caramel',pop:false,desc:'Caramel espresso latte with a salted caramel finish.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:135}],a:DA},
-  {id:25,cat:'Coffee',icon:'☕',name:'Caramel Macchiato',pop:false,desc:'Layered vanilla latte with a caramel drizzle.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:DA},
+  {id:18,cat:'Coffee',icon:'☕',name:'Double Espresso',pop:false,desc:'Two concentrated shots of bold espresso.',p:70,v:[],a:CA},
+  {id:19,cat:'Coffee',icon:'☕',name:'Americano',pop:false,desc:'Espresso with hot or cold water — clean and bold.',p:80,v:[{l:'Hot',p:80},{l:'Iced',p:100}],a:CA},
+  {id:20,cat:'Coffee',icon:'☕',name:'Cappuccino',pop:false,desc:'Equal parts espresso, steamed milk, and velvety foam.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
+  {id:21,cat:'Coffee',icon:'☕',name:'Cafe Latte',pop:true,desc:'Smooth espresso blended with generous steamed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
+  {id:22,cat:'Coffee',icon:'☕',name:'Spanish Latte',pop:true,desc:'Rich espresso blended with sweetened condensed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
+  {id:23,cat:'Coffee',icon:'☕',name:'Hazelnut Latte',pop:false,desc:'Espresso and milk with rich hazelnut flavour syrup.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
+  {id:24,cat:'Coffee',icon:'☕',name:'Salted Caramel',pop:false,desc:'Caramel espresso latte with a salted caramel finish.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:135}],a:CA},
+  {id:25,cat:'Coffee',icon:'☕',name:'Caramel Macchiato',pop:false,desc:'Layered vanilla latte with a caramel drizzle.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
   // MILKTEA
   {id:26,cat:'Milktea',icon:'🧋',name:'Taro',pop:true,desc:'Earthy purple taro blended into a smooth creamy milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
   {id:27,cat:'Milktea',icon:'🧋',name:'Okinawa',pop:false,desc:'Brown sugar milk tea with a smoky-sweet caramel undertone.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
@@ -698,24 +767,25 @@ const MENU=[
   {id:30,cat:'Milktea',icon:'🧋',name:'Chocolate',pop:false,desc:'Rich creamy chocolate blended into a classic milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
   {id:31,cat:'Milktea',icon:'🧋',name:'Cookies & Cream',pop:true,desc:'Crushed Oreo cookies blended into a creamy milk tea base.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
   // FRAPPE
-  {id:32,cat:'Frappe',icon:'🥤',name:'Caramel',pop:false,desc:'Silky blended caramel frappe with whipped cream topping.',p:165,v:[],a:DA},
-  {id:33,cat:'Frappe',icon:'🥤',name:'Mochaccino',pop:true,desc:'Coffee and chocolate blended into a rich indulgent frappe.',p:165,v:[],a:DA},
-  {id:34,cat:'Frappe',icon:'🥤',name:'Toffee-Nut',pop:false,desc:'Smooth toffee and toasted nut blended frappe.',p:165,v:[],a:DA},
-  {id:35,cat:'Frappe',icon:'🥤',name:'Peppermint Mocha',pop:false,desc:'Cool peppermint meets rich chocolate mocha.',p:165,v:[],a:DA},
-  {id:36,cat:'Frappe',icon:'🥤',name:'Pumpkin Spice',pop:false,desc:'Warm pumpkin spice flavors served cold and blended.',p:165,v:[],a:DA},
-  {id:37,cat:'Frappe',icon:'🥤',name:'Biscoff',pop:false,desc:'Speculoos cookie butter blended into a creamy frappe.',p:170,v:[],a:DA},
-  {id:38,cat:'Frappe',icon:'🥤',name:'Nutella',pop:true,desc:'Rich hazelnut Nutella blended smooth for an irresistible frappe.',p:170,v:[],a:DA},
+  {id:32,cat:'Frappe',icon:'🥤',name:'Caramel',pop:false,desc:'Silky blended caramel frappe with whipped cream topping.',p:165,v:[],a:[]},
+  {id:33,cat:'Frappe',icon:'🥤',name:'Mochaccino',pop:true,desc:'Coffee and chocolate blended into a rich indulgent frappe.',p:165,v:[],a:[]},
+  {id:34,cat:'Frappe',icon:'🥤',name:'Toffee-Nut',pop:false,desc:'Smooth toffee and toasted nut blended frappe.',p:165,v:[],a:[]},
+  {id:35,cat:'Frappe',icon:'🥤',name:'Peppermint Mocha',pop:false,desc:'Cool peppermint meets rich chocolate mocha.',p:165,v:[],a:[]},
+  {id:36,cat:'Frappe',icon:'🥤',name:'Pumpkin Spice',pop:false,desc:'Warm pumpkin spice flavors served cold and blended.',p:165,v:[],a:[]},
+  {id:37,cat:'Frappe',icon:'🥤',name:'Biscoff',pop:false,desc:'Speculoos cookie butter blended into a creamy frappe.',p:170,v:[],a:[]},
+  {id:38,cat:'Frappe',icon:'🥤',name:'Nutella',pop:true,desc:'Rich hazelnut Nutella blended smooth for an irresistible frappe.',p:170,v:[],a:[]},
   // FRUIT SHAKES
-  {id:39,cat:'Fruit Shakes',icon:'🥭',name:'Mango',pop:true,desc:'Fresh ripe mango blended with milk and crushed ice.',p:120,v:[],a:DA},
-  {id:40,cat:'Fruit Shakes',icon:'🥑',name:'Avocado',pop:false,desc:'Creamy ripe avocado shake with condensed milk.',p:120,v:[],a:DA},
-  {id:41,cat:'Fruit Shakes',icon:'🍹',name:'Seasonal Fruit *',pop:false,desc:"Ask our staff for today's fresh seasonal fruit blend. *Availability varies.",p:120,v:[],a:DA},
+  {id:39,cat:'Fruit Shakes',icon:'🥭',name:'Mango',pop:true,desc:'Fresh ripe mango blended with milk and crushed ice.',p:120,v:[],a:FA},
+  {id:40,cat:'Fruit Shakes',icon:'🥑',name:'Avocado',pop:false,desc:'Creamy ripe avocado shake with condensed milk.',p:120,v:[],a:FA},
+  {id:41,cat:'Fruit Shakes',icon:'🍹',name:'Seasonal Fruit *',pop:false,desc:"Ask our staff for today's fresh seasonal fruit blend. *Availability varies.",p:120,v:[],a:FA},
   // ADD-ONS
   {id:42,cat:'Add-ons',icon:'🫧',name:'Pearl',pop:false,desc:'Chewy tapioca pearl add-on for drinks.',p:15,v:[],a:[]},
   {id:43,cat:'Add-ons',icon:'🍮',name:'Nata',pop:false,desc:'Sweet coconut jelly cubes for drinks.',p:15,v:[],a:[]},
   {id:44,cat:'Add-ons',icon:'🧀',name:'Cream Cheese',pop:false,desc:'Creamy salted cheese foam topping.',p:15,v:[],a:[]},
+  {id:45,cat:'Add-ons',icon:'🍚',name:'Extra Rice',pop:false,desc:'Additional cup of steaming hot white rice.',p:25,v:[],a:[]},
 ];
 
-const CATS=['All','Appetizer','Pizza','Pasta','Mains','Combo Meals','Dessert','Coffee','Milktea','Frappe','Fruit Shakes','Add-ons'];
+const CATS=['All','Appetizer','Pizza (Solo)','Pasta','Mains','Combo Meals','Dessert','Coffee','Milktea','Frappe','Fruit Shakes','Add-ons'];
 const BS=[9,11,6,8,22,38,17,21];
 const PROMOS=[
   '★ Open Tue–Sun · 12PM–10PM · Closed Monday',
@@ -825,9 +895,11 @@ function buildMenu(cat){
 }
 
 /* ── MODAL ── */
+let dualSelected=[];
+
 function openModal(id){
   curItem=MENU.find(m=>m.id===id);
-  curQty=1;curVI=curItem.v.length?0:null;curAds=[];
+  curQty=1;curVI=curItem.v.length?0:null;curAds=[];dualSelected=[];
   document.getElementById('mIcon').textContent=curItem.icon;
   document.getElementById('mName').textContent=curItem.name;
   document.getElementById('mDesc').textContent=curItem.desc;
@@ -835,12 +907,27 @@ function openModal(id){
   const vs=document.getElementById('mVarSec');
   if(curItem.v.length){
     vs.style.display='block';
-    document.getElementById('mVariants').innerHTML=curItem.v.map((v,i)=>
-      `<div class="modal-v-btn${i===0?' sel':''}" onclick="selVar(${i},this)">
-        <span>${v.l} &nbsp;—&nbsp; ₱${v.p}</span>
-        <div class="chk">${i===0?'✓':''}</div>
-       </div>`
-    ).join('');
+    if(curItem.dual){
+      // DUAL FLAVOR MODE — pick exactly 2
+      dualSelected=[];
+      document.getElementById('mVariants').innerHTML=
+        `<div class="modal-dual-note">🍗 Select 2 flavors for your 12 pcs</div>`+
+        curItem.v.map((v,i)=>
+          `<div class="modal-v-btn" data-idx="${i}" onclick="togDual(${i},this)">
+            <span>${v.l}</span>
+            <div class="dual-empty" id="dual-chk-${i}"></div>
+           </div>`
+        ).join('');
+      curVI=null; // no single selection
+    } else {
+      curVI=0;
+      document.getElementById('mVariants').innerHTML=curItem.v.map((v,i)=>
+        `<div class="modal-v-btn${i===0?' sel':''}" onclick="selVar(${i},this)">
+          <span>${v.l} &nbsp;—&nbsp; ₱${v.p}</span>
+          <div class="chk">${i===0?'✓':''}</div>
+         </div>`
+      ).join('');
+    }
   } else vs.style.display='none';
   const as=document.getElementById('mAddSec');
   if(curItem.a.length){
@@ -851,13 +938,31 @@ function openModal(id){
           <div class="modal-addon-chk"></div>
           <span class="modal-addon-name">${a.name}</span>
         </div>
-        <span class="modal-addon-price">+₱${a.price}</span>
+        <span class="modal-addon-price">${a.price>0?'+₱'+a.price:'Free'}</span>
        </div>`
     ).join('');
   } else as.style.display='none';
   updMT();
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+}
+
+function togDual(i,btn){
+  const already=dualSelected.includes(i);
+  if(already){
+    dualSelected=dualSelected.filter(x=>x!==i);
+    btn.classList.remove('dual-sel');
+    document.getElementById('dual-chk-'+i).className='dual-empty';
+    document.getElementById('dual-chk-'+i).textContent='';
+  } else {
+    if(dualSelected.length>=2){toast('Maximum 2 flavors only!');return;}
+    dualSelected.push(i);
+    btn.classList.add('dual-sel');
+    const badge=document.getElementById('dual-chk-'+i);
+    badge.className='dual-badge';
+    badge.textContent=dualSelected.length;
+  }
+  updMT();
 }
 function closeModalOut(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
@@ -879,15 +984,26 @@ function chQty(d){curQty=Math.max(1,curQty+d);document.getElementById('mQty').te
 function updMT(){
   if(!curItem)return;
   let base=curItem.p;
-  if(curVI!==null&&curItem.v[curVI])base=curItem.v[curVI].p;
+  if(!curItem.dual&&curVI!==null&&curItem.v[curVI])base=curItem.v[curVI].p;
   const at=curAds.reduce((s,i)=>s+curItem.a[i].price,0);
-  document.getElementById('mPrice').textContent=`₱${base}`+(at?` + ₱${at} add-ons`:'');
-  document.getElementById('mTotal').textContent=`₱${(base+at)*curQty}`;
+  if(curItem.dual){
+    const needed=2-dualSelected.length;
+    document.getElementById('mPrice').textContent=needed>0?`🍗 Pick ${needed} more flavor${needed>1?'s':''}`:`₱${base}${at?' + ₱'+at+' add-ons':''}`;
+    document.getElementById('mTotal').textContent=dualSelected.length<2?'—':`₱${(base+at)*curQty}`;
+  } else {
+    document.getElementById('mPrice').textContent=`₱${base}`+(at?` + ₱${at} add-ons`:'');
+    document.getElementById('mTotal').textContent=`₱${(base+at)*curQty}`;
+  }
 }
 function addToCart(){
   if(!curItem)return;
+  if(curItem.dual&&dualSelected.length<2){toast('Please pick 2 flavors first!');return;}
   let base=curItem.p,vl='';
-  if(curVI!==null&&curItem.v[curVI]){base=curItem.v[curVI].p;vl=curItem.v[curVI].l;}
+  if(curItem.dual){
+    vl=dualSelected.map(i=>curItem.v[i].l).join(' + ');
+  } else if(curVI!==null&&curItem.v[curVI]){
+    base=curItem.v[curVI].p;vl=curItem.v[curVI].l;
+  }
   const al=curAds.map(i=>curItem.a[i].name);
   const at=curAds.reduce((s,i)=>s+curItem.a[i].price,0);
   const up=base+at;
@@ -950,6 +1066,54 @@ function setOT(btn,type){
   checkSendBtn();
 }
 
+/* ── MAP / LOCATION ── */
+let pinnedLat=null, pinnedLng=null, pinnedLabel='';
+
+function useMyLocation(){
+  const btn=document.querySelector('.map-gps-btn');
+  const status=document.getElementById('pinStatus');
+  if(!navigator.geolocation){
+    status.className='pin-status show warn';
+    status.innerHTML='⚠️ <strong>GPS not available</strong> on this device. Please type your address details below.';
+    return;
+  }
+  btn.textContent='⏳ Locating…';
+  btn.disabled=true;
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      pinnedLat=pos.coords.latitude.toFixed(6);
+      pinnedLng=pos.coords.longitude.toFixed(6);
+      pinnedLabel=`${pinnedLat}, ${pinnedLng}`;
+      // Update iframe src to center on detected location
+      const z=17;
+      const frame=document.getElementById('delivMapFrame');
+      if(frame){
+        const bbox=calcBbox(parseFloat(pinnedLat),parseFloat(pinnedLng),0.004);
+        frame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${pinnedLat},${pinnedLng}`;
+      }
+      status.className='pin-status show';
+      status.innerHTML=`✅ <strong>Location pinned!</strong><br/>📍 Coordinates: ${pinnedLat}, ${pinnedLng}<br/><a href="https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng}" target="_blank" rel="noopener" style="color:var(--gr);font-weight:700">View on map ↗</a>`;
+      btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg> Location Pinned ✓';
+      btn.disabled=false;
+      btn.style.background='linear-gradient(135deg,#1a6b2a,#0f4a1c)';
+      checkSendBtn();
+    },
+    err=>{
+      pinnedLat=null;pinnedLng=null;
+      const msgs={1:'Location access denied. Please allow location permission and try again.',2:'Unable to detect your location. Please fill in your address manually.',3:'Location request timed out. Please try again.'};
+      status.className='pin-status show warn';
+      status.innerHTML=`⚠️ <strong>Could not get location:</strong> ${msgs[err.code]||'Unknown error.'}`;
+      btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Try Again';
+      btn.disabled=false;
+    },
+    {timeout:10000,maximumAge:0,enableHighAccuracy:true}
+  );
+}
+
+function calcBbox(lat,lng,d){
+  return `${(lng-d).toFixed(5)},${(lat-d).toFixed(5)},${(lng+d).toFixed(5)},${(lat+d).toFixed(5)}`;
+}
+
 /* ── SEND BUTTON GATE ── */
 function checkSendBtn(){
   const btn=document.getElementById('sendBtn');
@@ -984,7 +1148,11 @@ function sendOrder(){
     if(!bgy||bgy===''){err('custBgy');toast('Please select your barangay');return;}
     if(!st){err('custStreet');toast('Please enter your street address');return;}
     if(!lm){err('custLM');toast('Please enter a landmark');return;}
-    dline=`📍 Delivery Address:\n   📌 Barangay: ${bgy}\n   🏠 Street/Purok: ${st}\n   🗺️ Landmark: ${lm}\n   💰 Delivery Fee: ₱20–₱50 (to confirm)\n`;
+    dline=`📍 Delivery Address:\n   📌 Barangay: ${bgy}\n   🏠 Street/Purok: ${st}\n   🗺️ Landmark: ${lm}\n`;
+    if(pinnedLat&&pinnedLng){
+      dline+=`   🌐 GPS Pin: ${pinnedLat}, ${pinnedLng}\n   🔗 Map: https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng}\n`;
+    }
+    dline+=`   💰 Delivery Fee: ₱20–₱50 (to confirm)\n`;
   }
   const tot=cart.reduce((s,i)=>s+i.total,0);
   let msg=`🔥 NEW ORDER — La Luna Grill + Cafe\n`;
