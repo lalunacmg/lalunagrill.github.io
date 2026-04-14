@@ -1191,7 +1191,6 @@ function setOT(btn,type){
 }
 
 /* ── PAYMENT METHOD ── */
-let curPayment='';
 function setPayment(btn,method){
   document.querySelectorAll('.pay-option').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');curPayment=method;
@@ -1251,6 +1250,9 @@ function checkSendBtn(){
   const note=document.getElementById('sendNote');
   if(!btn)return;
   let missing=[];
+  if(!cart.length) missing.push('items');
+  if(!g('custName')) missing.push('full name');
+  if(!g('custPhone')) missing.push('phone number');
   if(!curOT) missing.push('order type');
   if(!curPayment) missing.push('payment method');
   if(curOT==='Delivery'){
@@ -1269,7 +1271,7 @@ function checkSendBtn(){
   const ready=missing.length===0;
   btn.disabled=!ready;
   if(missing.length>0){
-    note.textContent=`Fill in: ${missing.join(', ')}.`;
+    note.textContent=missing[0]==='items' ? 'Add at least one item to your cart.' : `Fill in: ${missing.join(', ')}.`;
     note.style.color='var(--wg)';
   } else {
     note.textContent='✅ All set! Tap "Place Order via Messenger" above.';
@@ -1408,6 +1410,7 @@ function sendOrder(){
 /* ── ORDER SENT POPUP ── */
 function showOrderPopup(){
   const name=g('custName');
+  const phone=g('custPhone');
   const tot=cart.reduce((s,i)=>s+i.total,0);
   const detail=document.getElementById('popupDetail');
   let timeInfo='';
