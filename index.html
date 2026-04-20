@@ -303,6 +303,34 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 .time-slot-group{margin-bottom:0}
 .time-note{font-size:.7rem;color:var(--wg);margin-top:5px;line-height:1.4;padding:7px 10px;background:rgba(232,82,26,.05);border-radius:var(--r);border:1px solid rgba(232,82,26,.12)}
 
+/* ORDER CONFIRM POPUP */
+.confirm-overlay{position:fixed;inset:0;background:rgba(20,18,15,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:1900;display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.confirm-overlay.show{opacity:1;pointer-events:all}
+.confirm-box{background:#fff;border-radius:24px;padding:26px 22px 22px;width:100%;max-width:390px;transform:scale(.9) translateY(16px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 60px rgba(0,0,0,.28);max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.confirm-overlay.show .confirm-box{transform:scale(1) translateY(0)}
+.confirm-icon-wrap{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--or),var(--orl));display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 6px 18px rgba(232,82,26,.35);font-size:1.9rem}
+.confirm-title{font-family:var(--font-h);font-size:1.2rem;font-weight:800;color:var(--dk);text-align:center;margin-bottom:4px}
+.confirm-sub{font-size:.78rem;color:var(--wg);text-align:center;margin-bottom:16px;line-height:1.5}
+.confirm-section{background:var(--crl);border-radius:var(--rl);padding:13px 14px;margin-bottom:10px;border:1px solid var(--orp)}
+.confirm-sec-title{font-family:var(--font-h);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--or);margin-bottom:8px}
+.confirm-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:4px 0;font-size:.8rem;border-bottom:1px solid rgba(0,0,0,.05)}
+.confirm-row:last-child{border-bottom:none}
+.confirm-row-lbl{color:var(--wg);font-weight:600;flex-shrink:0}
+.confirm-row-val{color:var(--dk);font-weight:700;text-align:right;font-family:var(--font-h)}
+.confirm-item-row{padding:5px 0;font-size:.79rem;border-bottom:1px solid rgba(0,0,0,.05)}
+.confirm-item-row:last-child{border-bottom:none}
+.confirm-item-name{color:var(--dk);font-weight:700}
+.confirm-item-mods{color:var(--wg);font-size:.72rem;margin-top:1px}
+.confirm-item-price{color:var(--or);font-weight:800;font-family:var(--font-h);float:right}
+.confirm-total{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:linear-gradient(135deg,var(--or),var(--orl));border-radius:var(--rl);margin-bottom:14px;color:#fff}
+.confirm-total-lbl{font-weight:700;font-size:.88rem}
+.confirm-total-amt{font-family:var(--font-h);font-size:1.1rem;font-weight:900}
+.confirm-btns{display:flex;flex-direction:column;gap:9px}
+.confirm-ok-btn{width:100%;padding:14px;background:linear-gradient(135deg,#0078FF,#0056C7);color:#fff;border-radius:100px;font-weight:800;font-size:.92rem;font-family:var(--font);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(0,120,255,.32);transition:var(--t)}
+.confirm-ok-btn:active{transform:scale(.97)}
+.confirm-back-btn{width:100%;padding:13px;border:1.5px solid var(--wgll);color:var(--wg);border-radius:100px;font-weight:700;font-size:.88rem;font-family:var(--font);background:#fff;cursor:pointer;transition:var(--t)}
+.confirm-back-btn:active{background:var(--crl)}
+
 /* ORDER SENT POPUP */
 .order-popup-overlay{position:fixed;inset:0;background:rgba(20,18,15,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s ease}
 .order-popup-overlay.show{opacity:1;pointer-events:all}
@@ -774,7 +802,39 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
   </div>
 </section>
 
-<!-- ORDER SENT POPUP -->
+<!-- ═══ ORDER CONFIRMATION POPUP ═══ -->
+<div class="confirm-overlay" id="confirmPopup">
+  <div class="confirm-box">
+    <div class="confirm-icon-wrap">🧾</div>
+    <div class="confirm-title">Review Your Order</div>
+    <div class="confirm-sub">Please check your order details before sending to Messenger.</div>
+
+    <div class="confirm-section">
+      <div class="confirm-sec-title">📋 Customer Details</div>
+      <div id="confirmCustRows"></div>
+    </div>
+
+    <div class="confirm-section">
+      <div class="confirm-sec-title">🛒 Items Ordered</div>
+      <div id="confirmItemRows"></div>
+    </div>
+
+    <div class="confirm-total">
+      <span class="confirm-total-lbl">Order Total</span>
+      <span class="confirm-total-amt" id="confirmTotalAmt">₱0</span>
+    </div>
+
+    <div class="confirm-btns">
+      <button class="confirm-ok-btn" onclick="confirmAndSend()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8l3.131 3.259L19.752 8l-6.561 6.963z"/></svg>
+        OK — Send to Messenger
+      </button>
+      <button class="confirm-back-btn" onclick="closeConfirmPopup()">✏️ Edit Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ORDER SENT POPUP ═══ -->
 <div class="order-popup-overlay" id="orderPopup">
   <div class="order-popup">
     <div class="popup-icon-wrap" id="popupIconWrap">
@@ -834,7 +894,7 @@ const MENU=[
   {id:5,cat:'Pizza (Solo)',icon:'🍕',name:'Pepperoni',pop:false,desc:'Loaded with spicy pepperoni slices on a stretchy mozzarella base.',p:110,v:[],a:[]},
   {id:6,cat:'Pizza (Solo)',icon:'🍕',name:'La Luna',pop:true,desc:'Our signature house pizza on a crispy thin crust — a customer favorite.',p:120,v:[],a:[]},
   // PASTA
-  {id:7,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:179,v:[],a:[]},
+  {id:7,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:189,v:[],a:[]},
   {id:8,cat:'Pasta',icon:'🍝',name:'Bacon & Mushroom Carbonara',pop:true,desc:'Creamy white sauce pasta with savory bacon and earthy mushrooms.',p:179,v:[],a:[]},
   // MAINS
   {id:9,cat:'Mains',icon:'🫕',name:'Sisig Platter',pop:true,desc:'Sizzling pork sisig on a hot cast-iron plate — the ultimate Filipino pulutan.',p:250,v:[],a:[]},
@@ -844,8 +904,8 @@ const MENU=[
     v:[{l:'Honey Butter',p:299},{l:'Soy Garlic',p:299},{l:'Buffalo',p:299}],a:[],dual:true},
   // RICE MEALS
   {id:12,cat:'Rice Meals',icon:'🍱',name:'C1 – 3 pcs BBQ w/ 2 Rice',pop:true,desc:'3 charcoal-grilled pork BBQ sticks served with 2 cups of steamed rice.',p:120,v:[],a:[]},
-  {id:13,cat:'Rice Meals',icon:'🍱',name:'C2 – Quarter Leg',pop:true,desc:'Grilled chicken quarter leg. Choose your rice option.',p:180,v:[{l:'With 2 Rice',p:180},{l:'Unli Rice',p:220}],a:[]},
-  {id:14,cat:'Rice Meals',icon:'🍱',name:'C3 – Quarter Wing',pop:false,desc:'Grilled chicken quarter wing. Choose your rice option.',p:200,v:[{l:'With 2 Rice',p:200},{l:'Unli Rice',p:240}],a:[]},
+  {id:13,cat:'Rice Meals',icon:'🍱',name:'C2 – Quarter Leg w/ 2 Rice',pop:true,desc:'Grilled chicken quarter leg served with 2 cups of steamed rice.',p:180,v:[],a:[]},
+  {id:14,cat:'Rice Meals',icon:'🍱',name:'C3 – Quarter Wing w/ 2 Rice',pop:false,desc:'Grilled chicken quarter wing served with 2 cups of steamed rice.',p:200,v:[],a:[]},
   {id:15,cat:'Rice Meals',icon:'🫕',name:'C4 – Sisig Rice w/ Egg',pop:false,desc:'Sizzling pork sisig served with steamed white rice and a fried egg.',p:180,v:[],a:[]},
   {id:16,cat:'Rice Meals',icon:'🍱',name:'C5 – 3 pcs Chix Wings w/ Rice',pop:false,desc:'3 crispy chicken wings with rice. Choose your wing sauce!',p:160,
     v:[{l:'Honey Butter',p:160},{l:'Soy Garlic',p:160},{l:'Buffalo',p:160}],a:[]},
@@ -1015,7 +1075,7 @@ function openModal(id){
     vs.style.display='block';
     const need=curItem.bundleQty;
     document.getElementById('mVariants').innerHTML=
-      `<div class="modal-dual-note">🧋 Select ${need} Milktea flavors for your bundle</div>`+
+      `<div class="modal-dual-note">🧋 Pick any ${need} Milktea flavors — repeats allowed! Tap same flavor again to add more.</div>`+
       MILKTEA_FLAVORS.map((fl,i)=>
         `<div class="modal-v-btn" data-idx="${i}" onclick="togBundle(${i},this)">
           <span>${fl}</span>
@@ -1067,23 +1127,35 @@ function openModal(id){
 
 function togBundle(i,btn){
   const need=curItem.bundleQty;
-  const already=bundleSelected.includes(i);
-  if(already){
-    bundleSelected=bundleSelected.filter(x=>x!==i);
-    btn.classList.remove('dual-sel');
-    const el=document.getElementById('bchk-'+i);
-    el.className='dual-empty';el.textContent='';
+  const total=bundleSelected.length;
+  // Count how many times this flavor is already selected
+  const countThis=bundleSelected.filter(x=>x===i).length;
+
+  if(countThis>0 && total>=need){
+    // At max — tapping an already-selected flavor removes one instance
+    const idx=bundleSelected.lastIndexOf(i);
+    bundleSelected.splice(idx,1);
+  } else if(total>=need){
+    toast(`Maximum ${need} flavors only! Tap a selected flavor to change it.`);
+    return;
   } else {
-    if(bundleSelected.length>=need){toast(`Maximum ${need} flavors only!`);return;}
     bundleSelected.push(i);
-    btn.classList.add('dual-sel');
-    const el=document.getElementById('bchk-'+i);
-    el.className='dual-badge';el.textContent=bundleSelected.indexOf(i)+1;
   }
-  // Re-number badges
-  bundleSelected.forEach((idx,pos)=>{
-    const el=document.getElementById('bchk-'+idx);
-    if(el){el.className='dual-badge';el.textContent=pos+1;}
+  // Refresh all button states
+  MILKTEA_FLAVORS.forEach((_,fi)=>{
+    const fbtn=document.querySelector(`.modal-v-btn[data-idx="${fi}"]`);
+    const fchk=document.getElementById('bchk-'+fi);
+    if(!fbtn||!fchk)return;
+    const cnt=bundleSelected.filter(x=>x===fi).length;
+    if(cnt>0){
+      fbtn.classList.add('dual-sel');
+      fchk.className='dual-badge';
+      fchk.textContent=cnt>1?`×${cnt}`:'✓';
+    } else {
+      fbtn.classList.remove('dual-sel');
+      fchk.className='dual-empty';
+      fchk.textContent='';
+    }
   });
   updMT();
 }
@@ -1148,7 +1220,11 @@ function addToCart(){
   if(curItem.dual&&dualSelected.length<2){toast('Please pick 2 flavors first!');return;}
   let base=curItem.p,vl='';
   if(curItem.bundle){
-    vl='Milktea: '+bundleSelected.map(i=>MILKTEA_FLAVORS[i]).join(', ');
+    // Build flavor summary with counts for repeats
+    const counts={};
+    bundleSelected.forEach(i=>{counts[i]=(counts[i]||0)+1;});
+    const parts=Object.entries(counts).map(([i,c])=>c>1?`${c}× ${MILKTEA_FLAVORS[i]}`:MILKTEA_FLAVORS[i]);
+    vl='Milktea: '+parts.join(', ');
   } else if(curItem.dual){
     vl=dualSelected.map(i=>curItem.v[i].l).join(' + ');
   } else if(curVI!==null&&curItem.v[curVI]){
@@ -1421,7 +1497,7 @@ Please confirm my order. Thank you!`;
   return msg;
 }
 
-/* ── SEND ORDER ── */
+/* ── SEND ORDER — shows confirmation popup first ── */
 function sendOrder(){
   if(!cart.length){toast('⚠️ Your cart is empty!');return;}
   const name=g('custName'),phone=g('custPhone');
@@ -1429,7 +1505,6 @@ function sendOrder(){
   if(!phone){err('custPhone');toast('Please enter your phone number');return;}
   if(!curOT){toast('Please select an order type');return;}
   if(!curPayment){toast('Please select a payment method');return;}
-  // Validate date/time for dine-in/pickup
   if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
     const d=g('custDate'),t=g('custTime');
     if(!d){err('custDate');toast('Please select a date');return;}
@@ -1437,7 +1512,6 @@ function sendOrder(){
     const picked=new Date(d+'T12:00:00');
     if(picked.getDay()===1){err('custDate');toast('⚠️ We are closed on Mondays. Please pick another day.');return;}
   }
-  // Validate delivery fields
   if(curOT==='Delivery'){
     const bgy=document.getElementById('custBgy').value;
     const st=g('custStreet'),lm=g('custLM');
@@ -1445,29 +1519,80 @@ function sendOrder(){
     if(!st){err('custStreet');toast('Please enter your street address');return;}
     if(!lm){err('custLM');toast('Please enter a landmark');return;}
   }
+  // All valid — show confirmation popup
+  showConfirmPopup();
+}
 
-  // Build the structured message and encode URL
+function showConfirmPopup(){
+  const name=g('custName'),phone=g('custPhone');
+  const tot=cart.reduce((s,i)=>s+i.total,0);
+
+  // Customer detail rows
+  let custHTML=`
+    <div class="confirm-row"><span class="confirm-row-lbl">Name</span><span class="confirm-row-val">${name}</span></div>
+    <div class="confirm-row"><span class="confirm-row-lbl">Phone</span><span class="confirm-row-val">${phone}</span></div>
+    <div class="confirm-row"><span class="confirm-row-lbl">Order Type</span><span class="confirm-row-val">${curOT}</span></div>`;
+  if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
+    const d=g('custDate'),t=g('custTime');
+    if(d&&t) custHTML+=`<div class="confirm-row"><span class="confirm-row-lbl">Date & Time</span><span class="confirm-row-val">${fmtDateTime(d,t)}</span></div>`;
+  }
+  if(curOT==='Delivery'){
+    const bgy=document.getElementById('custBgy').value;
+    const st=g('custStreet'),lm=g('custLM');
+    custHTML+=`<div class="confirm-row"><span class="confirm-row-lbl">Barangay</span><span class="confirm-row-val">${bgy}</span></div>`;
+    custHTML+=`<div class="confirm-row"><span class="confirm-row-lbl">Address</span><span class="confirm-row-val">${st}</span></div>`;
+    if(lm) custHTML+=`<div class="confirm-row"><span class="confirm-row-lbl">Landmark</span><span class="confirm-row-val">${lm}</span></div>`;
+  }
+  custHTML+=`<div class="confirm-row"><span class="confirm-row-lbl">Payment</span><span class="confirm-row-val">💳 ${curPayment}</span></div>`;
+  const notes=g('custNotes');
+  if(notes) custHTML+=`<div class="confirm-row"><span class="confirm-row-lbl">Notes</span><span class="confirm-row-val">${notes}</span></div>`;
+  document.getElementById('confirmCustRows').innerHTML=custHTML;
+
+  // Item rows
+  const itemHTML=cart.map(item=>`
+    <div class="confirm-item-row">
+      <span class="confirm-item-price">₱${item.total}</span>
+      <div class="confirm-item-name">${item.icon} ${item.name} ×${item.qty}</div>
+      ${item.mods?`<div class="confirm-item-mods">${item.mods}</div>`:''}
+    </div>`).join('');
+  document.getElementById('confirmItemRows').innerHTML=itemHTML;
+
+  // Total
+  const delivNote=curOT==='Delivery'?' + delivery fee':'';
+  document.getElementById('confirmTotalAmt').textContent=`₱${tot}${delivNote}`;
+
+  document.getElementById('confirmPopup').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function closeConfirmPopup(){
+  document.getElementById('confirmPopup').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+function confirmAndSend(){
+  closeConfirmPopup();
+
+  // Build message and redirect to Messenger
   const msg=buildMsg();
   const pageId='303918802794006';
   const encodedMsg=encodeURIComponent(msg);
   lastMsgUrl=`https://m.me/${pageId}?text=${encodedMsg}`;
 
-  // Show popup first (so it's visible even if redirect happens instantly)
+  // Show sent popup
   showOrderPopup();
 
-  // Attempt immediate redirect — works best on mobile (opens Messenger app)
+  // Redirect
   try {
     window.location.href=lastMsgUrl;
   } catch(ex){
-    // If location.href fails (some browsers), fall back to window.open
     try { window.open(lastMsgUrl,'_blank'); } catch(ex2){}
   }
 
-  // After 2.5s check if we're still here (redirect didn't navigate away = browser blocked)
+  // Fallback if still on page after 2.5s
   setTimeout(()=>{
     const popup=document.getElementById('orderPopup');
     if(popup.classList.contains('show')){
-      // User is still on page — show fallback
       document.getElementById('popupFallback').style.display='block';
       document.getElementById('popupFallbackLink').href=lastMsgUrl;
       document.getElementById('popupTitle').textContent='Order Ready to Send!';
@@ -1515,6 +1640,7 @@ function openMessenger(){
 
 function closePopupNewOrder(){
   document.getElementById('orderPopup').classList.remove('show');
+  document.getElementById('confirmPopup').classList.remove('show');
   document.body.style.overflow='';
   cart=[];updBadge();
   curOT='';curPayment='';pinnedLat=null;pinnedLng=null;bundleSelected=[];
