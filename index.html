@@ -10,9 +10,11 @@
 <meta name="apple-mobile-web-app-title" content="La Luna"/>
 <meta name="description" content="La Luna Grill + Cafe — Order online. Filipino grill favorites, pizza, pasta and café drinks."/>
 <title>La Luna Grill + Cafe</title>
-<link rel="preconnect" href="[fonts.googleapis.com](https://fonts.googleapis.com)"/>
-<link rel="preconnect" href="[fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin/>
-<link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Poppins:wght@400;500;600;700;800&display=swap)" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 /* ── DESIGN TOKENS ── */
 :root{
@@ -234,7 +236,7 @@ img{display:block;max-width:100%}
 .finput::placeholder{color:var(--wgl)}
 .finput.error{border-color:#e74c3c;background:#fff8f8}
 textarea.finput{resize:vertical;min-height:72px}
-select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](http://www.w3.org/2000/svg)' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7468' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px;cursor:pointer}
+select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7468' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px;cursor:pointer}
 .fhint{font-size:.67rem;color:var(--wg);margin-top:4px;line-height:1.45}
 .form-row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 
@@ -271,9 +273,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
 .dual-empty{width:20px;height:20px;border-radius:50%;border:2px solid var(--wgll);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
 /* LOCATION PIN MAP */
-.map-pin-wrap{position:relative;width:100%;height:220px;border-radius:var(--rl);overflow:hidden;border:1.5px solid var(--wgll);margin-bottom:10px;background:#e6ede6}
-#delivMapFrame{width:100%;height:100%;border:none;display:block}
-.map-overlay-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-100%);pointer-events:none;z-index:10;filter:drop-shadow(0 3px 5px rgba(0,0,0,.4))}
+#leafletMap{width:100%;height:100%;}
 .map-actions{display:flex;gap:8px;margin-bottom:10px}
 .map-gps-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;background:linear-gradient(135deg,var(--gr),var(--grd));color:#fff;border-radius:100px;font-size:.79rem;font-weight:800;box-shadow:0 2px 8px rgba(45,138,62,.28);transition:var(--t);font-family:var(--font);border:none;cursor:pointer}
 .map-gps-btn:active{transform:scale(.97)}
@@ -362,7 +362,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-logo" onclick="goTo('home')">
-    <svg viewBox="0 0 245 48" xmlns="[w3.org](http://www.w3.org/2000/svg)" aria-label="La Luna Grill + Cafe">
+    <svg viewBox="0 0 245 48" xmlns="http://www.w3.org/2000/svg" aria-label="La Luna Grill + Cafe">
       <defs>
         <linearGradient id="fg" x1="29" y1="4" x2="29" y2="27" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stop-color="#FFD166"/><stop offset="45%" stop-color="#FF6B2B"/><stop offset="100%" stop-color="#CC3A00"/>
@@ -444,7 +444,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
     <div class="hero-bg"></div>
     <div class="hero-dots"></div>
     <div class="hero-deco">
-      <svg viewBox="0 0 200 200" xmlns="[w3.org](http://www.w3.org/2000/svg)" style="width:100%;height:100%">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
         <defs>
           <linearGradient id="hfg" x1="100" y1="18" x2="100" y2="135" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="#FFD166"/><stop offset="50%" stop-color="#FF6B2B"/><stop offset="100%" stop-color="#CC3A00"/>
@@ -466,11 +466,11 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
       </div>
       <div class="hero-btns">
         <button class="btn-pri" onclick="goTo('menu')">🍽️ Browse Menu</button>
-        <a class="btn-sec" href="[maps.app.goo.gl](https://maps.app.goo.gl/98P9TApBfp1cpxkD8)" target="_blank" rel="noopener">📍 Find Us</a>
+        <a class="btn-sec" href="https://maps.app.goo.gl/98P9TApBfp1cpxkD8" target="_blank" rel="noopener">📍 Find Us</a>
       </div>
       <div class="hero-stats">
-        <div class="hero-stat"><div class="hero-stat-num">45+</div><div class="hero-stat-lbl">Items</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">₱40</div><div class="hero-stat-lbl">Starts At</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">44+</div><div class="hero-stat-lbl">Items</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">₱69</div><div class="hero-stat-lbl">Starts At</div></div>
         <div class="hero-stat"><div class="hero-stat-num">⭐4.9</div><div class="hero-stat-lbl">Rating</div></div>
       </div>
     </div>
@@ -589,6 +589,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
           </div>
         </div>
 
+        <!-- TIME PICKER — shown for Advance Dine-in and Pick-up -->
         <div class="time-fields" id="timeFields">
           <div class="fg">
             <label class="flbl" id="timeLabel">📅 Date &amp; Time <span class="req">*</span></label>
@@ -606,6 +607,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
           </div>
         </div>
 
+        <!-- DELIVERY FIELDS -->
         <div id="delivFields" style="display:none">
           <div class="delivery-banner">
             🚴 <strong>Delivery Details Required</strong><br/>
@@ -616,26 +618,21 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
           </div>
           <div style="height:10px"></div>
 
+          <!-- PIN LOCATION MAP -->
           <div class="fg">
-            <label class="flbl">📍 Pin Your Delivery Location <span class="req">*</span></label>
-            <div class="fhint" style="margin-bottom:8px">Tap "Use My Location" to auto-detect, or drag the map to position the red pin on your exact location.</div>
-            <div class="map-pin-wrap" id="mapWrap">
-              <iframe id="delivMapFrame"
-                src="[openstreetmap.org](https://www.openstreetmap.org/export/embed.html?bbox=122.3,10.2,122.7,10.6&amp;layer=mapnik)"
-                allowfullscreen loading="lazy" title="Delivery location map">
-              </iframe>
-              <div class="map-overlay-pin" id="mapPin">
-                <svg width="32" height="42" viewBox="0 0 32 42" xmlns="[w3.org](http://www.w3.org/2000/svg)">
-                  <path d="M16 0C7.163 0 0 7.163 0 16c0 10.627 14.4 25.193 15.04 25.848a1.333 1.333 0 001.92 0C17.6 41.193 32 26.627 32 16 32 7.163 24.837 0 16 0z" fill="#E8521A"/>
-                  <circle cx="16" cy="16" r="7" fill="white"/>
-                  <circle cx="16" cy="16" r="4" fill="#E8521A"/>
-                </svg>
+            <label class="flbl">📍 Your Delivery Location <span class="req">*</span></label>
+            <div class="fhint" style="margin-bottom:8px">Tap "Use My GPS Location" to detect your location automatically, or type your address below.</div>
+            <div id="mapContainer" style="width:100%;height:220px;border-radius:12px;overflow:hidden;border:1.5px solid var(--wgll);margin-bottom:10px;background:#e8f0e8;display:flex;align-items:center;justify-content:center;position:relative;">
+              <div id="leafletMap" style="width:100%;height:100%;"></div>
+              <div id="mapPlaceholder" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#f0f7f0,#e0eee0);">
+                <div style="font-size:2.5rem;">🗺️</div>
+                <div style="font-size:.78rem;font-weight:700;color:var(--dks);text-align:center;padding:0 20px;">Tap "Use My GPS Location"<br/>to show your location on the map</div>
               </div>
             </div>
             <div class="map-actions">
-              <button type="button" class="map-gps-btn" onclick="useMyLocation()">
+              <button type="button" class="map-gps-btn" id="gpsBtn" onclick="useMyLocation()">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg>
-                Use My Location
+                Use My GPS Location
               </button>
             </div>
             <div class="pin-status" id="pinStatus"></div>
@@ -718,9 +715,9 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
       <div class="ic-row"><span class="ic-lbl">Facebook</span><span class="ic-val">La Luna Grill &amp; Cafe</span></div>
       <div class="ic-row"><span class="ic-lbl">Orders</span><span class="ic-val">Via FB Messenger</span></div>
       <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
-        <a href="[maps.app.goo.gl](https://maps.app.goo.gl/98P9TApBfp1cpxkD8)" target="_blank" rel="noopener" class="maps-btn">📍 Open in Google Maps</a>
-        <a href="[facebook.com](https://www.facebook.com/laluna.cmg)" target="_blank" rel="noopener" class="fb-follow-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="[w3.org](http://www.w3.org/2000/svg)" style="flex-shrink:0"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        <a href="https://maps.app.goo.gl/98P9TApBfp1cpxkD8" target="_blank" rel="noopener" class="maps-btn">📍 Open in Google Maps</a>
+        <a href="https://www.facebook.com/laluna.cmg" target="_blank" rel="noopener" class="fb-follow-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           Follow us on Facebook
         </a>
       </div>
@@ -737,7 +734,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
 
     <div class="about-card">
       <div class="about-card-deco">
-        <svg viewBox="0 0 120 120" width="140" height="140" xmlns="[w3.org](http://www.w3.org/2000/svg)">
+        <svg viewBox="0 0 120 120" width="140" height="140" xmlns="http://www.w3.org/2000/svg">
           <path d="M60 12C38 12 20 32 20 60C20 88 38 108 60 108C47 100 39 82 39 60C39 38 47 20 60 12Z" fill="none" stroke="white" stroke-width="5"/>
           <path d="M60 12C82 12 100 32 100 60C100 88 82 108 60 108" fill="none" stroke="white" stroke-width="4"/>
           <path d="M60 15C60 15 50 33 50 46C50 58 57 62 60 53C63 62 70 58 70 46C70 33 60 15 60 15Z" fill="white"/>
@@ -772,7 +769,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
       <div class="msg-cta-icon">💬</div>
       <div class="msg-cta-title">Order via Messenger</div>
       <div class="msg-cta-text">Build your cart, fill your details, and send your complete order summary in one tap. We confirm and reply within minutes!</div>
-      <a href="[m.me](https://m.me/303918802794006)" target="_blank" rel="noopener" class="msg-cta-btn">💬 Message Us on Facebook</a>
+      <a href="https://m.me/303918802794006" target="_blank" rel="noopener" class="msg-cta-btn">💬 Message Us on Facebook</a>
     </div>
   </div>
 </section>
@@ -803,17 +800,18 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='[w3.org](ht
 
 <!-- ═══════════════ SCRIPTS ═══════════════ -->
 <script>
-/* ── ADD-ON ARRAYS ── */
+/* ── MENU DATA ── */
 const DA=[{name:'Pearl',price:15},{name:'Nata',price:15},{name:'Cream Cheese',price:15}];
 const CA=[{name:'Extra Espresso Shot',price:25},{name:'Sugar',price:0}];
 const FA=[{name:'Pearl',price:15},{name:'Nata',price:15}];
 
+/* Category icons for the menu header */
 const CAT_ICON={
-  'Appetizer':'🥗',
+  'Snacks':'🎉',
   'Pizza (Solo)':'🍕',
   'Pasta':'🍝',
   'Mains':'🍖',
-  'Combo Meals':'🍱',
+  'Rice Meals':'🍱',
   'Dessert':'🧁',
   'Coffee':'☕',
   'Milktea':'🧋',
@@ -822,44 +820,49 @@ const CAT_ICON={
   'Add-ons':'✨'
 };
 
+/* Realistic SVG-based food icons — returns a CSS background color + emoji pair */
+const MILKTEA_FLAVORS=['Taro','Wintermelon','Okinawa','Cookies & Cream','Chocolate','Caramel Sugar'];
+
 const MENU=[
-  // APPETIZER
-  {id:1,cat:'Appetizer',icon:'🫓',name:'Shawarma',pop:false,desc:'Grilled seasoned meat wrapped in warm pita with garlic sauce.',p:110,v:[],a:[]},
-  {id:2,cat:'Appetizer',icon:'🍟',name:'French Fries',pop:false,desc:'Crispy golden fries, salted to perfection.',p:110,v:[],a:[]},
+  // SNACKS
+  {id:1,cat:'Snacks',icon:'🫓',name:'Shawarma',pop:false,desc:'Grilled seasoned meat wrapped in warm pita with garlic sauce.',p:110,v:[],a:[]},
+  {id:2,cat:'Snacks',icon:'🍟',name:'French Fries',pop:false,desc:'Crispy golden fries, salted to perfection.',p:110,v:[],a:[]},
+  {id:3,cat:'Snacks',icon:'🎉',name:'Barkada Bundle 1',pop:true,desc:'Pizza + Nachos + Cheese Fries + 3 Milktea. Choose any 3 Milktea flavors!',p:350,v:[],a:[],bundle:true,bundleQty:3},
+  {id:46,cat:'Snacks',icon:'🍗',name:'Barkada Bundle 2',pop:true,desc:'Pasta + 6pcs Chicken Wings + Toasted Bread + 3 Milktea. Choose any 3 Milktea flavors!',p:450,v:[],a:[],bundle:true,bundleQty:3},
   // PIZZA (SOLO)
   {id:4,cat:'Pizza (Solo)',icon:'🍕',name:'Hawaiian',pop:false,desc:'Classic ham and sweet pineapple on a rich tomato base with mozzarella.',p:110,v:[],a:[]},
-  {id:5,cat:'Pizza (Solo)',icon:'🍕',name:'Pepperoni (Beef)',pop:false,desc:'Loaded with spicy beef pepperoni slices on a stretchy mozzarella base.',p:110,v:[],a:[]},
+  {id:5,cat:'Pizza (Solo)',icon:'🍕',name:'Pepperoni',pop:false,desc:'Loaded with spicy pepperoni slices on a stretchy mozzarella base.',p:110,v:[],a:[]},
   {id:6,cat:'Pizza (Solo)',icon:'🍕',name:'La Luna',pop:true,desc:'Our signature house pizza on a crispy thin crust — a customer favorite.',p:120,v:[],a:[]},
   // PASTA
-  {id:7,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:189,v:[],a:[]},
-  {id:8,cat:'Pasta',icon:'🍝',name:'Carbonara',pop:true,desc:'Creamy white sauce pasta with savory bacon and earthy mushrooms.',p:179,v:[],a:[]},
+  {id:7,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:179,v:[],a:[]},
+  {id:8,cat:'Pasta',icon:'🍝',name:'Bacon & Mushroom Carbonara',pop:true,desc:'Creamy white sauce pasta with savory bacon and earthy mushrooms.',p:179,v:[],a:[]},
   // MAINS
   {id:9,cat:'Mains',icon:'🫕',name:'Sisig Platter',pop:true,desc:'Sizzling pork sisig on a hot cast-iron plate — the ultimate Filipino pulutan.',p:250,v:[],a:[]},
   {id:10,cat:'Mains',icon:'🍗',name:'6 pcs Chicken Wings',pop:true,desc:'Crispy fried chicken wings served with a savory dipping sauce. Choose your flavor!',p:189,
     v:[{l:'Honey Butter',p:189},{l:'Soy Garlic',p:189},{l:'Buffalo',p:189}],a:[]},
   {id:11,cat:'Mains',icon:'🍗',name:'12 pcs Chicken Wings',pop:true,desc:'A dozen golden fried wings — perfect for sharing. Pick 2 different flavors!',p:299,
     v:[{l:'Honey Butter',p:299},{l:'Soy Garlic',p:299},{l:'Buffalo',p:299}],a:[],dual:true},
-  // COMBO MEALS
-  {id:12,cat:'Combo Meals',icon:'🍱',name:'C1 – 3 pcs BBQ Mix w/ 2 Rice',pop:true,desc:'3 charcoal-grilled pork BBQ sticks served with 2 cups of steamed rice.',p:120,v:[],a:[]},
-  {id:13,cat:'Combo Meals',icon:'🍱',name:'C2 – Quarter Leg w/ 2 Rice',pop:true,desc:'Grilled chicken quarter leg served with 2 cups of rice.',p:160,v:[],a:[]},
-  {id:14,cat:'Combo Meals',icon:'🍱',name:'C3 – Quarter Wing w/ 2 Rice',pop:false,desc:'Grilled chicken quarter wing served with 2 cups of rice.',p:200,v:[],a:[]},
-  {id:15,cat:'Combo Meals',icon:'🫕',name:'C4 – Sisig Rice w/ Egg',pop:false,desc:'Sizzling pork sisig with egg served with steamed white rice.',p:180,v:[],a:[]},
-  {id:16,cat:'Combo Meals',icon:'🍱',name:'C5 – 3 pcs Chix Wings w/ Rice',pop:false,desc:'3 crispy chicken wings with rice. Choose your wing sauce!',p:160,
+  // RICE MEALS
+  {id:12,cat:'Rice Meals',icon:'🍱',name:'C1 – 3 pcs BBQ w/ 2 Rice',pop:true,desc:'3 charcoal-grilled pork BBQ sticks served with 2 cups of steamed rice.',p:120,v:[],a:[]},
+  {id:13,cat:'Rice Meals',icon:'🍱',name:'C2 – Quarter Leg',pop:true,desc:'Grilled chicken quarter leg. Choose your rice option.',p:180,v:[{l:'With 2 Rice',p:180},{l:'Unli Rice',p:220}],a:[]},
+  {id:14,cat:'Rice Meals',icon:'🍱',name:'C3 – Quarter Wing',pop:false,desc:'Grilled chicken quarter wing. Choose your rice option.',p:200,v:[{l:'With 2 Rice',p:200},{l:'Unli Rice',p:240}],a:[]},
+  {id:15,cat:'Rice Meals',icon:'🫕',name:'C4 – Sisig Rice w/ Egg',pop:false,desc:'Sizzling pork sisig served with steamed white rice and a fried egg.',p:180,v:[],a:[]},
+  {id:16,cat:'Rice Meals',icon:'🍱',name:'C5 – 3 pcs Chix Wings w/ Rice',pop:false,desc:'3 crispy chicken wings with rice. Choose your wing sauce!',p:160,
     v:[{l:'Honey Butter',p:160},{l:'Soy Garlic',p:160},{l:'Buffalo',p:160}],a:[]},
   // DESSERT
   {id:17,cat:'Dessert',icon:'🍧',name:'Halo-Halo',pop:true,desc:'Classic Filipino shaved ice dessert with mixed sweets, leche flan, and ube ice cream.',p:120,v:[],a:[]},
-  {id:46,cat:'Dessert',icon:'☕',name:'Coffee Jelly',pop:false,desc:'Smooth coffee-flavored jelly served chilled — a simple and satisfying treat.',p:40,v:[],a:[]},
+  {id:47,cat:'Dessert',icon:'🍮',name:'Coffee Jelly',pop:false,desc:'Smooth coffee-flavored jelly served chilled — a classic Filipino café treat.',p:40,v:[],a:[]},
   // COFFEE
-  {id:18,cat:'Coffee',icon:'☕',name:'Double Espresso',pop:false,desc:'Two concentrated shots of bold espresso.',p:80,v:[],a:CA},
+  {id:18,cat:'Coffee',icon:'☕',name:'Double Espresso',pop:false,desc:'Two concentrated shots of bold espresso.',p:70,v:[],a:CA},
   {id:19,cat:'Coffee',icon:'☕',name:'Americano',pop:false,desc:'Espresso with hot or cold water — clean and bold.',p:80,v:[{l:'Hot',p:80},{l:'Iced',p:100}],a:CA},
   {id:20,cat:'Coffee',icon:'☕',name:'Cappuccino',pop:false,desc:'Equal parts espresso, steamed milk, and velvety foam.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
   {id:21,cat:'Coffee',icon:'☕',name:'Cafe Latte',pop:true,desc:'Smooth espresso blended with generous steamed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
   {id:22,cat:'Coffee',icon:'☕',name:'Spanish Latte',pop:true,desc:'Rich espresso blended with sweetened condensed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
   {id:23,cat:'Coffee',icon:'☕',name:'Hazelnut Latte',pop:false,desc:'Espresso and milk with rich hazelnut flavour syrup.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
-  {id:24,cat:'Coffee',icon:'☕',name:'Salted Caramel',pop:false,desc:'Caramel espresso latte with a salted caramel finish.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
+  {id:24,cat:'Coffee',icon:'☕',name:'Salted Caramel',pop:false,desc:'Caramel espresso latte with a salted caramel finish.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:135}],a:CA},
   {id:25,cat:'Coffee',icon:'☕',name:'Caramel Macchiato',pop:false,desc:'Layered vanilla latte with a caramel drizzle.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
-  {id:47,cat:'Coffee',icon:'☕',name:'Toffee-Nut',pop:false,desc:'Smooth toffee and toasted nut espresso latte, hot or iced.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
-  {id:48,cat:'Coffee',icon:'☕',name:'Pumpkin Spice',pop:false,desc:'Warm pumpkin spice latte served hot or iced.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
+  {id:48,cat:'Coffee',icon:'☕',name:'Toffee-Nut',pop:false,desc:'Smooth toffee and toasted nut espresso latte, available hot or iced.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
+  {id:49,cat:'Coffee',icon:'☕',name:'Pumpkin Spice',pop:false,desc:'Warm pumpkin spice flavors in a rich espresso latte, hot or iced.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
   // MILKTEA
   {id:26,cat:'Milktea',icon:'🧋',name:'Taro',pop:true,desc:'Earthy purple taro blended into a smooth creamy milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
   {id:27,cat:'Milktea',icon:'🧋',name:'Okinawa',pop:false,desc:'Brown sugar milk tea with a smoky-sweet caramel undertone.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
@@ -870,12 +873,13 @@ const MENU=[
   // FRAPPE
   {id:32,cat:'Frappe',icon:'🥤',name:'Caramel',pop:false,desc:'Silky blended caramel frappe with whipped cream topping.',p:165,v:[],a:[]},
   {id:33,cat:'Frappe',icon:'🥤',name:'Mochaccino',pop:true,desc:'Coffee and chocolate blended into a rich indulgent frappe.',p:165,v:[],a:[]},
-  {id:49,cat:'Frappe',icon:'🥤',name:'Peppermint Mocha',pop:false,desc:'Cool peppermint meets rich chocolate mocha in a blended frappe.',p:165,v:[],a:[]},
+  {id:35,cat:'Frappe',icon:'🥤',name:'Peppermint Mocha',pop:false,desc:'Cool peppermint meets rich chocolate mocha.',p:165,v:[],a:[]},
   {id:37,cat:'Frappe',icon:'🥤',name:'Biscoff',pop:false,desc:'Speculoos cookie butter blended into a creamy frappe.',p:170,v:[],a:[]},
   {id:38,cat:'Frappe',icon:'🥤',name:'Nutella',pop:true,desc:'Rich hazelnut Nutella blended smooth for an irresistible frappe.',p:170,v:[],a:[]},
   // FRUIT SHAKES
   {id:39,cat:'Fruit Shakes',icon:'🥭',name:'Mango',pop:true,desc:'Fresh ripe mango blended with milk and crushed ice.',p:120,v:[],a:FA},
   {id:40,cat:'Fruit Shakes',icon:'🥑',name:'Avocado',pop:false,desc:'Creamy ripe avocado shake with condensed milk.',p:120,v:[],a:FA},
+  {id:41,cat:'Fruit Shakes',icon:'🍹',name:'Seasonal Fruit *',pop:false,desc:"Ask our staff for today's fresh seasonal fruit blend. *Availability varies.",p:120,v:[],a:FA},
   // ADD-ONS
   {id:42,cat:'Add-ons',icon:'🫧',name:'Pearl',pop:false,desc:'Chewy tapioca pearl add-on for drinks.',p:15,v:[],a:[]},
   {id:43,cat:'Add-ons',icon:'🍮',name:'Nata',pop:false,desc:'Sweet coconut jelly cubes for drinks.',p:15,v:[],a:[]},
@@ -883,26 +887,29 @@ const MENU=[
   {id:45,cat:'Add-ons',icon:'🍚',name:'Extra Rice',pop:false,desc:'Additional cup of steaming hot white rice.',p:25,v:[],a:[]},
 ];
 
-const CATS=['All','Appetizer','Pizza (Solo)','Pasta','Mains','Combo Meals','Dessert','Coffee','Milktea','Frappe','Fruit Shakes','Add-ons'];
+const CATS=['All','Snacks','Pizza (Solo)','Pasta','Mains','Rice Meals','Dessert','Coffee','Milktea','Frappe','Fruit Shakes','Add-ons'];
 const BS=[9,11,6,8,22,38,17,21];
 const PROMOS=[
   '★ Open Tue–Sun · 12PM–10PM · Closed Monday',
-  '🔥 Combo Meals from ₱120',
+  '🔥 Rice Meals from ₱120',
   '🍕 La Luna Pizza Solo ₱120',
   '🍗 12 pcs Wings — 3 flavors!',
   '🧋 Milk Tea from ₱69',
   '🍧 Try our Halo-Halo ₱120',
   '☕ Spanish Latte Hot or Iced',
   '🥤 Nutella Frappe — bestseller!',
+  '🎉 Barkada Bundle 1 — ₱350!',
   '★ Advance orders welcome!',
 ];
 
 /* ── STATE ── */
 let cart=[],curItem=null,curQty=1,curVI=null,curAds=[],curOT='',curPayment='';
+let bundleSelected=[];
 
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded',()=>{
   buildPromo();buildBS();buildChips();buildMenu('All');
+  // Live status chip in info
   updateStatusChip();
 });
 
@@ -913,16 +920,18 @@ function goTo(p){
   document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
   document.getElementById('tab-'+p).classList.add('active');
   window.scrollTo(0,0);
-  if(p==='order')renderCart();
+  if(p==='order'){renderCart();setTimeout(()=>{if(leafletMap)leafletMap.invalidateSize();},150);}
 }
 
 /* ── LIVE STATUS ── */
 function updateStatusChip(){
   const now=new Date();
-  const day=now.getDay();
+  const day=now.getDay(); // 0=Sun,1=Mon
   const h=now.getHours(),m=now.getMinutes();
   const t=h*60+m;
-  const isOpen=day!==1 && t>=720 && t<1320;
+  const isOpen=day!==1 && t>=720 && t<1320; // Mon=1 closed; 12pm=720, 10pm=1320
+  const chip=document.querySelector('.ic-row .ic-val');
+  // we handle this differently below — just skip if not found
 }
 
 /* ── PROMO ── */
@@ -994,13 +1003,27 @@ let dualSelected=[];
 
 function openModal(id){
   curItem=MENU.find(m=>m.id===id);
-  curQty=1;curVI=curItem.v.length?0:null;curAds=[];dualSelected=[];
+  curQty=1;curVI=curItem.v.length?0:null;curAds=[];dualSelected=[];bundleSelected=[];
   document.getElementById('mIcon').textContent=curItem.icon;
   document.getElementById('mName').textContent=curItem.name;
   document.getElementById('mDesc').textContent=curItem.desc;
   document.getElementById('mQty').textContent=1;
   const vs=document.getElementById('mVarSec');
-  if(curItem.v.length){
+
+  if(curItem.bundle){
+    // BUNDLE MODE — pick exactly bundleQty milktea flavors
+    vs.style.display='block';
+    const need=curItem.bundleQty;
+    document.getElementById('mVariants').innerHTML=
+      `<div class="modal-dual-note">🧋 Select ${need} Milktea flavors for your bundle</div>`+
+      MILKTEA_FLAVORS.map((fl,i)=>
+        `<div class="modal-v-btn" data-idx="${i}" onclick="togBundle(${i},this)">
+          <span>${fl}</span>
+          <div class="dual-empty" id="bchk-${i}"></div>
+         </div>`
+      ).join('');
+    curVI=null;
+  } else if(curItem.v.length){
     vs.style.display='block';
     if(curItem.dual){
       dualSelected=[];
@@ -1023,6 +1046,7 @@ function openModal(id){
       ).join('');
     }
   } else vs.style.display='none';
+
   const as=document.getElementById('mAddSec');
   if(curItem.a.length){
     as.style.display='block';
@@ -1039,6 +1063,29 @@ function openModal(id){
   updMT();
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+}
+
+function togBundle(i,btn){
+  const need=curItem.bundleQty;
+  const already=bundleSelected.includes(i);
+  if(already){
+    bundleSelected=bundleSelected.filter(x=>x!==i);
+    btn.classList.remove('dual-sel');
+    const el=document.getElementById('bchk-'+i);
+    el.className='dual-empty';el.textContent='';
+  } else {
+    if(bundleSelected.length>=need){toast(`Maximum ${need} flavors only!`);return;}
+    bundleSelected.push(i);
+    btn.classList.add('dual-sel');
+    const el=document.getElementById('bchk-'+i);
+    el.className='dual-badge';el.textContent=bundleSelected.indexOf(i)+1;
+  }
+  // Re-number badges
+  bundleSelected.forEach((idx,pos)=>{
+    const el=document.getElementById('bchk-'+idx);
+    if(el){el.className='dual-badge';el.textContent=pos+1;}
+  });
+  updMT();
 }
 
 function togDual(i,btn){
@@ -1058,6 +1105,7 @@ function togDual(i,btn){
   }
   updMT();
 }
+
 function closeModalOut(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
 function selVar(i,btn){
@@ -1078,9 +1126,14 @@ function chQty(d){curQty=Math.max(1,curQty+d);document.getElementById('mQty').te
 function updMT(){
   if(!curItem)return;
   let base=curItem.p;
-  if(!curItem.dual&&curVI!==null&&curItem.v[curVI])base=curItem.v[curVI].p;
+  if(!curItem.dual&&!curItem.bundle&&curVI!==null&&curItem.v[curVI])base=curItem.v[curVI].p;
   const at=curAds.reduce((s,i)=>s+curItem.a[i].price,0);
-  if(curItem.dual){
+  if(curItem.bundle){
+    const need=curItem.bundleQty;
+    const left=need-bundleSelected.length;
+    document.getElementById('mPrice').textContent=left>0?`🧋 Pick ${left} more flavor${left>1?'s':''}`:`₱${base}`;
+    document.getElementById('mTotal').textContent=bundleSelected.length<need?'—':`₱${(base+at)*curQty}`;
+  } else if(curItem.dual){
     const needed=2-dualSelected.length;
     document.getElementById('mPrice').textContent=needed>0?`🍗 Pick ${needed} more flavor${needed>1?'s':''}`:`₱${base}${at?' + ₱'+at+' add-ons':''}`;
     document.getElementById('mTotal').textContent=dualSelected.length<2?'—':`₱${(base+at)*curQty}`;
@@ -1091,9 +1144,12 @@ function updMT(){
 }
 function addToCart(){
   if(!curItem)return;
+  if(curItem.bundle&&bundleSelected.length<curItem.bundleQty){toast(`Please pick ${curItem.bundleQty} Milktea flavors first!`);return;}
   if(curItem.dual&&dualSelected.length<2){toast('Please pick 2 flavors first!');return;}
   let base=curItem.p,vl='';
-  if(curItem.dual){
+  if(curItem.bundle){
+    vl='Milktea: '+bundleSelected.map(i=>MILKTEA_FLAVORS[i]).join(', ');
+  } else if(curItem.dual){
     vl=dualSelected.map(i=>curItem.v[i].l).join(' + ');
   } else if(curVI!==null&&curItem.v[curVI]){
     base=curItem.v[curVI].p;vl=curItem.v[curVI].l;
@@ -1151,6 +1207,7 @@ function rmC(id){cart=cart.filter(x=>x.id!==id);updBadge();renderCart();}
 function setOT(btn,type){
   document.querySelectorAll('.ot-option').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');curOT=type;
+  // Time fields — show for Dine-in and Pick-up only
   const tf=document.getElementById('timeFields');
   const tl=document.getElementById('timeLabel');
   const tn=document.getElementById('timeNote');
@@ -1185,32 +1242,62 @@ function setPayment(btn,method){
   checkSendBtn();
 }
 
-/* ── MAP / LOCATION ── */
+/* ── MAP / LOCATION (Leaflet) ── */
 let pinnedLat=null, pinnedLng=null, pinnedLabel='';
 let lastMsgUrl='';
+let leafletMap=null, leafletMarker=null;
+
+function initLeafletMap(lat,lng){
+  const placeholder=document.getElementById('mapPlaceholder');
+  if(placeholder) placeholder.style.display='none';
+  if(!leafletMap){
+    leafletMap=L.map('leafletMap',{zoomControl:true,attributionControl:false}).setView([lat,lng],16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(leafletMap);
+    // Custom red pin icon
+    const pinIcon=L.divIcon({
+      className:'',
+      html:`<svg width="32" height="42" viewBox="0 0 32 42" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.163 0 0 7.163 0 16c0 10.627 14.4 25.193 15.04 25.848a1.333 1.333 0 001.92 0C17.6 41.193 32 26.627 32 16 32 7.163 24.837 0 16 0z" fill="#E8521A"/><circle cx="16" cy="16" r="7" fill="white"/><circle cx="16" cy="16" r="4" fill="#E8521A"/></svg>`,
+      iconSize:[32,42],iconAnchor:[16,42],popupAnchor:[0,-42]
+    });
+    leafletMarker=L.marker([lat,lng],{icon:pinIcon,draggable:true}).addTo(leafletMap);
+    leafletMarker.on('dragend',function(e){
+      const pos=e.target.getLatLng();
+      pinnedLat=pos.lat.toFixed(6);
+      pinnedLng=pos.lng.toFixed(6);
+      pinnedLabel=`${pinnedLat}, ${pinnedLng}`;
+      updatePinStatus();
+      checkSendBtn();
+    });
+  } else {
+    leafletMap.setView([lat,lng],16);
+    leafletMarker.setLatLng([lat,lng]);
+  }
+  // Force map to re-render (needed when shown after being hidden)
+  setTimeout(()=>{ if(leafletMap) leafletMap.invalidateSize(); },200);
+}
+
+function updatePinStatus(){
+  const status=document.getElementById('pinStatus');
+  status.className='pin-status show';
+  status.innerHTML=`✅ <strong>Location pinned!</strong> You can drag the red pin to adjust.<br/>📍 ${pinnedLat}, ${pinnedLng} &nbsp;<a href="https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng}" target="_blank" rel="noopener" style="color:var(--gr);font-weight:700">View ↗</a>`;
+}
 
 function useMyLocation(){
-  const btn=document.querySelector('.map-gps-btn');
+  const btn=document.getElementById('gpsBtn');
   const status=document.getElementById('pinStatus');
   if(!navigator.geolocation){
     status.className='pin-status show warn';
-    status.innerHTML='⚠️ <strong>GPS not available</strong> on this device. Please type your address details below.';
+    status.innerHTML='⚠️ <strong>GPS not available</strong> on this device. Please fill your address details below.';
     return;
   }
-  btn.textContent='⏳ Locating…';
-  btn.disabled=true;
+  btn.innerHTML='⏳ Locating…';btn.disabled=true;
   navigator.geolocation.getCurrentPosition(
     pos=>{
       pinnedLat=pos.coords.latitude.toFixed(6);
       pinnedLng=pos.coords.longitude.toFixed(6);
       pinnedLabel=`${pinnedLat}, ${pinnedLng}`;
-      const frame=document.getElementById('delivMapFrame');
-      if(frame){
-        const bbox=calcBbox(parseFloat(pinnedLat),parseFloat(pinnedLng),0.004);
-        frame.src=`[openstreetmap.org](https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${pinnedLat},${pinnedLng})`;
-      }
-      status.className='pin-status show';
-      status.innerHTML=`✅ <strong>Location pinned!</strong><br/>📍 Coordinates: ${pinnedLat}, ${pinnedLng}<br/><a href="[openstreetmap.org](https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng})" target="_blank" rel="noopener" style="color:var(--gr);font-weight:700">View on map ↗</a>`;
+      initLeafletMap(parseFloat(pinnedLat),parseFloat(pinnedLng));
+      updatePinStatus();
       btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg> Location Pinned ✓';
       btn.disabled=false;
       btn.style.background='linear-gradient(135deg,#1a6b2a,#0f4a1c)';
@@ -1218,19 +1305,17 @@ function useMyLocation(){
     },
     e=>{
       pinnedLat=null;pinnedLng=null;
-      const msgs={1:'Location access denied. Please allow location permission and try again.',2:'Unable to detect your location. Please fill in your address manually.',3:'Location request timed out. Please try again.'};
+      const msgs={1:'Location access denied. Please allow location permission and try again.',2:'Unable to detect location. Please fill your address manually.',3:'Location request timed out. Please try again.'};
       status.className='pin-status show warn';
       status.innerHTML=`⚠️ <strong>Could not get location:</strong> ${msgs[e.code]||'Unknown error.'}`;
       btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Try Again';
       btn.disabled=false;
     },
-    {timeout:10000,maximumAge:0,enableHighAccuracy:true}
+    {timeout:12000,maximumAge:0,enableHighAccuracy:true}
   );
 }
 
-function calcBbox(lat,lng,d){
-  return `${(lng-d).toFixed(5)},${(lat-d).toFixed(5)},${(lng+d).toFixed(5)},${(lat+d).toFixed(5)}`;
-}
+
 
 /* ── SEND BUTTON GATE ── */
 function checkSendBtn(){
@@ -1238,9 +1323,6 @@ function checkSendBtn(){
   const note=document.getElementById('sendNote');
   if(!btn)return;
   let missing=[];
-  if(!cart.length) missing.push('items');
-  if(!g('custName')) missing.push('full name');
-  if(!g('custPhone')) missing.push('phone number');
   if(!curOT) missing.push('order type');
   if(!curPayment) missing.push('payment method');
   if(curOT==='Delivery'){
@@ -1259,7 +1341,7 @@ function checkSendBtn(){
   const ready=missing.length===0;
   btn.disabled=!ready;
   if(missing.length>0){
-    note.textContent=missing[0]==='items' ? 'Add at least one item to your cart.' : `Fill in: ${missing.join(', ')}.`;
+    note.textContent=`Fill in: ${missing.join(', ')}.`;
     note.style.color='var(--wg)';
   } else {
     note.textContent='✅ All set! Tap "Place Order via Messenger" above.';
@@ -1280,31 +1362,40 @@ function fmtDateTime(dateVal,timeVal){
   return `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()} at ${hr12}:${min} ${ampm}`;
 }
 
-/* ── BUILD MESSAGE ── */
+/* ── BUILD STRUCTURED MESSAGE ── */
 function buildMsg(){
   const name=g('custName'),phone=g('custPhone'),notes=g('custNotes');
   const tot=cart.reduce((s,i)=>s+i.total,0);
+
+  // Items list
   let itemLines='';
   cart.forEach((item,i)=>{
     itemLines+=`  ${i+1}. ${item.name}`;
     if(item.mods) itemLines+=` (${item.mods})`;
     itemLines+=` x${item.qty} - ₱${item.total}\n`;
   });
+
+  // Order type line + time if applicable
   let orderTypeLine=curOT;
   if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
     const d=g('custDate'),t=g('custTime');
     if(d&&t) orderTypeLine+=` — ${fmtDateTime(d,t)}`;
   }
+
+  // Delivery address block
   let addressBlock='N/A';
   if(curOT==='Delivery'){
     const bgy=document.getElementById('custBgy').value;
     const st=g('custStreet'),lm=g('custLM');
     addressBlock=`${st}, ${bgy}`;
     if(lm) addressBlock+=`\n  Landmark: ${lm}`;
-    if(pinnedLat&&pinnedLng) addressBlock+=`\n  GPS: [openstreetmap.org](https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng})`;
+    if(pinnedLat&&pinnedLng) addressBlock+=`\n  GPS: https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng}`;
   }
+
+  // Delivery fee
   const delivFee=curOT==='Delivery'?'₱20–₱50 (to confirm)':'—';
   const totalLine=curOT==='Delivery'?`₱${tot} + delivery fee`:`₱${tot}`;
+
   const msg=
 `Hello! I would like to place an order from La Luna Grill & Cafe.
 
@@ -1326,6 +1417,7 @@ Payment Method: ${curPayment}
 ${notes||'None'}
 
 Please confirm my order. Thank you!`;
+
   return msg;
 }
 
@@ -1337,6 +1429,7 @@ function sendOrder(){
   if(!phone){err('custPhone');toast('Please enter your phone number');return;}
   if(!curOT){toast('Please select an order type');return;}
   if(!curPayment){toast('Please select a payment method');return;}
+  // Validate date/time for dine-in/pickup
   if(curOT==='Advance Dine-in'||curOT==='Pick-up'){
     const d=g('custDate'),t=g('custTime');
     if(!d){err('custDate');toast('Please select a date');return;}
@@ -1344,6 +1437,7 @@ function sendOrder(){
     const picked=new Date(d+'T12:00:00');
     if(picked.getDay()===1){err('custDate');toast('⚠️ We are closed on Mondays. Please pick another day.');return;}
   }
+  // Validate delivery fields
   if(curOT==='Delivery'){
     const bgy=document.getElementById('custBgy').value;
     const st=g('custStreet'),lm=g('custLM');
@@ -1351,19 +1445,29 @@ function sendOrder(){
     if(!st){err('custStreet');toast('Please enter your street address');return;}
     if(!lm){err('custLM');toast('Please enter a landmark');return;}
   }
+
+  // Build the structured message and encode URL
   const msg=buildMsg();
   const pageId='303918802794006';
   const encodedMsg=encodeURIComponent(msg);
-  lastMsgUrl=`[m.me](https://m.me/${pageId}?text=${encodedMsg})`;
+  lastMsgUrl=`https://m.me/${pageId}?text=${encodedMsg}`;
+
+  // Show popup first (so it's visible even if redirect happens instantly)
   showOrderPopup();
+
+  // Attempt immediate redirect — works best on mobile (opens Messenger app)
   try {
     window.location.href=lastMsgUrl;
   } catch(ex){
+    // If location.href fails (some browsers), fall back to window.open
     try { window.open(lastMsgUrl,'_blank'); } catch(ex2){}
   }
+
+  // After 2.5s check if we're still here (redirect didn't navigate away = browser blocked)
   setTimeout(()=>{
     const popup=document.getElementById('orderPopup');
     if(popup.classList.contains('show')){
+      // User is still on page — show fallback
       document.getElementById('popupFallback').style.display='block';
       document.getElementById('popupFallbackLink').href=lastMsgUrl;
       document.getElementById('popupTitle').textContent='Order Ready to Send!';
@@ -1373,10 +1477,9 @@ function sendOrder(){
   },2500);
 }
 
-/* ── ORDER POPUP ── */
+/* ── ORDER SENT POPUP ── */
 function showOrderPopup(){
   const name=g('custName');
-  const phone=g('custPhone');
   const tot=cart.reduce((s,i)=>s+i.total,0);
   const detail=document.getElementById('popupDetail');
   let timeInfo='';
@@ -1397,6 +1500,7 @@ function showOrderPopup(){
       <strong>🛒 ${cart.length} item${cart.length>1?'s':''}</strong> · Subtotal: <strong style="color:var(--or)">₱${tot}</strong><br/>
       <strong>💳 ${curPayment}</strong>
     </div>`;
+  // Reset fallback state
   document.getElementById('popupFallback').style.display='none';
   document.getElementById('popupTitle').textContent='Redirecting to Messenger…';
   document.getElementById('popupSubtitle').textContent='Your complete order has been prepared. Messenger is opening now.';
@@ -1413,7 +1517,10 @@ function closePopupNewOrder(){
   document.getElementById('orderPopup').classList.remove('show');
   document.body.style.overflow='';
   cart=[];updBadge();
-  curOT='';curPayment='';pinnedLat=null;pinnedLng=null;
+  curOT='';curPayment='';pinnedLat=null;pinnedLng=null;bundleSelected=[];
+  if(leafletMap){leafletMap.remove();leafletMap=null;leafletMarker=null;}
+  const placeholder=document.getElementById('mapPlaceholder');
+  if(placeholder) placeholder.style.display='flex';
   document.querySelectorAll('.ot-option,.pay-option').forEach(b=>b.classList.remove('sel'));
   document.getElementById('timeFields').classList.remove('show');
   document.getElementById('delivFields').style.display='none';
@@ -1423,8 +1530,8 @@ function closePopupNewOrder(){
   });
   const bgy=document.getElementById('custBgy');if(bgy)bgy.value='';
   const ps=document.getElementById('pinStatus');if(ps){ps.className='pin-status';ps.innerHTML='';}
-  const gpsBtn=document.querySelector('.map-gps-btn');
-  if(gpsBtn){gpsBtn.disabled=false;gpsBtn.style.background='';gpsBtn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg> Use My Location';}
+  const gpsBtn=document.getElementById('gpsBtn');
+  if(gpsBtn){gpsBtn.disabled=false;gpsBtn.style.background='';gpsBtn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg> Use My GPS Location';}
   renderCart();
   goTo('home');
 }
