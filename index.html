@@ -538,7 +538,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
         <div>
           <div class="how-icon-sm">💬</div>
           <div class="how-step-title">Send via Messenger</div>
-          <div class="how-step-desc">Your full order summary is pre-filled and sent straight to our FB inbox. We confirm within minutes!</div>
+          <div class="how-step-desc">Your order summary is copied for Messenger and the chat opens in one tap. Just paste and send.</div>
         </div>
       </div>
     </div>
@@ -796,8 +796,8 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
     <div class="msg-cta">
       <div class="msg-cta-icon">💬</div>
       <div class="msg-cta-title">Order via Messenger</div>
-      <div class="msg-cta-text">Build your cart, fill your details, and send your complete order summary in one tap. We confirm and reply within minutes!</div>
-      <a href="https://m.me/303918802794006" target="_blank" rel="noopener" class="msg-cta-btn">💬 Message Us on Facebook</a>
+      <div class="msg-cta-text">Build your cart, fill your details, and open Messenger with your order summary ready to paste. We confirm and reply within minutes!</div>
+      <a href="https://m.me/laluna.cmg" target="_blank" rel="noopener" class="msg-cta-btn">💬 Message Us on Facebook</a>
     </div>
   </div>
 </section>
@@ -841,20 +841,21 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
       <span class="popup-icon">💬</span>
     </div>
     <div class="popup-title" id="popupTitle">Redirecting to Messenger…</div>
-    <div class="popup-subtitle" id="popupSubtitle">Your complete order has been prepared and Messenger is opening now.</div>
+    <div class="popup-subtitle" id="popupSubtitle">Messenger will open and your order summary will be ready to paste.</div>
     <div class="popup-detail" id="popupDetail"></div>
     <div class="popup-fallback" id="popupFallback" style="display:none">
-      <p style="font-size:.78rem;color:var(--wg);margin-bottom:10px;line-height:1.5">If Messenger did not open, please tap the button below or click the link to send your order manually.</p>
-      <a id="popupFallbackLink" href="#" target="_blank" rel="noopener" class="popup-fallback-link">💬 Open Messenger &amp; Send Order</a>
+      <p style="font-size:.78rem;color:var(--wg);margin-bottom:10px;line-height:1.5">If Messenger did not open, tap the button below, then paste your copied order summary into the chat.</p>
+      <a id="popupFallbackLink" href="#" target="_blank" rel="noopener" class="popup-fallback-link">💬 Open Messenger</a>
     </div>
     <div class="popup-actions">
       <button class="popup-btn-primary" onclick="openMessenger()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style="flex-shrink:0;vertical-align:middle;margin-right:6px"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8l3.131 3.259L19.752 8l-6.561 6.963z"/></svg>
         Open Messenger
       </button>
+      <button class="popup-btn-secondary" onclick="copyPreparedOrder()">📋 Copy Order Summary</button>
       <button class="popup-btn-secondary" onclick="closePopupNewOrder()">🛒 Place Another Order</button>
     </div>
-    <div class="popup-messenger-note" id="popupNote">Messenger should open automatically. La Luna will confirm your order within minutes! ✅</div>
+    <div class="popup-messenger-note" id="popupNote">Messenger should open automatically. Paste your order summary into the chat, then send it. ✅</div>
   </div>
 </div>
 
@@ -1321,7 +1322,73 @@ function setPayment(btn,method){
 /* ── MAP / LOCATION (Leaflet) ── */
 let pinnedLat=null, pinnedLng=null, pinnedLabel='';
 let lastMsgUrl='';
+let lastOrderMessage='';
 let leafletMap=null, leafletMarker=null;
+
+const MESSENGER_URL='https://m.me/laluna.cmg';
+const GPS_ICON='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg>';
+
+function isLocalHostName(host){
+  return host==='localhost' || host==='127.0.0.1' || host==='::1';
+}
+
+function canUseGeolocationSecurely(){
+  return window.isSecureContext || location.protocol==='https:' || isLocalHostName(location.hostname);
+}
+
+function setGpsButtonState(label, disabled=false, success=false){
+  const btn=document.getElementById('gpsBtn');
+  if(!btn)return;
+  btn.disabled=disabled;
+  btn.innerHTML=`${GPS_ICON} ${label}`;
+  btn.style.background=success ? 'linear-gradient(135deg,#1a6b2a,#0f4a1c)' : '';
+}
+
+function setPinWarning(html){
+  const status=document.getElementById('pinStatus');
+  if(!status)return;
+  status.className='pin-status show warn';
+  status.innerHTML=html;
+}
+
+function locateOnce(options){
+  return new Promise((resolve,reject)=>{
+    navigator.geolocation.getCurrentPosition(resolve,reject,options);
+  });
+}
+
+async function copyOrderMessage(text){
+  if(!text)return false;
+  if(navigator.clipboard && window.isSecureContext){
+    try{
+      await navigator.clipboard.writeText(text);
+      return true;
+    }catch(ex){}
+  }
+  try{
+    const ta=document.createElement('textarea');
+    ta.value=text;
+    ta.setAttribute('readonly','');
+    ta.style.position='fixed';
+    ta.style.left='-9999px';
+    ta.style.top='0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0,ta.value.length);
+    const copied=document.execCommand('copy');
+    document.body.removeChild(ta);
+    return copied;
+  }catch(ex){
+    return false;
+  }
+}
+
+function copyPreparedOrder(){
+  copyOrderMessage(lastOrderMessage).then(ok=>{
+    toast(ok?'📋 Order summary copied! Paste it into Messenger.':'⚠️ Could not copy automatically. Please copy and send manually.');
+  });
+}
 
 function initLeafletMap(lat,lng){
   const placeholder=document.getElementById('mapPlaceholder');
@@ -1358,37 +1425,63 @@ function updatePinStatus(){
   status.innerHTML=`✅ <strong>Location pinned!</strong> You can drag the red pin to adjust.<br/>📍 ${pinnedLat}, ${pinnedLng} &nbsp;<a href="https://www.openstreetmap.org/?mlat=${pinnedLat}&mlon=${pinnedLng}#map=17/${pinnedLat}/${pinnedLng}" target="_blank" rel="noopener" style="color:var(--gr);font-weight:700">View ↗</a>`;
 }
 
-function useMyLocation(){
-  const btn=document.getElementById('gpsBtn');
-  const status=document.getElementById('pinStatus');
+async function useMyLocation(){
   if(!navigator.geolocation){
-    status.className='pin-status show warn';
-    status.innerHTML='⚠️ <strong>GPS not available</strong> on this device. Please fill your address details below.';
+    setPinWarning('⚠️ <strong>GPS not available</strong> on this device. Please fill your address details below.');
     return;
   }
-  btn.innerHTML='⏳ Locating…';btn.disabled=true;
-  navigator.geolocation.getCurrentPosition(
-    pos=>{
-      pinnedLat=pos.coords.latitude.toFixed(6);
-      pinnedLng=pos.coords.longitude.toFixed(6);
-      pinnedLabel=`${pinnedLat}, ${pinnedLng}`;
-      initLeafletMap(parseFloat(pinnedLat),parseFloat(pinnedLng));
-      updatePinStatus();
-      btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg> Location Pinned ✓';
-      btn.disabled=false;
-      btn.style.background='linear-gradient(135deg,#1a6b2a,#0f4a1c)';
-      checkSendBtn();
-    },
-    e=>{
-      pinnedLat=null;pinnedLng=null;
-      const msgs={1:'Location access denied. Please allow location permission and try again.',2:'Unable to detect location. Please fill your address manually.',3:'Location request timed out. Please try again.'};
-      status.className='pin-status show warn';
-      status.innerHTML=`⚠️ <strong>Could not get location:</strong> ${msgs[e.code]||'Unknown error.'}`;
-      btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Try Again';
-      btn.disabled=false;
-    },
-    {timeout:12000,maximumAge:0,enableHighAccuracy:true}
-  );
+
+  if(!canUseGeolocationSecurely()){
+    setPinWarning('⚠️ <strong>GPS needs HTTPS</strong> to work. It will work on your live GitHub Pages site or on localhost, but not from a downloaded <code>.html</code> file.');
+    setGpsButtonState('Use My GPS Location');
+    return;
+  }
+
+  setGpsButtonState('Locating…',true,false);
+  const status=document.getElementById('pinStatus');
+  if(status){
+    status.className='pin-status show';
+    status.innerHTML='📡 <strong>Requesting your location…</strong> Please allow location access if your browser asks.';
+  }
+
+  try{
+    if(navigator.permissions && navigator.permissions.query){
+      try{
+        const permission=await navigator.permissions.query({name:'geolocation'});
+        if(permission.state==='denied'){
+          setPinWarning('⚠️ <strong>Location permission is blocked</strong>. Please allow location access in your browser settings, then tap the button again.');
+          setGpsButtonState('Try Again');
+          return;
+        }
+      }catch(ex){}
+    }
+
+    let pos;
+    try{
+      pos=await locateOnce({enableHighAccuracy:true,timeout:10000,maximumAge:300000});
+    }catch(firstError){
+      if(firstError && firstError.code===1) throw firstError;
+      pos=await locateOnce({enableHighAccuracy:false,timeout:15000,maximumAge:600000});
+    }
+
+    pinnedLat=pos.coords.latitude.toFixed(6);
+    pinnedLng=pos.coords.longitude.toFixed(6);
+    pinnedLabel=`${pinnedLat}, ${pinnedLng}`;
+    initLeafletMap(parseFloat(pinnedLat),parseFloat(pinnedLng));
+    updatePinStatus();
+    setGpsButtonState('Location Pinned ✓',false,true);
+    checkSendBtn();
+  }catch(e){
+    pinnedLat=null;
+    pinnedLng=null;
+    const msgs={
+      1:'Location access was denied. Please allow location permission and try again.',
+      2:'Your device could not determine a GPS position. Please try again outdoors or continue by typing your address manually.',
+      3:'The GPS request timed out. Please try again or continue by typing your address manually.'
+    };
+    setPinWarning(`⚠️ <strong>Could not get location:</strong> ${msgs[e.code]||'Please try again or enter your address manually.'}`);
+    setGpsButtonState('Try Again');
+  }
 }
 
 
@@ -1399,6 +1492,9 @@ function checkSendBtn(){
   const note=document.getElementById('sendNote');
   if(!btn)return;
   let missing=[];
+  if(!cart.length) missing.push('items');
+  if(!g('custName')) missing.push('full name');
+  if(!g('custPhone')) missing.push('phone number');
   if(!curOT) missing.push('order type');
   if(!curPayment) missing.push('payment method');
   if(curOT==='Delivery'){
@@ -1570,17 +1666,16 @@ function closeConfirmPopup(){
   document.body.style.overflow='';
 }
 
-function confirmAndSend(){
+async function confirmAndSend(){
   closeConfirmPopup();
 
   // Build message and redirect to Messenger
-  const msg=buildMsg();
-  const pageId='303918802794006';
-  const encodedMsg=encodeURIComponent(msg);
-  lastMsgUrl=`https://m.me/${pageId}?text=${encodedMsg}`;
+  lastOrderMessage=buildMsg();
+  lastMsgUrl=MESSENGER_URL;
+  const copied=await copyOrderMessage(lastOrderMessage);
 
   // Show sent popup
-  showOrderPopup();
+  showOrderPopup(copied);
 
   // Redirect
   try {
@@ -1595,16 +1690,21 @@ function confirmAndSend(){
     if(popup.classList.contains('show')){
       document.getElementById('popupFallback').style.display='block';
       document.getElementById('popupFallbackLink').href=lastMsgUrl;
-      document.getElementById('popupTitle').textContent='Order Ready to Send!';
-      document.getElementById('popupSubtitle').textContent='Your order is prepared. Tap below to open Messenger and send it.';
-      document.getElementById('popupNote').textContent='If Messenger does not open, please click the link again or send us your order manually.';
+      document.getElementById('popupTitle').textContent='Messenger Ready';
+      document.getElementById('popupSubtitle').textContent=copied
+        ? 'Messenger is open. Paste your copied order summary into the chat and send it.'
+        : 'Messenger is ready. Tap below to open it, then copy and paste your order summary.';
+      document.getElementById('popupNote').textContent=copied
+        ? 'If Messenger did not open, tap the button again. Your order summary is already copied. ✅'
+        : 'If auto-copy did not work, tap “Copy Order Summary” before sending. ✅';
     }
   },2500);
 }
 
 /* ── ORDER SENT POPUP ── */
-function showOrderPopup(){
+function showOrderPopup(copied=false){
   const name=g('custName');
+  const phone=g('custPhone');
   const tot=cart.reduce((s,i)=>s+i.total,0);
   const detail=document.getElementById('popupDetail');
   let timeInfo='';
@@ -1617,25 +1717,37 @@ function showOrderPopup(){
     const bgy=document.getElementById('custBgy').value;
     delivInfo=`<br/><strong>📍 Barangay:</strong> ${bgy}`;
   }
+  const copyInfo=copied
+    ? '<br/><strong>📋 Order summary copied:</strong> Paste it into Messenger.'
+    : '<br/><strong>📋 Order summary ready:</strong> Tap “Copy Order Summary” if needed.';
   detail.innerHTML=`
     <div style="text-align:left;line-height:1.7">
       <strong>👤 ${name}</strong><br/>
-      <strong>📞 ${phone||g('custPhone')}</strong><br/>
+      <strong>📞 ${phone}</strong><br/>
       <strong>🍽️ ${curOT}</strong>${timeInfo}${delivInfo}<br/>
       <strong>🛒 ${cart.length} item${cart.length>1?'s':''}</strong> · Subtotal: <strong style="color:var(--or)">₱${tot}</strong><br/>
-      <strong>💳 ${curPayment}</strong>
+      <strong>💳 ${curPayment}</strong>${copyInfo}
     </div>`;
   // Reset fallback state
   document.getElementById('popupFallback').style.display='none';
-  document.getElementById('popupTitle').textContent='Redirecting to Messenger…';
-  document.getElementById('popupSubtitle').textContent='Your complete order has been prepared. Messenger is opening now.';
-  document.getElementById('popupNote').textContent='Messenger should open automatically. La Luna will confirm your order within minutes! ✅';
+  document.getElementById('popupTitle').textContent='Opening Messenger…';
+  document.getElementById('popupSubtitle').textContent=copied
+    ? 'Messenger is opening. Your order summary was copied — just paste and send.'
+    : 'Messenger is opening. Your order summary is ready if you need to copy it again.';
+  document.getElementById('popupNote').textContent=copied
+    ? 'Paste your order summary into the Messenger chat, then send it. ✅'
+    : 'If the text was not copied automatically, tap “Copy Order Summary,” then paste it into Messenger. ✅';
   document.getElementById('orderPopup').classList.add('show');
   document.body.style.overflow='hidden';
 }
 
 function openMessenger(){
-  if(lastMsgUrl) window.open(lastMsgUrl,'_blank');
+  if(!lastMsgUrl)return;
+  try {
+    window.location.href=lastMsgUrl;
+  } catch(ex){
+    window.open(lastMsgUrl,'_blank');
+  }
 }
 
 function closePopupNewOrder(){
@@ -1644,6 +1756,7 @@ function closePopupNewOrder(){
   document.body.style.overflow='';
   cart=[];updBadge();
   curOT='';curPayment='';pinnedLat=null;pinnedLng=null;bundleSelected=[];
+  lastMsgUrl='';lastOrderMessage='';
   if(leafletMap){leafletMap.remove();leafletMap=null;leafletMarker=null;}
   const placeholder=document.getElementById('mapPlaceholder');
   if(placeholder) placeholder.style.display='flex';
