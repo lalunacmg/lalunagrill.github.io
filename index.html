@@ -869,7 +869,7 @@ const FA=[{name:'Pearl',price:15},{name:'Nata',price:15}];
 /* Category icons for the menu header */
 const CAT_ICON={
   'Snacks':'🎉',
-  'Pizza (Solo)':'🍕',
+  'Pizza':'🍕',
   'Pasta':'🍝',
   'Mains':'🍖',
   'Rice Meals':'🍱',
@@ -884,84 +884,75 @@ const CAT_ICON={
 /* Realistic SVG-based food icons — returns a CSS background color + emoji pair */
 const MILKTEA_FLAVORS=['Taro','Wintermelon','Okinawa','Cookies & Cream','Chocolate','Caramel Sugar'];
 
+
 const MENU=[
   // SNACKS
-  {id:1,cat:'Snacks',icon:'🌮',name:'Nachos',pop:false,desc:'Crispy tortilla chips loaded with cheese and savory toppings.',p:170,v:[],a:[]},
-  {id:2,cat:'Snacks',icon:'🍟',name:'French Fries',pop:false,desc:'Crispy golden fries, salted to perfection.',p:120,v:[],a:[]},
-  {id:3,cat:'Snacks',icon:'🎉',name:'Barkada Bundle 1',pop:true,desc:'Pizza + Nachos + Fries + Pitcher of drink.',p:399,v:[],a:[]},
-  {id:46,cat:'Snacks',icon:'🍗',name:'Barkada Bundle 2',pop:true,desc:'Pasta + 6pcs Chicken Wings + 3 Pizza Breads + Pitcher of drink.',p:499,v:[],a:[]},
-  {id:47,cat:'Snacks',icon:'🎉',name:'Barkada Bundle 3',pop:true,desc:'All 3 Pizza Flavors + Pitcher of drink.',p:389,v:[],a:[]},
-  // PIZZA (SOLO)
-  {id:4,cat:'Pizza (Solo)',icon:'🍕',name:'Hawaiian',pop:false,desc:'Classic ham and sweet pineapple on a rich tomato base with mozzarella.',p:120,v:[],a:[]},
-  {id:5,cat:'Pizza (Solo)',icon:'🍕',name:'Pepperoni',pop:false,desc:'Loaded with spicy pepperoni slices on a stretchy mozzarella base.',p:110,v:[],a:[]},
-  {id:6,cat:'Pizza (Solo)',icon:'🍕',name:'La Luna',pop:true,desc:'Our signature house pizza on a crispy thin crust — a customer favorite.',p:120,v:[],a:[]},
+  {id:1,cat:'Snacks',icon:'🍟',name:'French Fries',pop:false,desc:'Crispy golden fries, salted to perfection.',p:120,v:[],a:[]},
+  {id:2,cat:'Snacks',icon:'🌮',name:'Nachos',pop:false,desc:'Crispy tortilla chips loaded with cheese and savory toppings.',p:170,v:[],a:[]},
+  {id:3,cat:'Snacks',icon:'🥪',name:'Egg Sandwich',pop:false,desc:'Fresh egg sandwich served warm and satisfying.',p:100,v:[],a:[]},
+  {id:4,cat:'Snacks',icon:'🍔',name:'Cheese Burger',pop:false,desc:'Juicy burger with melted cheese and classic toppings.',p:180,v:[],a:[]},
+  {id:5,cat:'Snacks',icon:'🍔',name:'Bacon Burger',pop:false,desc:'Juicy burger topped with crispy bacon and melted cheese.',p:240,v:[],a:[]},
+  // PIZZA
+  {id:6,cat:'Pizza',icon:'🍕',name:'La Luna',pop:true,desc:'Our signature house pizza on a crispy thin crust - a customer favorite.',p:120,v:[],a:[]},
+  {id:7,cat:'Pizza',icon:'🍕',name:'Hawaiian',pop:false,desc:'Classic ham and sweet pineapple on a rich tomato base with mozzarella.',p:120,v:[],a:[]},
+  {id:8,cat:'Pizza',icon:'🍕',name:'Pepperoni',pop:false,desc:'Loaded with spicy pepperoni slices on a stretchy mozzarella base.',p:110,v:[],a:[]},
   // PASTA
-  {id:7,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:179,v:[],a:[]},
-  {id:8,cat:'Pasta',icon:'🍝',name:'Carbonara',pop:true,desc:'Creamy white sauce pasta with savory bacon and earthy mushrooms.',p:189,v:[],a:[]},
+  {id:9,cat:'Pasta',icon:'🍝',name:'Carbonara',pop:true,desc:'Creamy white sauce pasta with savory bacon and earthy mushrooms.',p:190,v:[],a:[]},
+  {id:10,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:180,v:[],a:[]},
   // MAINS
-  {id:9,cat:'Mains',icon:'🫕',name:'Sisig Platter',pop:true,desc:'Sizzling pork sisig on a hot cast-iron plate — the ultimate Filipino pulutan.',p:250,v:[],a:[]},
-  {id:10,cat:'Mains',icon:'🍗',name:'6 pcs Chicken Wings',pop:true,desc:'Crispy fried chicken wings served with a savory dipping sauce. Choose your flavor!',p:189,
+  {id:11,cat:'Mains',icon:'🫕',name:'Sisig Platter',pop:true,desc:'Sizzling pork sisig on a hot cast-iron plate - the ultimate Filipino pulutan.',p:250,v:[],a:[]},
+  {id:12,cat:'Mains',icon:'🍗',name:'6pcs Chicken Wings',pop:true,desc:'Crispy fried chicken wings served with a savory dipping sauce. Choose your flavor!',p:189,
     v:[{l:'Honey Butter',p:189},{l:'Soy Garlic',p:189},{l:'Buffalo',p:189}],a:[]},
-  {id:11,cat:'Mains',icon:'🍗',name:'12 pcs Chicken Wings',pop:true,desc:'A dozen golden fried wings — perfect for sharing. Pick 2 different flavors!',p:299,
+  {id:13,cat:'Mains',icon:'🍗',name:'12pcs Chicken Wings',pop:true,desc:'A dozen golden fried wings - perfect for sharing. Pick 2 different flavors!',p:299,
     v:[{l:'Honey Butter',p:299},{l:'Soy Garlic',p:299},{l:'Buffalo',p:299}],a:[],dual:true},
   // RICE MEALS
-  {id:12,cat:'Rice Meals',icon:'🍱',name:'C1 – 3 pcs BBQ w/ 2 Rice',pop:true,desc:'3 charcoal-grilled pork BBQ sticks served with 2 cups of steamed rice.',p:140,v:[],a:[]},
-  {id:13,cat:'Rice Meals',icon:'🍱',name:'C2 – Quarter Leg w/ 2 Rice',pop:true,desc:'Grilled chicken quarter leg served with 2 cups of steamed rice.',p:160,v:[],a:[]},
-  {id:14,cat:'Rice Meals',icon:'🍱',name:'C3 – Quarter Wing w/ 2 Rice',pop:false,desc:'Grilled chicken quarter wing served with 2 cups of steamed rice.',p:180,v:[],a:[]},
-  {id:15,cat:'Rice Meals',icon:'🫕',name:'C4 – Sisig Rice w/ Egg',pop:false,desc:'Sizzling pork sisig served with steamed white rice and a fried egg.',p:160,v:[],a:[]},
-  {id:16,cat:'Rice Meals',icon:'🍱',name:'C5 – 3 pcs Chix Wings w/ Rice',pop:false,desc:'3 crispy chicken wings with rice. Choose your wing sauce!',p:160,
-    v:[{l:'Honey Butter',p:160},{l:'Soy Garlic',p:160},{l:'Buffalo',p:160}],a:[]},
+  {id:14,cat:'Rice Meals',icon:'🍱',name:'C1 (Grilled Quarter Leg)',pop:true,desc:'Grilled chicken quarter leg served with steamed rice.',p:160,v:[],a:[]},
+  {id:15,cat:'Rice Meals',icon:'🍱',name:'C2 (Grilled Quarter Wing)',pop:false,desc:'Grilled chicken quarter wing served with steamed rice.',p:180,v:[],a:[]},
+  {id:16,cat:'Rice Meals',icon:'🫕',name:'C3 (Sisig Rice w/ Egg)',pop:false,desc:'Sizzling pork sisig served with steamed white rice and a fried egg.',p:160,v:[],a:[]},
   // DESSERT
   {id:17,cat:'Dessert',icon:'🍧',name:'Halo-Halo',pop:true,desc:'Classic Filipino shaved ice dessert with mixed sweets, leche flan, and ube ice cream.',p:120,v:[],a:[]},
-  {id:47,cat:'Dessert',icon:'🍮',name:'Coffee Jelly',pop:false,desc:'Smooth coffee-flavored jelly served chilled — a classic Filipino café treat.',p:40,v:[],a:[]},
+  {id:18,cat:'Dessert',icon:'🥥',name:'Buko Pandan',pop:false,desc:'Creamy pandan dessert with young coconut and jelly.',p:100,v:[],a:[]},
+  {id:19,cat:'Dessert',icon:'🍮',name:'Coffee Jelly',pop:false,desc:'Smooth coffee-flavored jelly served chilled - a classic Filipino cafe treat.',p:40,v:[],a:[]},
   // COFFEE
-  {id:18,cat:'Coffee',icon:'☕',name:'Double Espresso',pop:false,desc:'Two concentrated shots of bold espresso.',p:70,v:[],a:CA},
-  {id:19,cat:'Coffee',icon:'☕',name:'Americano',pop:false,desc:'Espresso with hot or cold water — clean and bold.',p:80,v:[{l:'Hot',p:80},{l:'Iced',p:100}],a:CA},
-  {id:20,cat:'Coffee',icon:'☕',name:'Cappuccino',pop:false,desc:'Equal parts espresso, steamed milk, and velvety foam.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
-  {id:21,cat:'Coffee',icon:'☕',name:'Cafe Latte',pop:true,desc:'Smooth espresso blended with generous steamed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
-  {id:22,cat:'Coffee',icon:'☕',name:'Spanish Latte',pop:true,desc:'Rich espresso blended with sweetened condensed milk.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
-  {id:23,cat:'Coffee',icon:'☕',name:'Hazelnut Latte',pop:false,desc:'Espresso and milk with rich hazelnut flavour syrup.',p:125,v:[{l:'Hot',p:125},{l:'Iced',p:135}],a:CA},
-  {id:24,cat:'Coffee',icon:'☕',name:'Salted Caramel',pop:false,desc:'Caramel espresso latte with a salted caramel finish.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:135}],a:CA},
-  {id:25,cat:'Coffee',icon:'☕',name:'Caramel Macchiato',pop:false,desc:'Layered vanilla latte with a caramel drizzle.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
-  {id:48,cat:'Coffee',icon:'☕',name:'Toffee-Nut',pop:false,desc:'Smooth toffee and toasted nut espresso latte, available hot or iced.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
-  {id:49,cat:'Coffee',icon:'☕',name:'Pumpkin Spice',pop:false,desc:'Warm pumpkin spice flavors in a rich espresso latte, hot or iced.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
+  {id:20,cat:'Coffee',icon:'☕',name:'Double Espresso',pop:false,desc:'Two concentrated shots of bold espresso.',p:80,v:[{l:'Hot',p:80}],a:CA},
+  {id:21,cat:'Coffee',icon:'☕',name:'Americano',pop:false,desc:'Espresso with hot or cold water - clean and bold.',p:100,v:[{l:'Hot',p:100},{l:'Iced',p:110}],a:CA},
+  {id:22,cat:'Coffee',icon:'☕',name:'Cappuccino',pop:false,desc:'Equal parts espresso, steamed milk, and velvety foam.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
+  {id:23,cat:'Coffee',icon:'☕',name:'Cafe Latte',pop:true,desc:'Smooth espresso blended with generous steamed milk.',p:130,v:[{l:'Hot',p:130},{l:'Iced',p:140}],a:CA},
+  {id:24,cat:'Coffee',icon:'☕',name:'Spanish Latte',pop:true,desc:'Rich espresso blended with sweetened condensed milk.',p:135,v:[{l:'Hot',p:135},{l:'Iced',p:145}],a:CA},
+  {id:25,cat:'Coffee',icon:'☕',name:'Hazelnut Latte',pop:false,desc:'Espresso and milk with rich hazelnut flavour syrup.',p:135,v:[{l:'Hot',p:135},{l:'Iced',p:145}],a:CA},
+  {id:26,cat:'Coffee',icon:'☕',name:'Caramel Latte',pop:false,desc:'Smooth espresso latte with rich caramel flavour.',p:135,v:[{l:'Hot',p:135},{l:'Iced',p:145}],a:CA},
+  {id:27,cat:'Coffee',icon:'☕',name:'Salted Caramel',pop:false,desc:'Caramel espresso latte with a salted caramel finish.',p:135,v:[{l:'Hot',p:135},{l:'Iced',p:145}],a:CA},
+  {id:28,cat:'Coffee',icon:'☕',name:'Caramel Macchiato',pop:false,desc:'Layered vanilla latte with a caramel drizzle.',p:135,v:[{l:'Hot',p:135},{l:'Iced',p:145}],a:CA},
   // MILKTEA
-  {id:26,cat:'Milktea',icon:'🧋',name:'Taro',pop:true,desc:'Earthy purple taro blended into a smooth creamy milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
-  {id:27,cat:'Milktea',icon:'🧋',name:'Okinawa',pop:false,desc:'Brown sugar milk tea with a smoky-sweet caramel undertone.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
-  {id:28,cat:'Milktea',icon:'🧋',name:'Wintermelon',pop:false,desc:'Subtly sweet wintermelon syrup in classic creamy milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
-  {id:29,cat:'Milktea',icon:'🧋',name:'Caramel Sugar',pop:false,desc:'Smooth milk tea sweetened with rich caramel sugar syrup.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
-  {id:30,cat:'Milktea',icon:'🧋',name:'Chocolate',pop:false,desc:'Rich creamy chocolate blended into a classic milk tea.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
-  {id:31,cat:'Milktea',icon:'🧋',name:'Cookies & Cream',pop:true,desc:'Crushed Oreo cookies blended into a creamy milk tea base.',p:69,v:[{l:'Medium (M)',p:69},{l:'Large (L)',p:79}],a:DA},
+  {id:29,cat:'Milktea',icon:'🧋',name:'Taro',pop:true,desc:'Earthy purple taro blended into a smooth creamy milk tea.',p:69,v:[{l:'16oz',p:69},{l:'22oz',p:79}],a:DA},
+  {id:30,cat:'Milktea',icon:'🧋',name:'Okinawa',pop:false,desc:'Brown sugar milk tea with a smoky-sweet caramel undertone.',p:69,v:[{l:'16oz',p:69},{l:'22oz',p:79}],a:DA},
+  {id:31,cat:'Milktea',icon:'🧋',name:'WinterMelon',pop:false,desc:'Subtly sweet wintermelon syrup in classic creamy milk tea.',p:69,v:[{l:'16oz',p:69},{l:'22oz',p:79}],a:DA},
+  {id:32,cat:'Milktea',icon:'🧋',name:'Caramel Sugar',pop:false,desc:'Smooth milk tea sweetened with rich caramel sugar syrup.',p:69,v:[{l:'16oz',p:69},{l:'22oz',p:79}],a:DA},
+  {id:33,cat:'Milktea',icon:'🧋',name:'Chocolate',pop:false,desc:'Rich creamy chocolate blended into a classic milk tea.',p:69,v:[{l:'16oz',p:69},{l:'22oz',p:79}],a:DA},
+  {id:34,cat:'Milktea',icon:'🧋',name:'Cookies & Cream',pop:true,desc:'Crushed Oreo cookies blended into a creamy milk tea base.',p:69,v:[{l:'16oz',p:69},{l:'22oz',p:79}],a:DA},
   // FRAPPE
-  {id:32,cat:'Frappe',icon:'🥤',name:'Caramel',pop:false,desc:'Silky blended caramel frappe with whipped cream topping.',p:165,v:[],a:[]},
-  {id:33,cat:'Frappe',icon:'🥤',name:'Mochaccino',pop:true,desc:'Coffee and chocolate blended into a rich indulgent frappe.',p:165,v:[],a:[]},
-  {id:35,cat:'Frappe',icon:'🥤',name:'Peppermint Mocha',pop:false,desc:'Cool peppermint meets rich chocolate mocha.',p:165,v:[],a:[]},
-  {id:37,cat:'Frappe',icon:'🥤',name:'Biscoff',pop:false,desc:'Speculoos cookie butter blended into a creamy frappe.',p:170,v:[],a:[]},
-  {id:38,cat:'Frappe',icon:'🥤',name:'Nutella',pop:true,desc:'Rich hazelnut Nutella blended smooth for an irresistible frappe.',p:170,v:[],a:[]},
+  {id:35,cat:'Frappe',icon:'🥤',name:'Biscoff',pop:false,desc:'Speculoos cookie butter blended into a creamy frappe.',p:170,v:[],a:[]},
+  {id:36,cat:'Frappe',icon:'🥤',name:'Nutella',pop:true,desc:'Rich hazelnut Nutella blended smooth for an irresistible frappe.',p:170,v:[],a:[]},
+  {id:37,cat:'Frappe',icon:'🥤',name:'Caramel',pop:false,desc:'Silky blended caramel frappe with whipped cream topping.',p:165,v:[],a:[]},
+  {id:38,cat:'Frappe',icon:'🥤',name:'Mochaccino',pop:true,desc:'Coffee and chocolate blended into a rich indulgent frappe.',p:165,v:[],a:[]},
   // FRUIT SHAKES
   {id:39,cat:'Fruit Shakes',icon:'🥭',name:'Mango',pop:true,desc:'Fresh ripe mango blended with milk and crushed ice.',p:120,v:[],a:FA},
-  {id:40,cat:'Fruit Shakes',icon:'🥑',name:'Avocado',pop:false,desc:'Creamy ripe avocado shake with condensed milk.',p:120,v:[],a:FA},
-  {id:41,cat:'Fruit Shakes',icon:'🍹',name:'Seasonal Fruit *',pop:false,desc:"Ask our staff for today's fresh seasonal fruit blend. *Availability varies.",p:120,v:[],a:FA},
-  // ADD-ONS
-  {id:42,cat:'Add-ons',icon:'🫧',name:'Pearl',pop:false,desc:'Chewy tapioca pearl add-on for drinks.',p:15,v:[],a:[]},
-  {id:43,cat:'Add-ons',icon:'🍮',name:'Nata',pop:false,desc:'Sweet coconut jelly cubes for drinks.',p:15,v:[],a:[]},
-  {id:44,cat:'Add-ons',icon:'🧀',name:'Cream Cheese',pop:false,desc:'Creamy salted cheese foam topping.',p:15,v:[],a:[]},
-  {id:45,cat:'Add-ons',icon:'🍚',name:'Extra Rice',pop:false,desc:'Additional cup of steaming hot white rice.',p:25,v:[],a:[]},
+  {id:40,cat:'Fruit Shakes',icon:'🥑',name:'Avocado (seasonal)',pop:false,desc:'Creamy ripe avocado shake with condensed milk. Seasonal availability.',p:120,v:[],a:FA},
 ];
 
-const CATS=['All','Snacks','Pizza (Solo)','Pasta','Mains','Rice Meals','Dessert','Coffee','Milktea','Frappe','Fruit Shakes','Add-ons'];
-const BS=[9,11,6,8,22,38,17,21];
+const CATS=['All','Snacks','Pizza','Pasta','Mains','Rice Meals','Dessert','Coffee','Milktea','Frappe','Fruit Shakes'];
+const BS=[11,13,6,9,24,36,17,23];
 const PROMOS=[
   '★ Open Tue–Sun · 12PM–10PM · Closed Monday',
-  '🔥 Rice Meals from ₱140',
-  '🍕 La Luna Pizza Solo ₱120',
-  '🍗 12 pcs Wings — 3 flavors!',
+  '🔥 Rice Meals from ₱160',
+  '🍕 La Luna Pizza ₱120',
+  '🍗 12pcs Wings — 3 flavors!',
   '🧋 Milk Tea from ₱69',
   '🍧 Try our Halo-Halo ₱120',
   '☕ Spanish Latte Hot or Iced',
   '🥤 Nutella Frappe — bestseller!',
-  '🎉 Barkada Bundle 1 — ₱399!',
-  '🍗 Barkada Bundle 2 — ₱499!',
+  '🍔 Bacon Burger — ₱240!',
+  '🥥 Buko Pandan — ₱100!',
   '★ Advance orders welcome!',
 ];
 
