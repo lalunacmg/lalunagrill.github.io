@@ -486,7 +486,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
       </svg>
     </div>
     <div class="hero-body">
-      <div class="hero-badge">🌙 Tue–Sun · 12PM–10PM</div>
+      <div class="hero-badge">🌙 Tue–Sun · 11AM–9PM</div>
       <h1 class="hero-title">Grilled Fresh,<em>Served with Love.</em></h1>
       <div class="announce-banner">
         <div class="announce-main">Open Tue–Sun &nbsp;★&nbsp; ADVANCE ORDER FOR DINE-IN &amp; PICK-UP &nbsp;★&nbsp; INQUIRE FOR DELIVERY</div>
@@ -628,10 +628,10 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
               </div>
               <div class="time-slot-group">
                 <label class="flbl" style="font-size:.65rem">Time</label>
-                <input class="finput" type="time" id="custTime" oninput="checkSendBtn()" min="12:00" max="21:30"/>
+                <input class="finput" type="time" id="custTime" oninput="checkSendBtn()" min="11:00" max="20:30"/>
               </div>
             </div>
-            <div class="time-note" id="timeNote">⏰ Store hours: Tuesday–Sunday, 12:00 PM – 10:00 PM. Closed Mondays. Please book at least 30 minutes ahead.</div>
+            <div class="time-note" id="timeNote">⏰ Store hours: Tuesday–Sunday, 11:00 AM – 9:00 PM. Closed Mondays. Please book at least 30 minutes ahead.</div>
           </div>
         </div>
 
@@ -732,7 +732,7 @@ select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.
 
     <div class="info-card">
       <div class="ic-title">⏰ Operating Hours</div>
-      <div class="ic-row"><span class="ic-lbl">Tuesday – Sunday</span><span class="ic-val">12:00 PM – 10:00 PM</span></div>
+      <div class="ic-row"><span class="ic-lbl">Tuesday – Sunday</span><span class="ic-val">11:00 AM – 9:00 PM</span></div>
       <div class="ic-row"><span class="ic-lbl">Monday</span><span class="ic-val" style="color:#c0392b">CLOSED</span></div>
       <div class="ic-row"><span class="ic-lbl">Holidays</span><span class="ic-val">Check FB Page</span></div>
     </div>
@@ -943,7 +943,7 @@ const MENU=[
 const CATS=['All','Snacks','Pizza','Pasta','Mains','Rice Meals','Dessert','Coffee','Milktea','Frappe','Fruit Shakes'];
 const BS=[11,13,6,9,24,36,17,23];
 const PROMOS=[
-  '★ Open Tue–Sun · 12PM–10PM · Closed Monday',
+  '★ Open Tue–Sun · 11AM–9PM · Closed Monday',
   '🔥 Rice Meals from ₱160',
   '🍕 La Luna Pizza ₱120',
   '🍗 12pcs Wings — 3 flavors!',
@@ -983,7 +983,7 @@ function updateStatusChip(){
   const day=now.getDay(); // 0=Sun,1=Mon
   const h=now.getHours(),m=now.getMinutes();
   const t=h*60+m;
-  const isOpen=day!==1 && t>=720 && t<1320; // Mon=1 closed; 12pm=720, 10pm=1320
+  const isOpen=day!==1 && t>=660 && t<1260; // Mon=1 closed; 11am=660, 9pm=1260
   const chip=document.querySelector('.ic-row .ic-val');
   // we handle this differently below — just skip if not found
 }
@@ -1284,11 +1284,11 @@ function setOT(btn,type){
   if(type==='Advance Dine-in'){
     tf.classList.add('show');
     tl.innerHTML='📅 Date &amp; Time of Dine-in <span class="req">*</span>';
-    tn.textContent='⏰ Store hours: Tue–Sun, 12:00 PM – 10:00 PM. Closed Mondays. Please book at least 30 minutes ahead.';
+    tn.textContent='⏰ Store hours: Tue–Sun, 11:00 AM – 9:00 PM. Closed Mondays. Please book at least 30 minutes ahead.';
   } else if(type==='Pick-up'){
     tf.classList.add('show');
     tl.innerHTML='📅 Date &amp; Time of Pick-up <span class="req">*</span>';
-    tn.textContent='⏰ Store hours: Tue–Sun, 12:00 PM – 10:00 PM. Closed Mondays. Please order at least 30 minutes before pick-up time.';
+    tn.textContent='⏰ Store hours: Tue–Sun, 11:00 AM – 9:00 PM. Closed Mondays. Please order at least 30 minutes before pick-up time.';
   } else {
     tf.classList.remove('show');
     document.getElementById('custDate').value='';
