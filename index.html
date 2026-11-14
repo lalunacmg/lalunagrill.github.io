@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="La Luna"/>
-<meta name="description" content="La Luna Grill + Cafe — Order online. Filipino grill favorites, pizza, pasta and café drinks."/>
+<meta name="description" content="La Luna Grill + Cafe — Order online. Filipino grill favorites, pasta and café drinks."/>
 <title>La Luna Grill + Cafe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -836,7 +836,7 @@ body{background:var(--crl)}
         </svg>
       </div>
       <div class="about-title">About <span>La Luna</span></div>
-      <div class="about-text">La Luna Grill + Cafe serves hearty Filipino-inspired grills, pasta, pizza, and a full café menu with coffee, milk tea, frappes, and fruit shakes. Great food, warm service, and that unmistakable homey atmosphere — night after night.</div>
+      <div class="about-text">La Luna Grill + Cafe serves hearty Filipino-inspired grills, pasta, and a full café menu with coffee, milk tea, frappes, and fruit shakes. Great food, warm service, and that unmistakable homey atmosphere — night after night.</div>
     </div>
 
     <div class="addons-card">
@@ -936,7 +936,6 @@ const FA=[{name:'Pearl',price:15},{name:'Nata',price:15}];
 /* Category icons for the menu header */
 const CAT_ICON={
   'Snacks':'🎉',
-  'Pizza':'🍕',
   'Pasta':'🍝',
   'Mains':'🍖',
   'Rice Meals':'🍱',
@@ -944,7 +943,7 @@ const CAT_ICON={
   'Coffee':'☕',
   'Milktea':'🧋',
   'Frappe':'🥤',
-  'Use Series':'\uD83D\uDC9C',
+  'Ube Series':'\uD83D\uDC9C',
   'Add-ons':'✨'
 };
 
@@ -958,10 +957,6 @@ const MENU=[
   {id:2,cat:'Snacks',icon:'🌮',name:'Nachos',pop:false,desc:'Crispy tortilla chips loaded with cheese and savory toppings.',p:170,v:[],a:[]},
   {id:4,cat:'Snacks',icon:'🍔',name:'Cheese Burger',pop:false,desc:'Juicy burger with melted cheese and classic toppings.',p:180,v:[],a:[]},
   {id:5,cat:'Snacks',icon:'🍔',name:'Bacon Burger',pop:false,desc:'Juicy burger topped with crispy bacon and melted cheese.',p:240,v:[],a:[]},
-  // PIZZA
-  {id:6,cat:'Pizza',icon:'🍕',name:'La Luna',pop:true,desc:'Our signature house pizza on a crispy thin crust - a customer favorite.',p:120,v:[],a:[]},
-  {id:7,cat:'Pizza',icon:'🍕',name:'Hawaiian',pop:false,desc:'Classic ham and sweet pineapple on a rich tomato base with mozzarella.',p:120,v:[],a:[]},
-  {id:8,cat:'Pizza',icon:'🍕',name:'Pepperoni',pop:false,desc:'Loaded with spicy pepperoni slices on a stretchy mozzarella base.',p:110,v:[],a:[]},
   // PASTA
   {id:9,cat:'Pasta',icon:'🍝',name:'Carbonara',pop:true,desc:'Creamy white sauce pasta with savory bacon and earthy mushrooms.',p:190,v:[],a:[]},
   {id:10,cat:'Pasta',icon:'🍝',name:'Seafood Marinara',pop:false,desc:'Fresh seafood in a rich tomato marinara sauce over pasta.',p:180,v:[],a:[]},
@@ -1003,19 +998,18 @@ const MENU=[
   // FRUIT SHAKES
   {id:39,cat:'Fruit Shakes & Desserts',icon:'🥭',name:'Mango',pop:true,desc:'Fresh ripe mango blended with milk and crushed ice.',p:120,v:[],a:FA},
   {id:40,cat:'Fruit Shakes & Desserts',icon:'🥑',name:'Avocado (seasonal)',pop:false,desc:'Creamy ripe avocado shake with condensed milk. Seasonal availability.',p:120,v:[],a:FA},
-  // USE SERIES
-  {id:41,cat:'Use Series',icon:'\u2615',name:'Ube Cafe Latte',pop:false,desc:'',p:130,v:[],a:[]},
-  {id:42,cat:'Use Series',icon:'\uD83E\uDDCB',name:'Ube Macchiato',pop:false,desc:'',p:130,v:[],a:[]},
-  {id:43,cat:'Use Series',icon:'\uD83E\uDD64',name:'Ube Cheesy Frappe',pop:false,desc:'',p:145,v:[],a:[]},
-  {id:44,cat:'Use Series',icon:'\uD83E\uDD64',name:'White Chocolate Ube Frappe',pop:false,desc:'',p:165,v:[],a:[]},
+  // UBE SERIES
+  {id:41,cat:'Ube Series',icon:'\u2615',name:'Ube Cafe Latte',pop:false,desc:'',p:130,v:[],a:[]},
+  {id:42,cat:'Ube Series',icon:'\uD83E\uDDCB',name:'Ube Macchiato',pop:false,desc:'',p:130,v:[],a:[]},
+  {id:43,cat:'Ube Series',icon:'\uD83E\uDD64',name:'Ube Cheesy Frappe',pop:false,desc:'',p:145,v:[],a:[]},
+  {id:44,cat:'Ube Series',icon:'\uD83E\uDD64',name:'White Chocolate Ube Frappe',pop:false,desc:'',p:165,v:[],a:[]},
 ];
 
-const CATS=['All','Snacks','Pizza','Pasta','Mains','Rice Meals','Fruit Shakes & Desserts','Coffee','Milktea','Frappe','Use Series'];
-const BS=[11,13,6,9,24,36,17,23];
+const CATS=['All','Snacks','Pasta','Mains','Rice Meals','Fruit Shakes & Desserts','Coffee','Milktea','Frappe','Ube Series'];
+const BS=[11,13,9,24,36,17,23];
 const PROMOS=[
   '★ Open Tue–Sun · 11AM–9PM · Closed Monday',
   '🔥 Rice Meals from ₱160',
-  '🍕 La Luna Pizza ₱120',
   '🍗 12pcs Wings — 3 flavors!',
   '🧋 Milk Tea from ₱69',
   '🍧 Try our Halo-Halo ₱120',
